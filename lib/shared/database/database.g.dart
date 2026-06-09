@@ -750,6 +750,14 @@ class $TasksTable extends Tasks with TableInfo<$TasksTable, Task> {
       type: DriftSqlType.string,
       requiredDuringInsert: false,
       defaultValue: const Constant('pending'));
+  static const VerificationMeta _priorityMeta =
+      const VerificationMeta('priority');
+  @override
+  late final GeneratedColumn<String> priority = GeneratedColumn<String>(
+      'priority', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultValue: const Constant('medium'));
   static const VerificationMeta _habitIdMeta =
       const VerificationMeta('habitId');
   @override
@@ -779,6 +787,7 @@ class $TasksTable extends Tasks with TableInfo<$TasksTable, Task> {
         category,
         notes,
         status,
+        priority,
         habitId,
         createdAt,
         completedAt
@@ -828,6 +837,10 @@ class $TasksTable extends Tasks with TableInfo<$TasksTable, Task> {
       context.handle(_statusMeta,
           status.isAcceptableOrUnknown(data['status']!, _statusMeta));
     }
+    if (data.containsKey('priority')) {
+      context.handle(_priorityMeta,
+          priority.isAcceptableOrUnknown(data['priority']!, _priorityMeta));
+    }
     if (data.containsKey('habit_id')) {
       context.handle(_habitIdMeta,
           habitId.isAcceptableOrUnknown(data['habit_id']!, _habitIdMeta));
@@ -865,6 +878,8 @@ class $TasksTable extends Tasks with TableInfo<$TasksTable, Task> {
           .read(DriftSqlType.string, data['${effectivePrefix}notes']),
       status: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}status'])!,
+      priority: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}priority'])!,
       habitId: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}habit_id']),
       createdAt: attachedDatabase.typeMapping
@@ -888,6 +903,7 @@ class Task extends DataClass implements Insertable<Task> {
   final String? category;
   final String? notes;
   final String status;
+  final String priority;
   final String? habitId;
   final DateTime createdAt;
   final DateTime? completedAt;
@@ -899,6 +915,7 @@ class Task extends DataClass implements Insertable<Task> {
       this.category,
       this.notes,
       required this.status,
+      required this.priority,
       this.habitId,
       required this.createdAt,
       this.completedAt});
@@ -918,6 +935,7 @@ class Task extends DataClass implements Insertable<Task> {
       map['notes'] = Variable<String>(notes);
     }
     map['status'] = Variable<String>(status);
+    map['priority'] = Variable<String>(priority);
     if (!nullToAbsent || habitId != null) {
       map['habit_id'] = Variable<String>(habitId);
     }
@@ -942,6 +960,7 @@ class Task extends DataClass implements Insertable<Task> {
       notes:
           notes == null && nullToAbsent ? const Value.absent() : Value(notes),
       status: Value(status),
+      priority: Value(priority),
       habitId: habitId == null && nullToAbsent
           ? const Value.absent()
           : Value(habitId),
@@ -963,6 +982,7 @@ class Task extends DataClass implements Insertable<Task> {
       category: serializer.fromJson<String?>(json['category']),
       notes: serializer.fromJson<String?>(json['notes']),
       status: serializer.fromJson<String>(json['status']),
+      priority: serializer.fromJson<String>(json['priority']),
       habitId: serializer.fromJson<String?>(json['habitId']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       completedAt: serializer.fromJson<DateTime?>(json['completedAt']),
@@ -979,6 +999,7 @@ class Task extends DataClass implements Insertable<Task> {
       'category': serializer.toJson<String?>(category),
       'notes': serializer.toJson<String?>(notes),
       'status': serializer.toJson<String>(status),
+      'priority': serializer.toJson<String>(priority),
       'habitId': serializer.toJson<String?>(habitId),
       'createdAt': serializer.toJson<DateTime>(createdAt),
       'completedAt': serializer.toJson<DateTime?>(completedAt),
@@ -993,6 +1014,7 @@ class Task extends DataClass implements Insertable<Task> {
           Value<String?> category = const Value.absent(),
           Value<String?> notes = const Value.absent(),
           String? status,
+          String? priority,
           Value<String?> habitId = const Value.absent(),
           DateTime? createdAt,
           Value<DateTime?> completedAt = const Value.absent()}) =>
@@ -1004,6 +1026,7 @@ class Task extends DataClass implements Insertable<Task> {
         category: category.present ? category.value : this.category,
         notes: notes.present ? notes.value : this.notes,
         status: status ?? this.status,
+        priority: priority ?? this.priority,
         habitId: habitId.present ? habitId.value : this.habitId,
         createdAt: createdAt ?? this.createdAt,
         completedAt: completedAt.present ? completedAt.value : this.completedAt,
@@ -1018,6 +1041,7 @@ class Task extends DataClass implements Insertable<Task> {
       category: data.category.present ? data.category.value : this.category,
       notes: data.notes.present ? data.notes.value : this.notes,
       status: data.status.present ? data.status.value : this.status,
+      priority: data.priority.present ? data.priority.value : this.priority,
       habitId: data.habitId.present ? data.habitId.value : this.habitId,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
       completedAt:
@@ -1035,6 +1059,7 @@ class Task extends DataClass implements Insertable<Task> {
           ..write('category: $category, ')
           ..write('notes: $notes, ')
           ..write('status: $status, ')
+          ..write('priority: $priority, ')
           ..write('habitId: $habitId, ')
           ..write('createdAt: $createdAt, ')
           ..write('completedAt: $completedAt')
@@ -1044,7 +1069,7 @@ class Task extends DataClass implements Insertable<Task> {
 
   @override
   int get hashCode => Object.hash(id, title, dueDate, shortGoalId, category,
-      notes, status, habitId, createdAt, completedAt);
+      notes, status, priority, habitId, createdAt, completedAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1056,6 +1081,7 @@ class Task extends DataClass implements Insertable<Task> {
           other.category == this.category &&
           other.notes == this.notes &&
           other.status == this.status &&
+          other.priority == this.priority &&
           other.habitId == this.habitId &&
           other.createdAt == this.createdAt &&
           other.completedAt == this.completedAt);
@@ -1069,6 +1095,7 @@ class TasksCompanion extends UpdateCompanion<Task> {
   final Value<String?> category;
   final Value<String?> notes;
   final Value<String> status;
+  final Value<String> priority;
   final Value<String?> habitId;
   final Value<DateTime> createdAt;
   final Value<DateTime?> completedAt;
@@ -1081,6 +1108,7 @@ class TasksCompanion extends UpdateCompanion<Task> {
     this.category = const Value.absent(),
     this.notes = const Value.absent(),
     this.status = const Value.absent(),
+    this.priority = const Value.absent(),
     this.habitId = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.completedAt = const Value.absent(),
@@ -1094,6 +1122,7 @@ class TasksCompanion extends UpdateCompanion<Task> {
     this.category = const Value.absent(),
     this.notes = const Value.absent(),
     this.status = const Value.absent(),
+    this.priority = const Value.absent(),
     this.habitId = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.completedAt = const Value.absent(),
@@ -1109,6 +1138,7 @@ class TasksCompanion extends UpdateCompanion<Task> {
     Expression<String>? category,
     Expression<String>? notes,
     Expression<String>? status,
+    Expression<String>? priority,
     Expression<String>? habitId,
     Expression<DateTime>? createdAt,
     Expression<DateTime>? completedAt,
@@ -1122,6 +1152,7 @@ class TasksCompanion extends UpdateCompanion<Task> {
       if (category != null) 'category': category,
       if (notes != null) 'notes': notes,
       if (status != null) 'status': status,
+      if (priority != null) 'priority': priority,
       if (habitId != null) 'habit_id': habitId,
       if (createdAt != null) 'created_at': createdAt,
       if (completedAt != null) 'completed_at': completedAt,
@@ -1137,6 +1168,7 @@ class TasksCompanion extends UpdateCompanion<Task> {
       Value<String?>? category,
       Value<String?>? notes,
       Value<String>? status,
+      Value<String>? priority,
       Value<String?>? habitId,
       Value<DateTime>? createdAt,
       Value<DateTime?>? completedAt,
@@ -1149,6 +1181,7 @@ class TasksCompanion extends UpdateCompanion<Task> {
       category: category ?? this.category,
       notes: notes ?? this.notes,
       status: status ?? this.status,
+      priority: priority ?? this.priority,
       habitId: habitId ?? this.habitId,
       createdAt: createdAt ?? this.createdAt,
       completedAt: completedAt ?? this.completedAt,
@@ -1180,6 +1213,9 @@ class TasksCompanion extends UpdateCompanion<Task> {
     if (status.present) {
       map['status'] = Variable<String>(status.value);
     }
+    if (priority.present) {
+      map['priority'] = Variable<String>(priority.value);
+    }
     if (habitId.present) {
       map['habit_id'] = Variable<String>(habitId.value);
     }
@@ -1205,9 +1241,439 @@ class TasksCompanion extends UpdateCompanion<Task> {
           ..write('category: $category, ')
           ..write('notes: $notes, ')
           ..write('status: $status, ')
+          ..write('priority: $priority, ')
           ..write('habitId: $habitId, ')
           ..write('createdAt: $createdAt, ')
           ..write('completedAt: $completedAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $TimeLogsTable extends TimeLogs with TableInfo<$TimeLogsTable, TimeLog> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $TimeLogsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+      'id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _categoryMeta =
+      const VerificationMeta('category');
+  @override
+  late final GeneratedColumn<String> category = GeneratedColumn<String>(
+      'category', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _taskIdMeta = const VerificationMeta('taskId');
+  @override
+  late final GeneratedColumn<String> taskId = GeneratedColumn<String>(
+      'task_id', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _durationSecondsMeta =
+      const VerificationMeta('durationSeconds');
+  @override
+  late final GeneratedColumn<int> durationSeconds = GeneratedColumn<int>(
+      'duration_seconds', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _notesMeta = const VerificationMeta('notes');
+  @override
+  late final GeneratedColumn<String> notes = GeneratedColumn<String>(
+      'notes', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _startedAtMeta =
+      const VerificationMeta('startedAt');
+  @override
+  late final GeneratedColumn<DateTime> startedAt = GeneratedColumn<DateTime>(
+      'started_at', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _endedAtMeta =
+      const VerificationMeta('endedAt');
+  @override
+  late final GeneratedColumn<DateTime> endedAt = GeneratedColumn<DateTime>(
+      'ended_at', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _createdAtMeta =
+      const VerificationMeta('createdAt');
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+      'created_at', aliasedName, false,
+      type: DriftSqlType.dateTime,
+      requiredDuringInsert: false,
+      defaultValue: currentDateAndTime);
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        category,
+        taskId,
+        durationSeconds,
+        notes,
+        startedAt,
+        endedAt,
+        createdAt
+      ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'time_logs';
+  @override
+  VerificationContext validateIntegrity(Insertable<TimeLog> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('category')) {
+      context.handle(_categoryMeta,
+          category.isAcceptableOrUnknown(data['category']!, _categoryMeta));
+    } else if (isInserting) {
+      context.missing(_categoryMeta);
+    }
+    if (data.containsKey('task_id')) {
+      context.handle(_taskIdMeta,
+          taskId.isAcceptableOrUnknown(data['task_id']!, _taskIdMeta));
+    }
+    if (data.containsKey('duration_seconds')) {
+      context.handle(
+          _durationSecondsMeta,
+          durationSeconds.isAcceptableOrUnknown(
+              data['duration_seconds']!, _durationSecondsMeta));
+    } else if (isInserting) {
+      context.missing(_durationSecondsMeta);
+    }
+    if (data.containsKey('notes')) {
+      context.handle(
+          _notesMeta, notes.isAcceptableOrUnknown(data['notes']!, _notesMeta));
+    }
+    if (data.containsKey('started_at')) {
+      context.handle(_startedAtMeta,
+          startedAt.isAcceptableOrUnknown(data['started_at']!, _startedAtMeta));
+    } else if (isInserting) {
+      context.missing(_startedAtMeta);
+    }
+    if (data.containsKey('ended_at')) {
+      context.handle(_endedAtMeta,
+          endedAt.isAcceptableOrUnknown(data['ended_at']!, _endedAtMeta));
+    } else if (isInserting) {
+      context.missing(_endedAtMeta);
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  TimeLog map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return TimeLog(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
+      category: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}category'])!,
+      taskId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}task_id']),
+      durationSeconds: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}duration_seconds'])!,
+      notes: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}notes']),
+      startedAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}started_at'])!,
+      endedAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}ended_at'])!,
+      createdAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
+    );
+  }
+
+  @override
+  $TimeLogsTable createAlias(String alias) {
+    return $TimeLogsTable(attachedDatabase, alias);
+  }
+}
+
+class TimeLog extends DataClass implements Insertable<TimeLog> {
+  final String id;
+  final String category;
+  final String? taskId;
+  final int durationSeconds;
+  final String? notes;
+  final DateTime startedAt;
+  final DateTime endedAt;
+  final DateTime createdAt;
+  const TimeLog(
+      {required this.id,
+      required this.category,
+      this.taskId,
+      required this.durationSeconds,
+      this.notes,
+      required this.startedAt,
+      required this.endedAt,
+      required this.createdAt});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['category'] = Variable<String>(category);
+    if (!nullToAbsent || taskId != null) {
+      map['task_id'] = Variable<String>(taskId);
+    }
+    map['duration_seconds'] = Variable<int>(durationSeconds);
+    if (!nullToAbsent || notes != null) {
+      map['notes'] = Variable<String>(notes);
+    }
+    map['started_at'] = Variable<DateTime>(startedAt);
+    map['ended_at'] = Variable<DateTime>(endedAt);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    return map;
+  }
+
+  TimeLogsCompanion toCompanion(bool nullToAbsent) {
+    return TimeLogsCompanion(
+      id: Value(id),
+      category: Value(category),
+      taskId:
+          taskId == null && nullToAbsent ? const Value.absent() : Value(taskId),
+      durationSeconds: Value(durationSeconds),
+      notes:
+          notes == null && nullToAbsent ? const Value.absent() : Value(notes),
+      startedAt: Value(startedAt),
+      endedAt: Value(endedAt),
+      createdAt: Value(createdAt),
+    );
+  }
+
+  factory TimeLog.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return TimeLog(
+      id: serializer.fromJson<String>(json['id']),
+      category: serializer.fromJson<String>(json['category']),
+      taskId: serializer.fromJson<String?>(json['taskId']),
+      durationSeconds: serializer.fromJson<int>(json['durationSeconds']),
+      notes: serializer.fromJson<String?>(json['notes']),
+      startedAt: serializer.fromJson<DateTime>(json['startedAt']),
+      endedAt: serializer.fromJson<DateTime>(json['endedAt']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'category': serializer.toJson<String>(category),
+      'taskId': serializer.toJson<String?>(taskId),
+      'durationSeconds': serializer.toJson<int>(durationSeconds),
+      'notes': serializer.toJson<String?>(notes),
+      'startedAt': serializer.toJson<DateTime>(startedAt),
+      'endedAt': serializer.toJson<DateTime>(endedAt),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+    };
+  }
+
+  TimeLog copyWith(
+          {String? id,
+          String? category,
+          Value<String?> taskId = const Value.absent(),
+          int? durationSeconds,
+          Value<String?> notes = const Value.absent(),
+          DateTime? startedAt,
+          DateTime? endedAt,
+          DateTime? createdAt}) =>
+      TimeLog(
+        id: id ?? this.id,
+        category: category ?? this.category,
+        taskId: taskId.present ? taskId.value : this.taskId,
+        durationSeconds: durationSeconds ?? this.durationSeconds,
+        notes: notes.present ? notes.value : this.notes,
+        startedAt: startedAt ?? this.startedAt,
+        endedAt: endedAt ?? this.endedAt,
+        createdAt: createdAt ?? this.createdAt,
+      );
+  TimeLog copyWithCompanion(TimeLogsCompanion data) {
+    return TimeLog(
+      id: data.id.present ? data.id.value : this.id,
+      category: data.category.present ? data.category.value : this.category,
+      taskId: data.taskId.present ? data.taskId.value : this.taskId,
+      durationSeconds: data.durationSeconds.present
+          ? data.durationSeconds.value
+          : this.durationSeconds,
+      notes: data.notes.present ? data.notes.value : this.notes,
+      startedAt: data.startedAt.present ? data.startedAt.value : this.startedAt,
+      endedAt: data.endedAt.present ? data.endedAt.value : this.endedAt,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('TimeLog(')
+          ..write('id: $id, ')
+          ..write('category: $category, ')
+          ..write('taskId: $taskId, ')
+          ..write('durationSeconds: $durationSeconds, ')
+          ..write('notes: $notes, ')
+          ..write('startedAt: $startedAt, ')
+          ..write('endedAt: $endedAt, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, category, taskId, durationSeconds, notes,
+      startedAt, endedAt, createdAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is TimeLog &&
+          other.id == this.id &&
+          other.category == this.category &&
+          other.taskId == this.taskId &&
+          other.durationSeconds == this.durationSeconds &&
+          other.notes == this.notes &&
+          other.startedAt == this.startedAt &&
+          other.endedAt == this.endedAt &&
+          other.createdAt == this.createdAt);
+}
+
+class TimeLogsCompanion extends UpdateCompanion<TimeLog> {
+  final Value<String> id;
+  final Value<String> category;
+  final Value<String?> taskId;
+  final Value<int> durationSeconds;
+  final Value<String?> notes;
+  final Value<DateTime> startedAt;
+  final Value<DateTime> endedAt;
+  final Value<DateTime> createdAt;
+  final Value<int> rowid;
+  const TimeLogsCompanion({
+    this.id = const Value.absent(),
+    this.category = const Value.absent(),
+    this.taskId = const Value.absent(),
+    this.durationSeconds = const Value.absent(),
+    this.notes = const Value.absent(),
+    this.startedAt = const Value.absent(),
+    this.endedAt = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  TimeLogsCompanion.insert({
+    required String id,
+    required String category,
+    this.taskId = const Value.absent(),
+    required int durationSeconds,
+    this.notes = const Value.absent(),
+    required DateTime startedAt,
+    required DateTime endedAt,
+    this.createdAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  })  : id = Value(id),
+        category = Value(category),
+        durationSeconds = Value(durationSeconds),
+        startedAt = Value(startedAt),
+        endedAt = Value(endedAt);
+  static Insertable<TimeLog> custom({
+    Expression<String>? id,
+    Expression<String>? category,
+    Expression<String>? taskId,
+    Expression<int>? durationSeconds,
+    Expression<String>? notes,
+    Expression<DateTime>? startedAt,
+    Expression<DateTime>? endedAt,
+    Expression<DateTime>? createdAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (category != null) 'category': category,
+      if (taskId != null) 'task_id': taskId,
+      if (durationSeconds != null) 'duration_seconds': durationSeconds,
+      if (notes != null) 'notes': notes,
+      if (startedAt != null) 'started_at': startedAt,
+      if (endedAt != null) 'ended_at': endedAt,
+      if (createdAt != null) 'created_at': createdAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  TimeLogsCompanion copyWith(
+      {Value<String>? id,
+      Value<String>? category,
+      Value<String?>? taskId,
+      Value<int>? durationSeconds,
+      Value<String?>? notes,
+      Value<DateTime>? startedAt,
+      Value<DateTime>? endedAt,
+      Value<DateTime>? createdAt,
+      Value<int>? rowid}) {
+    return TimeLogsCompanion(
+      id: id ?? this.id,
+      category: category ?? this.category,
+      taskId: taskId ?? this.taskId,
+      durationSeconds: durationSeconds ?? this.durationSeconds,
+      notes: notes ?? this.notes,
+      startedAt: startedAt ?? this.startedAt,
+      endedAt: endedAt ?? this.endedAt,
+      createdAt: createdAt ?? this.createdAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (category.present) {
+      map['category'] = Variable<String>(category.value);
+    }
+    if (taskId.present) {
+      map['task_id'] = Variable<String>(taskId.value);
+    }
+    if (durationSeconds.present) {
+      map['duration_seconds'] = Variable<int>(durationSeconds.value);
+    }
+    if (notes.present) {
+      map['notes'] = Variable<String>(notes.value);
+    }
+    if (startedAt.present) {
+      map['started_at'] = Variable<DateTime>(startedAt.value);
+    }
+    if (endedAt.present) {
+      map['ended_at'] = Variable<DateTime>(endedAt.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('TimeLogsCompanion(')
+          ..write('id: $id, ')
+          ..write('category: $category, ')
+          ..write('taskId: $taskId, ')
+          ..write('durationSeconds: $durationSeconds, ')
+          ..write('notes: $notes, ')
+          ..write('startedAt: $startedAt, ')
+          ..write('endedAt: $endedAt, ')
+          ..write('createdAt: $createdAt, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -1220,12 +1686,13 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $LongGoalsTable longGoals = $LongGoalsTable(this);
   late final $ShortGoalsTable shortGoals = $ShortGoalsTable(this);
   late final $TasksTable tasks = $TasksTable(this);
+  late final $TimeLogsTable timeLogs = $TimeLogsTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities =>
-      [longGoals, shortGoals, tasks];
+      [longGoals, shortGoals, tasks, timeLogs];
 }
 
 typedef $$LongGoalsTableCreateCompanionBuilder = LongGoalsCompanion Function({
@@ -1863,6 +2330,7 @@ typedef $$TasksTableCreateCompanionBuilder = TasksCompanion Function({
   Value<String?> category,
   Value<String?> notes,
   Value<String> status,
+  Value<String> priority,
   Value<String?> habitId,
   Value<DateTime> createdAt,
   Value<DateTime?> completedAt,
@@ -1876,6 +2344,7 @@ typedef $$TasksTableUpdateCompanionBuilder = TasksCompanion Function({
   Value<String?> category,
   Value<String?> notes,
   Value<String> status,
+  Value<String> priority,
   Value<String?> habitId,
   Value<DateTime> createdAt,
   Value<DateTime?> completedAt,
@@ -1927,6 +2396,9 @@ class $$TasksTableFilterComposer extends Composer<_$AppDatabase, $TasksTable> {
 
   ColumnFilters<String> get status => $composableBuilder(
       column: $table.status, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get priority => $composableBuilder(
+      column: $table.priority, builder: (column) => ColumnFilters(column));
 
   ColumnFilters<String> get habitId => $composableBuilder(
       column: $table.habitId, builder: (column) => ColumnFilters(column));
@@ -1985,6 +2457,9 @@ class $$TasksTableOrderingComposer
   ColumnOrderings<String> get status => $composableBuilder(
       column: $table.status, builder: (column) => ColumnOrderings(column));
 
+  ColumnOrderings<String> get priority => $composableBuilder(
+      column: $table.priority, builder: (column) => ColumnOrderings(column));
+
   ColumnOrderings<String> get habitId => $composableBuilder(
       column: $table.habitId, builder: (column) => ColumnOrderings(column));
 
@@ -2041,6 +2516,9 @@ class $$TasksTableAnnotationComposer
 
   GeneratedColumn<String> get status =>
       $composableBuilder(column: $table.status, builder: (column) => column);
+
+  GeneratedColumn<String> get priority =>
+      $composableBuilder(column: $table.priority, builder: (column) => column);
 
   GeneratedColumn<String> get habitId =>
       $composableBuilder(column: $table.habitId, builder: (column) => column);
@@ -2102,6 +2580,7 @@ class $$TasksTableTableManager extends RootTableManager<
             Value<String?> category = const Value.absent(),
             Value<String?> notes = const Value.absent(),
             Value<String> status = const Value.absent(),
+            Value<String> priority = const Value.absent(),
             Value<String?> habitId = const Value.absent(),
             Value<DateTime> createdAt = const Value.absent(),
             Value<DateTime?> completedAt = const Value.absent(),
@@ -2115,6 +2594,7 @@ class $$TasksTableTableManager extends RootTableManager<
             category: category,
             notes: notes,
             status: status,
+            priority: priority,
             habitId: habitId,
             createdAt: createdAt,
             completedAt: completedAt,
@@ -2128,6 +2608,7 @@ class $$TasksTableTableManager extends RootTableManager<
             Value<String?> category = const Value.absent(),
             Value<String?> notes = const Value.absent(),
             Value<String> status = const Value.absent(),
+            Value<String> priority = const Value.absent(),
             Value<String?> habitId = const Value.absent(),
             Value<DateTime> createdAt = const Value.absent(),
             Value<DateTime?> completedAt = const Value.absent(),
@@ -2141,6 +2622,7 @@ class $$TasksTableTableManager extends RootTableManager<
             category: category,
             notes: notes,
             status: status,
+            priority: priority,
             habitId: habitId,
             createdAt: createdAt,
             completedAt: completedAt,
@@ -2200,6 +2682,218 @@ typedef $$TasksTableProcessedTableManager = ProcessedTableManager<
     (Task, $$TasksTableReferences),
     Task,
     PrefetchHooks Function({bool shortGoalId})>;
+typedef $$TimeLogsTableCreateCompanionBuilder = TimeLogsCompanion Function({
+  required String id,
+  required String category,
+  Value<String?> taskId,
+  required int durationSeconds,
+  Value<String?> notes,
+  required DateTime startedAt,
+  required DateTime endedAt,
+  Value<DateTime> createdAt,
+  Value<int> rowid,
+});
+typedef $$TimeLogsTableUpdateCompanionBuilder = TimeLogsCompanion Function({
+  Value<String> id,
+  Value<String> category,
+  Value<String?> taskId,
+  Value<int> durationSeconds,
+  Value<String?> notes,
+  Value<DateTime> startedAt,
+  Value<DateTime> endedAt,
+  Value<DateTime> createdAt,
+  Value<int> rowid,
+});
+
+class $$TimeLogsTableFilterComposer
+    extends Composer<_$AppDatabase, $TimeLogsTable> {
+  $$TimeLogsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get category => $composableBuilder(
+      column: $table.category, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get taskId => $composableBuilder(
+      column: $table.taskId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get durationSeconds => $composableBuilder(
+      column: $table.durationSeconds,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get notes => $composableBuilder(
+      column: $table.notes, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get startedAt => $composableBuilder(
+      column: $table.startedAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get endedAt => $composableBuilder(
+      column: $table.endedAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+}
+
+class $$TimeLogsTableOrderingComposer
+    extends Composer<_$AppDatabase, $TimeLogsTable> {
+  $$TimeLogsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get category => $composableBuilder(
+      column: $table.category, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get taskId => $composableBuilder(
+      column: $table.taskId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get durationSeconds => $composableBuilder(
+      column: $table.durationSeconds,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get notes => $composableBuilder(
+      column: $table.notes, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get startedAt => $composableBuilder(
+      column: $table.startedAt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get endedAt => $composableBuilder(
+      column: $table.endedAt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+}
+
+class $$TimeLogsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $TimeLogsTable> {
+  $$TimeLogsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get category =>
+      $composableBuilder(column: $table.category, builder: (column) => column);
+
+  GeneratedColumn<String> get taskId =>
+      $composableBuilder(column: $table.taskId, builder: (column) => column);
+
+  GeneratedColumn<int> get durationSeconds => $composableBuilder(
+      column: $table.durationSeconds, builder: (column) => column);
+
+  GeneratedColumn<String> get notes =>
+      $composableBuilder(column: $table.notes, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get startedAt =>
+      $composableBuilder(column: $table.startedAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get endedAt =>
+      $composableBuilder(column: $table.endedAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+}
+
+class $$TimeLogsTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $TimeLogsTable,
+    TimeLog,
+    $$TimeLogsTableFilterComposer,
+    $$TimeLogsTableOrderingComposer,
+    $$TimeLogsTableAnnotationComposer,
+    $$TimeLogsTableCreateCompanionBuilder,
+    $$TimeLogsTableUpdateCompanionBuilder,
+    (TimeLog, BaseReferences<_$AppDatabase, $TimeLogsTable, TimeLog>),
+    TimeLog,
+    PrefetchHooks Function()> {
+  $$TimeLogsTableTableManager(_$AppDatabase db, $TimeLogsTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$TimeLogsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$TimeLogsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$TimeLogsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<String> id = const Value.absent(),
+            Value<String> category = const Value.absent(),
+            Value<String?> taskId = const Value.absent(),
+            Value<int> durationSeconds = const Value.absent(),
+            Value<String?> notes = const Value.absent(),
+            Value<DateTime> startedAt = const Value.absent(),
+            Value<DateTime> endedAt = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              TimeLogsCompanion(
+            id: id,
+            category: category,
+            taskId: taskId,
+            durationSeconds: durationSeconds,
+            notes: notes,
+            startedAt: startedAt,
+            endedAt: endedAt,
+            createdAt: createdAt,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required String id,
+            required String category,
+            Value<String?> taskId = const Value.absent(),
+            required int durationSeconds,
+            Value<String?> notes = const Value.absent(),
+            required DateTime startedAt,
+            required DateTime endedAt,
+            Value<DateTime> createdAt = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              TimeLogsCompanion.insert(
+            id: id,
+            category: category,
+            taskId: taskId,
+            durationSeconds: durationSeconds,
+            notes: notes,
+            startedAt: startedAt,
+            endedAt: endedAt,
+            createdAt: createdAt,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$TimeLogsTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $TimeLogsTable,
+    TimeLog,
+    $$TimeLogsTableFilterComposer,
+    $$TimeLogsTableOrderingComposer,
+    $$TimeLogsTableAnnotationComposer,
+    $$TimeLogsTableCreateCompanionBuilder,
+    $$TimeLogsTableUpdateCompanionBuilder,
+    (TimeLog, BaseReferences<_$AppDatabase, $TimeLogsTable, TimeLog>),
+    TimeLog,
+    PrefetchHooks Function()>;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -2210,4 +2904,6 @@ class $AppDatabaseManager {
       $$ShortGoalsTableTableManager(_db, _db.shortGoals);
   $$TasksTableTableManager get tasks =>
       $$TasksTableTableManager(_db, _db.tasks);
+  $$TimeLogsTableTableManager get timeLogs =>
+      $$TimeLogsTableTableManager(_db, _db.timeLogs);
 }

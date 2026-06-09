@@ -57,6 +57,8 @@ class Tasks extends Table {
   TextColumn get notes => text().nullable()();
   // pending | done | cancelled
   TextColumn get status => text().withDefault(const Constant('pending'))();
+  // high | medium | low
+  TextColumn get priority => text().withDefault(const Constant('medium'))();
   // آیا این تسک به‌صورت خودکار توسط یک عادت ساخته شده؟
   TextColumn get habitId => text().nullable()();
   DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
@@ -66,17 +68,33 @@ class Tasks extends Table {
   Set<Column> get primaryKey => {id};
 }
 
+// --- ماژول تایمر ---
+
+class TimeLogs extends Table {
+  TextColumn get id => text()();
+  // deep_work | shallow_work | learning | exercise | personal | family | recovery | misc
+  TextColumn get category => text()();
+  TextColumn get taskId => text().nullable()();
+  IntColumn get durationSeconds => integer()();
+  TextColumn get notes => text().nullable()();
+  DateTimeColumn get startedAt => dateTime()();
+  DateTimeColumn get endedAt => dateTime()();
+  DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
 // ============================================================
 // تعریف دیتابیس
 // ============================================================
 
-@DriftDatabase(tables: [LongGoals, ShortGoals, Tasks])
+@DriftDatabase(tables: [LongGoals, ShortGoals, Tasks, TimeLogs])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
-  // نسخه schema — هنگام اضافه/تغییر جدول این عدد را زیاد کنید
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -84,9 +102,29 @@ class AppDatabase extends _$AppDatabase {
           await m.createAll();
         },
         onUpgrade: (m, from, to) async {
-          // در آپدیت‌های بعدی، migration ماژول‌های جدید اینجا اضافه می‌شود
+          if (from < 2) {
+            await m.addColumn(tasks, tasks.priority);
+          }
+          if (from < 3) {
+            await m.createTable(timeLogs);
+          }
         },
       );
+
+  Stream<List<TimeLog>> watchTodayTimeLogs() {
+    final now = DateTime.now();
+    final startOfDay = DateTime(now.year, now.month, now.day);
+    final endOfDay = startOfDay.add(const Duration(days: 1));
+    return (select(timeLogs)
+          ..where((t) =>
+              t.startedAt.isBiggerOrEqualValue(startOfDay) &
+              t.startedAt.isSmallerThanValue(endOfDay))
+          ..orderBy([(t) => OrderingTerm.desc(t.startedAt)]))
+        .watch();
+  }
+
+  Future<void> insertTimeLog(TimeLogsCompanion entry) =>
+      into(timeLogs).insert(entry);
 }
 
 LazyDatabase _openConnection() {

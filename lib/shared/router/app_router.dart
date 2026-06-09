@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+
+import '../../modules/goals/screens/goal_detail_screen.dart';
+import '../../modules/goals/screens/goals_screen.dart';
 import '../../modules/home/screens/home_screen.dart';
+import '../../modules/more/screens/more_screen.dart';
 import '../../modules/tasks/screens/tasks_screen.dart';
+import '../../modules/timer/screens/timer_screen.dart';
 import 'placeholder_screen.dart';
 
-/// روتر اصلی اپ با ناوبری پایین.
-///
-/// برای اضافه کردن ماژول جدید:
-/// ۱. یک branch جدید به StatefulShellRoute اضافه کنید
-/// ۲. یک آیتم به _destinations اضافه کنید
 final appRouter = GoRouter(
   initialLocation: '/home',
   routes: [
@@ -37,10 +37,26 @@ final appRouter = GoRouter(
           routes: [
             GoRoute(
               path: '/goals',
+              builder: (_, __) => const GoalsScreen(),
+              routes: [
+                GoRoute(
+                  path: ':goalId',
+                  builder: (_, state) => GoalDetailScreen(
+                    goalId: state.pathParameters['goalId']!,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: '/finance',
               builder: (_, __) => const PlaceholderScreen(
-                title: 'اهداف',
-                icon: Icons.flag_outlined,
-                phase: 'فاز ۲',
+                title: 'مالی',
+                icon: Icons.account_balance_wallet_outlined,
+                phase: 'Wave 2',
               ),
             ),
           ],
@@ -48,12 +64,14 @@ final appRouter = GoRouter(
         StatefulShellBranch(
           routes: [
             GoRoute(
-              path: '/dashboard',
-              builder: (_, __) => const PlaceholderScreen(
-                title: 'داشبورد',
-                icon: Icons.dashboard_outlined,
-                phase: 'فاز ۴',
-              ),
+              path: '/more',
+              builder: (_, __) => const MoreScreen(),
+              routes: [
+                GoRoute(
+                  path: 'timer',
+                  builder: (_, __) => const TimerScreen(),
+                ),
+              ],
             ),
           ],
         ),
@@ -62,7 +80,6 @@ final appRouter = GoRouter(
   ],
 );
 
-/// آیتم‌های ناوبری پایین
 const _destinations = [
   NavigationDestination(
     icon: Icon(Icons.home_outlined),
@@ -80,9 +97,14 @@ const _destinations = [
     label: 'اهداف',
   ),
   NavigationDestination(
-    icon: Icon(Icons.dashboard_outlined),
-    selectedIcon: Icon(Icons.dashboard),
-    label: 'داشبورد',
+    icon: Icon(Icons.account_balance_wallet_outlined),
+    selectedIcon: Icon(Icons.account_balance_wallet),
+    label: 'مالی',
+  ),
+  NavigationDestination(
+    icon: Icon(Icons.more_horiz),
+    selectedIcon: Icon(Icons.more_horiz),
+    label: 'بیشتر',
   ),
 ];
 
