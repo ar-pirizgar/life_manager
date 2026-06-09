@@ -3,12 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shamsi_date/shamsi_date.dart';
 import '../providers/task_providers.dart';
 
-/// شیت ثبت سریع تسک.
-/// از صفحه اصلی باز می‌شود؛ هدف: ثبت در کمترین زمان ممکن.
 class QuickAddTaskSheet extends ConsumerStatefulWidget {
   const QuickAddTaskSheet({super.key});
 
-  /// نمایش به‌صورت bottom sheet
   static Future<void> show(BuildContext context) {
     return showModalBottomSheet(
       context: context,
@@ -19,20 +16,21 @@ class QuickAddTaskSheet extends ConsumerStatefulWidget {
   }
 
   @override
-  ConsumerState<QuickAddTaskSheet> createState() => _QuickAddTaskSheetState();
+  ConsumerState<QuickAddTaskSheet> createState() =>
+      _QuickAddTaskSheetState();
 }
 
 class _QuickAddTaskSheetState extends ConsumerState<QuickAddTaskSheet> {
   final _controller = TextEditingController();
   final _focusNode = FocusNode();
   late DateTime _selectedDate;
+  String _priority = 'medium';
 
   @override
   void initState() {
     super.initState();
     final now = DateTime.now();
     _selectedDate = DateTime(now.year, now.month, now.day);
-    // فوکوس خودکار روی فیلد متن برای ورود سریع
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _focusNode.requestFocus();
     });
@@ -79,6 +77,7 @@ class _QuickAddTaskSheetState extends ConsumerState<QuickAddTaskSheet> {
     await ref.read(taskRepositoryProvider).addTask(
           title: title,
           dueDate: _selectedDate,
+          priority: _priority,
         );
 
     if (mounted) Navigator.of(context).pop();
@@ -94,14 +93,14 @@ class _QuickAddTaskSheetState extends ConsumerState<QuickAddTaskSheet> {
       child: Container(
         decoration: BoxDecoration(
           color: theme.colorScheme.surface,
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+          borderRadius:
+              const BorderRadius.vertical(top: Radius.circular(24)),
         ),
         padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // دستگیره بالای شیت
             Center(
               child: Container(
                 width: 40,
@@ -142,7 +141,8 @@ class _QuickAddTaskSheetState extends ConsumerState<QuickAddTaskSheet> {
                   label: 'فردا',
                   selected: _isTomorrow,
                   onTap: () {
-                    final t = DateTime.now().add(const Duration(days: 1));
+                    final t =
+                        DateTime.now().add(const Duration(days: 1));
                     setState(() =>
                         _selectedDate = DateTime(t.year, t.month, t.day));
                   },
@@ -157,6 +157,12 @@ class _QuickAddTaskSheetState extends ConsumerState<QuickAddTaskSheet> {
                   onTap: _pickFromCalendar,
                 ),
               ],
+            ),
+            const SizedBox(height: 12),
+            // انتخاب اولویت
+            _PriorityRow(
+              selected: _priority,
+              onChanged: (p) => setState(() => _priority = p),
             ),
             const SizedBox(height: 20),
             FilledButton(
@@ -173,14 +179,94 @@ class _QuickAddTaskSheetState extends ConsumerState<QuickAddTaskSheet> {
     final j = Jalali.fromDateTime(date);
     const fa = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
     String toFa(int n) {
-      return n
-          .toString()
-          .split('')
-          .map((c) => fa[int.parse(c)])
-          .join();
+      return n.toString().split('').map((c) => fa[int.parse(c)]).join();
     }
 
     return '${toFa(j.month)}/${toFa(j.day)}';
+  }
+}
+
+class _PriorityRow extends StatelessWidget {
+  const _PriorityRow({required this.selected, required this.onChanged});
+
+  final String selected;
+  final ValueChanged<String> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Row(
+      children: [
+        Text('اولویت:',
+            style: theme.textTheme.bodySmall
+                ?.copyWith(color: theme.colorScheme.onSurfaceVariant)),
+        const SizedBox(width: 8),
+        _PriorityChip(
+          label: 'بالا',
+          value: 'high',
+          color: const Color(0xFFEF4444),
+          selected: selected == 'high',
+          onTap: () => onChanged('high'),
+        ),
+        const SizedBox(width: 6),
+        _PriorityChip(
+          label: 'متوسط',
+          value: 'medium',
+          color: const Color(0xFFF97316),
+          selected: selected == 'medium',
+          onTap: () => onChanged('medium'),
+        ),
+        const SizedBox(width: 6),
+        _PriorityChip(
+          label: 'پایین',
+          value: 'low',
+          color: const Color(0xFF60A5FA),
+          selected: selected == 'low',
+          onTap: () => onChanged('low'),
+        ),
+      ],
+    );
+  }
+}
+
+class _PriorityChip extends StatelessWidget {
+  const _PriorityChip({
+    required this.label,
+    required this.value,
+    required this.color,
+    required this.selected,
+    required this.onTap,
+  });
+
+  final String label;
+  final String value;
+  final Color color;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(20),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 150),
+        padding:
+            const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        decoration: BoxDecoration(
+          color: selected ? color : color.withValues(alpha:0.12),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w600,
+            color: selected ? Colors.white : color,
+          ),
+        ),
+      ),
+    );
   }
 }
 

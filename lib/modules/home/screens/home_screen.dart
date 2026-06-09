@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../shared/utils/jalali_helper.dart';
 import '../../tasks/providers/task_providers.dart';
+import '../../finance/widgets/add_transaction_sheet.dart';
 import '../../tasks/widgets/quick_add_task_sheet.dart';
 import '../../tasks/widgets/task_tile.dart';
 
@@ -64,14 +65,7 @@ class HomeScreen extends ConsumerWidget {
                         icon: Icons.payments_outlined,
                         label: 'هزینه',
                         color: theme.colorScheme.tertiary,
-                        onTap: () {
-                          // ماژول مالی — فاز ۳
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('ماژول مالی به‌زودی اضافه می‌شود'),
-                            ),
-                          );
-                        },
+                        onTap: () => showAddTransactionSheet(context),
                       ),
                     ),
                   ],

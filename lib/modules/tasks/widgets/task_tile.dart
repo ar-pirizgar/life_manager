@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../shared/database/database.dart';
 import '../providers/task_providers.dart';
 
-/// آیتم نمایش یک تسک در لیست.
 class TaskTile extends ConsumerWidget {
   const TaskTile({super.key, required this.task});
 
@@ -40,9 +39,13 @@ class TaskTile extends ConsumerWidget {
           borderRadius: BorderRadius.circular(12),
           onTap: () => ref.read(taskRepositoryProvider).toggleDone(task),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             child: Row(
               children: [
+                // نشانگر اولویت
+                _PriorityDot(priority: task.priority),
+                const SizedBox(width: 8),
                 // چک‌باکس دایره‌ای
                 Icon(
                   isDone
@@ -65,7 +68,6 @@ class TaskTile extends ConsumerWidget {
                     ),
                   ),
                 ),
-                // نشانگر دسته‌بندی (اگر داشته باشد)
                 if (task.category != null)
                   Container(
                     padding: const EdgeInsets.symmetric(
@@ -86,6 +88,25 @@ class TaskTile extends ConsumerWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _PriorityDot extends StatelessWidget {
+  const _PriorityDot({required this.priority});
+  final String priority;
+
+  @override
+  Widget build(BuildContext context) {
+    final color = switch (priority) {
+      'high' => const Color(0xFFEF4444),
+      'low' => const Color(0xFF60A5FA),
+      _ => const Color(0xFFF97316),
+    };
+    return Container(
+      width: 6,
+      height: 6,
+      decoration: BoxDecoration(color: color, shape: BoxShape.circle),
     );
   }
 }

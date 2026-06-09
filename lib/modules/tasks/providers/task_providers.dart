@@ -18,6 +18,7 @@ class TaskRepository {
     String? shortGoalId,
     String? category,
     String? notes,
+    String priority = 'medium',
   }) async {
     await _db.into(_db.tasks).insert(
           TasksCompanion.insert(
@@ -27,6 +28,7 @@ class TaskRepository {
             shortGoalId: Value(shortGoalId),
             category: Value(category),
             notes: Value(notes),
+            priority: Value(priority),
           ),
         );
   }
