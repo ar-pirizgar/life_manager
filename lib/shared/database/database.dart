@@ -68,6 +68,56 @@ class Tasks extends Table {
   Set<Column> get primaryKey => {id};
 }
 
+// --- ماژول مالی ---
+
+class Transactions extends Table {
+  TextColumn get id => text()();
+  TextColumn get title => text()();
+  RealColumn get amount => real()();
+  // expense | income
+  TextColumn get type => text()();
+  TextColumn get category => text()();
+  TextColumn get notes => text().nullable()();
+  DateTimeColumn get date => dateTime()();
+  DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
+class Debts extends Table {
+  TextColumn get id => text()();
+  TextColumn get title => text().nullable()();
+  RealColumn get amount => real()();
+  TextColumn get person => text()();
+  // i_owe | they_owe
+  TextColumn get direction => text()();
+  DateTimeColumn get dueDate => dateTime().nullable()();
+  TextColumn get notes => text().nullable()();
+  // active | settled
+  TextColumn get status => text().withDefault(const Constant('active'))();
+  DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
+class FinancialGoals extends Table {
+  TextColumn get id => text()();
+  TextColumn get title => text()();
+  RealColumn get targetAmount => real()();
+  RealColumn get currentAmount =>
+      real().withDefault(const Constant<double>(0))();
+  DateTimeColumn get deadline => dateTime().nullable()();
+  TextColumn get notes => text().nullable()();
+  // active | completed | cancelled
+  TextColumn get status => text().withDefault(const Constant('active'))();
+  DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
 // --- ماژول تایمر ---
 
 class TimeLogs extends Table {
@@ -89,12 +139,13 @@ class TimeLogs extends Table {
 // تعریف دیتابیس
 // ============================================================
 
-@DriftDatabase(tables: [LongGoals, ShortGoals, Tasks, TimeLogs])
+@DriftDatabase(
+    tables: [LongGoals, ShortGoals, Tasks, Transactions, Debts, FinancialGoals, TimeLogs])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 4;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -108,8 +159,15 @@ class AppDatabase extends _$AppDatabase {
           if (from < 3) {
             await m.createTable(timeLogs);
           }
+          if (from < 4) {
+            await m.createTable(transactions);
+            await m.createTable(debts);
+            await m.createTable(financialGoals);
+          }
         },
       );
+
+  // ── Timer ────────────────────────────────────────────────────
 
   Stream<List<TimeLog>> watchTodayTimeLogs() {
     final now = DateTime.now();
@@ -125,6 +183,37 @@ class AppDatabase extends _$AppDatabase {
 
   Future<void> insertTimeLog(TimeLogsCompanion entry) =>
       into(timeLogs).insert(entry);
+
+  // ── Finance ──────────────────────────────────────────────────
+
+  Stream<List<Transaction>> watchCurrentMonthTransactions() {
+    final now = DateTime.now();
+    final start = DateTime(now.year, now.month);
+    final end = DateTime(now.year, now.month + 1);
+    return (select(transactions)
+          ..where((t) =>
+              t.date.isBiggerOrEqualValue(start) &
+              t.date.isSmallerThanValue(end))
+          ..orderBy([(t) => OrderingTerm.desc(t.date)]))
+        .watch();
+  }
+
+  Stream<List<Transaction>> watchAllTransactions() =>
+      (select(transactions)
+            ..orderBy([(t) => OrderingTerm.desc(t.date)]))
+          .watch();
+
+  Stream<List<Debt>> watchActiveDebts() =>
+      (select(debts)
+            ..where((d) => d.status.equals('active'))
+            ..orderBy([(d) => OrderingTerm.desc(d.createdAt)]))
+          .watch();
+
+  Stream<List<FinancialGoal>> watchFinancialGoals() =>
+      (select(financialGoals)
+            ..where((g) => g.status.equals('active'))
+            ..orderBy([(g) => OrderingTerm.desc(g.createdAt)]))
+          .watch();
 }
 
 LazyDatabase _openConnection() {

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../modules/finance/screens/finance_screen.dart';
 import '../../modules/goals/screens/goal_detail_screen.dart';
 import '../../modules/goals/screens/goals_screen.dart';
 import '../../modules/home/screens/home_screen.dart';
 import '../../modules/more/screens/more_screen.dart';
 import '../../modules/tasks/screens/tasks_screen.dart';
 import '../../modules/timer/screens/timer_screen.dart';
-import 'placeholder_screen.dart';
 
 final appRouter = GoRouter(
   initialLocation: '/home',
@@ -53,11 +53,7 @@ final appRouter = GoRouter(
           routes: [
             GoRoute(
               path: '/finance',
-              builder: (_, __) => const PlaceholderScreen(
-                title: 'مالی',
-                icon: Icons.account_balance_wallet_outlined,
-                phase: 'Wave 2',
-              ),
+              builder: (_, __) => const FinanceScreen(),
             ),
           ],
         ),

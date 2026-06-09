@@ -52,6 +52,12 @@ class JalaliHelper {
     return _weekDays[idx];
   }
 
+  /// نام ماه و سال: «خرداد ۱۴۰۵»
+  static String monthYear(DateTime date) {
+    final j = Jalali.fromDateTime(date);
+    return '${_months[j.month - 1]} ${_toFa(j.year)}';
+  }
+
   /// عنوان نسبی هوشمند: امروز / فردا / دیروز / تاریخ کامل
   static String relative(DateTime date) {
     final now = DateTime.now();
