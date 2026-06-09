@@ -3,6 +3,7 @@ import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
+import 'package:uuid/uuid.dart';
 
 part 'database.g.dart';
 
@@ -118,6 +119,36 @@ class FinancialGoals extends Table {
   Set<Column> get primaryKey => {id};
 }
 
+// --- ماژول عادت‌ها ---
+
+class Habits extends Table {
+  TextColumn get id => text()();
+  TextColumn get title => text()();
+  // emoji for display
+  TextColumn get emoji => text().withDefault(const Constant('✅'))();
+  // morning | afternoon | evening | any
+  TextColumn get timeOfDay => text().withDefault(const Constant('any'))();
+  // active | archived
+  TextColumn get status => text().withDefault(const Constant('active'))();
+  DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
+class HabitLogs extends Table {
+  TextColumn get id => text()();
+  TextColumn get habitId => text().references(Habits, #id)();
+  // normalized to start-of-day
+  DateTimeColumn get date => dateTime()();
+  // done | skipped
+  TextColumn get status => text().withDefault(const Constant('done'))();
+  DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
 // --- ماژول تایمر ---
 
 class TimeLogs extends Table {
@@ -139,13 +170,17 @@ class TimeLogs extends Table {
 // تعریف دیتابیس
 // ============================================================
 
-@DriftDatabase(
-    tables: [LongGoals, ShortGoals, Tasks, Transactions, Debts, FinancialGoals, TimeLogs])
+@DriftDatabase(tables: [
+  LongGoals, ShortGoals, Tasks,
+  Transactions, Debts, FinancialGoals,
+  Habits, HabitLogs,
+  TimeLogs,
+])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 4;
+  int get schemaVersion => 5;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -164,8 +199,70 @@ class AppDatabase extends _$AppDatabase {
             await m.createTable(debts);
             await m.createTable(financialGoals);
           }
+          if (from < 5) {
+            await m.createTable(habits);
+            await m.createTable(habitLogs);
+          }
         },
       );
+
+  // ── Habits ───────────────────────────────────────────────────
+
+  Stream<List<Habit>> watchActiveHabits() =>
+      (select(habits)
+            ..where((h) => h.status.equals('active'))
+            ..orderBy([(h) => OrderingTerm.asc(h.createdAt)]))
+          .watch();
+
+  Stream<List<HabitLog>> watchTodayHabitLogs() {
+    final now = DateTime.now();
+    final start = DateTime(now.year, now.month, now.day);
+    final end = start.add(const Duration(days: 1));
+    return (select(habitLogs)
+          ..where((l) =>
+              l.date.isBiggerOrEqualValue(start) &
+              l.date.isSmallerThanValue(end)))
+        .watch();
+  }
+
+  Stream<List<HabitLog>> watchHabitLogs(String habitId,
+      {int days = 90}) {
+    final since = DateTime.now().subtract(Duration(days: days));
+    return (select(habitLogs)
+          ..where((l) =>
+              l.habitId.equals(habitId) &
+              l.date.isBiggerOrEqualValue(since))
+          ..orderBy([(l) => OrderingTerm.asc(l.date)]))
+        .watch();
+  }
+
+  Future<void> toggleHabitLog(String habitId, DateTime date) {
+    final dateOnly = DateTime(date.year, date.month, date.day);
+    final nextDay = dateOnly.add(const Duration(days: 1));
+    return transaction(() async {
+      final existing = await (select(habitLogs)
+            ..where((l) =>
+                l.habitId.equals(habitId) &
+                l.date.isBiggerOrEqualValue(dateOnly) &
+                l.date.isSmallerThanValue(nextDay)))
+          .getSingleOrNull();
+      if (existing != null) {
+        await (delete(habitLogs)
+              ..where((l) => l.id.equals(existing.id)))
+            .go();
+      } else {
+        await into(habitLogs).insert(HabitLogsCompanion(
+          id: Value(const Uuid().v4()),
+          habitId: Value(habitId),
+          date: Value(dateOnly),
+        ));
+      }
+    });
+  }
+
+  Future<void> archiveHabit(String habitId) =>
+      (update(habits)..where((h) => h.id.equals(habitId)))
+          .write(const HabitsCompanion(status: Value('archived')));
 
   // ── Timer ────────────────────────────────────────────────────
 

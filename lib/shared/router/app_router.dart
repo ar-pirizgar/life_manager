@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../modules/finance/screens/finance_screen.dart';
 import '../../modules/goals/screens/goal_detail_screen.dart';
 import '../../modules/goals/screens/goals_screen.dart';
+import '../../modules/habits/screens/habits_screen.dart';
 import '../../modules/home/screens/home_screen.dart';
 import '../../modules/more/screens/more_screen.dart';
 import '../../modules/tasks/screens/tasks_screen.dart';
@@ -66,6 +67,10 @@ final appRouter = GoRouter(
                 GoRoute(
                   path: 'timer',
                   builder: (_, __) => const TimerScreen(),
+                ),
+                GoRoute(
+                  path: 'habits',
+                  builder: (_, __) => const HabitsScreen(),
                 ),
               ],
             ),
