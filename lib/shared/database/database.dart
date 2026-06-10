@@ -150,6 +150,37 @@ class HabitLogs extends Table {
   Set<Column> get primaryKey => {id};
 }
 
+// --- ماژول KPI ---
+
+class Kpis extends Table {
+  TextColumn get id => text()();
+  TextColumn get title => text()();
+  TextColumn get unit => text()();
+  TextColumn get emoji => text().withDefault(const Constant('📊'))();
+  // higher_better | lower_better
+  TextColumn get direction =>
+      text().withDefault(const Constant('higher_better'))();
+  RealColumn get targetValue => real().nullable()();
+  // active | archived
+  TextColumn get status => text().withDefault(const Constant('active'))();
+  DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
+class KpiLogs extends Table {
+  TextColumn get id => text()();
+  TextColumn get kpiId => text().references(Kpis, #id)();
+  RealColumn get value => real()();
+  DateTimeColumn get date => dateTime()();
+  TextColumn get notes => text().nullable()();
+  DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
 // --- ماژول تایمر ---
 
 class TimeLogs extends Table {
@@ -176,12 +207,13 @@ class TimeLogs extends Table {
   Transactions, Debts, FinancialGoals,
   Habits, HabitLogs,
   TimeLogs,
+  Kpis, KpiLogs,
 ])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 6;
+  int get schemaVersion => 7;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -206,6 +238,10 @@ class AppDatabase extends _$AppDatabase {
           }
           if (from < 6) {
             await m.addColumn(tasks, tasks.description);
+          }
+          if (from < 7) {
+            await m.createTable(kpis);
+            await m.createTable(kpiLogs);
           }
         },
       );
@@ -284,6 +320,54 @@ class AppDatabase extends _$AppDatabase {
 
   Future<void> insertTimeLog(TimeLogsCompanion entry) =>
       into(timeLogs).insert(entry);
+
+  Stream<List<TimeLog>> watchWeekTimeLogs() {
+    final since = DateTime.now().subtract(const Duration(days: 7));
+    return (select(timeLogs)
+          ..where((t) => t.startedAt.isBiggerOrEqualValue(since))
+          ..orderBy([(t) => OrderingTerm.desc(t.startedAt)]))
+        .watch();
+  }
+
+  // ── KPI ──────────────────────────────────────────────────────
+
+  Stream<List<Kpi>> watchActiveKpis() =>
+      (select(kpis)
+            ..where((k) => k.status.equals('active'))
+            ..orderBy([(k) => OrderingTerm.asc(k.createdAt)]))
+          .watch();
+
+  Stream<List<KpiLog>> watchKpiLogs(String kpiId) =>
+      (select(kpiLogs)
+            ..where((l) => l.kpiId.equals(kpiId))
+            ..orderBy([(l) => OrderingTerm.desc(l.date)]))
+          .watch();
+
+  Future<KpiLog?> getLatestKpiLog(String kpiId) =>
+      (select(kpiLogs)
+            ..where((l) => l.kpiId.equals(kpiId))
+            ..orderBy([(l) => OrderingTerm.desc(l.date)])
+            ..limit(1))
+          .getSingleOrNull();
+
+  Future<void> insertKpi(KpisCompanion entry) =>
+      into(kpis).insert(entry);
+
+  Future<void> updateKpi(KpisCompanion entry) =>
+      (update(kpis)..where((k) => k.id.equals(entry.id.value))).write(entry);
+
+  Future<void> archiveKpi(String id) =>
+      (update(kpis)..where((k) => k.id.equals(id)))
+          .write(const KpisCompanion(status: Value('archived')));
+
+  Future<void> deleteKpi(String id) =>
+      (delete(kpis)..where((k) => k.id.equals(id))).go();
+
+  Future<void> insertKpiLog(KpiLogsCompanion entry) =>
+      into(kpiLogs).insert(entry);
+
+  Future<void> deleteKpiLog(String id) =>
+      (delete(kpiLogs)..where((l) => l.id.equals(id))).go();
 
   // ── Finance ──────────────────────────────────────────────────
 

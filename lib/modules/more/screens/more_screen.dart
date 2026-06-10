@@ -25,11 +25,11 @@ class MoreScreen extends StatelessWidget {
             onTap: () => context.go('/more/habits'),
           ),
           const SizedBox(height: 8),
-          const _MoreTile(
+          _MoreTile(
             icon: Icons.dashboard_outlined,
             title: 'داشبورد',
             subtitle: 'آمار و تحلیل عملکرد',
-            comingSoon: true,
+            onTap: () => context.go('/more/dashboard'),
           ),
           const SizedBox(height: 8),
           const _MoreTile(

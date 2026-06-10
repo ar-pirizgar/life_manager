@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../modules/dashboard/screens/dashboard_screen.dart';
+import '../../modules/dashboard/screens/kpi_list_screen.dart';
 import '../../modules/finance/screens/finance_screen.dart';
 import '../../modules/goals/screens/goal_detail_screen.dart';
 import '../../modules/goals/screens/goals_screen.dart';
@@ -71,6 +73,16 @@ final appRouter = GoRouter(
                 GoRoute(
                   path: 'habits',
                   builder: (_, __) => const HabitsScreen(),
+                ),
+                GoRoute(
+                  path: 'dashboard',
+                  builder: (_, __) => const DashboardScreen(),
+                  routes: [
+                    GoRoute(
+                      path: 'kpis',
+                      builder: (_, __) => const KpiListScreen(),
+                    ),
+                  ],
                 ),
               ],
             ),

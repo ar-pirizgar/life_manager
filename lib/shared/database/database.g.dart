@@ -3668,6 +3668,765 @@ class TimeLogsCompanion extends UpdateCompanion<TimeLog> {
   }
 }
 
+class $KpisTable extends Kpis with TableInfo<$KpisTable, Kpi> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $KpisTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+      'id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _titleMeta = const VerificationMeta('title');
+  @override
+  late final GeneratedColumn<String> title = GeneratedColumn<String>(
+      'title', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _unitMeta = const VerificationMeta('unit');
+  @override
+  late final GeneratedColumn<String> unit = GeneratedColumn<String>(
+      'unit', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _emojiMeta = const VerificationMeta('emoji');
+  @override
+  late final GeneratedColumn<String> emoji = GeneratedColumn<String>(
+      'emoji', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultValue: const Constant('📊'));
+  static const VerificationMeta _directionMeta =
+      const VerificationMeta('direction');
+  @override
+  late final GeneratedColumn<String> direction = GeneratedColumn<String>(
+      'direction', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultValue: const Constant('higher_better'));
+  static const VerificationMeta _targetValueMeta =
+      const VerificationMeta('targetValue');
+  @override
+  late final GeneratedColumn<double> targetValue = GeneratedColumn<double>(
+      'target_value', aliasedName, true,
+      type: DriftSqlType.double, requiredDuringInsert: false);
+  static const VerificationMeta _statusMeta = const VerificationMeta('status');
+  @override
+  late final GeneratedColumn<String> status = GeneratedColumn<String>(
+      'status', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultValue: const Constant('active'));
+  static const VerificationMeta _createdAtMeta =
+      const VerificationMeta('createdAt');
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+      'created_at', aliasedName, false,
+      type: DriftSqlType.dateTime,
+      requiredDuringInsert: false,
+      defaultValue: currentDateAndTime);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, title, unit, emoji, direction, targetValue, status, createdAt];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'kpis';
+  @override
+  VerificationContext validateIntegrity(Insertable<Kpi> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('title')) {
+      context.handle(
+          _titleMeta, title.isAcceptableOrUnknown(data['title']!, _titleMeta));
+    } else if (isInserting) {
+      context.missing(_titleMeta);
+    }
+    if (data.containsKey('unit')) {
+      context.handle(
+          _unitMeta, unit.isAcceptableOrUnknown(data['unit']!, _unitMeta));
+    } else if (isInserting) {
+      context.missing(_unitMeta);
+    }
+    if (data.containsKey('emoji')) {
+      context.handle(
+          _emojiMeta, emoji.isAcceptableOrUnknown(data['emoji']!, _emojiMeta));
+    }
+    if (data.containsKey('direction')) {
+      context.handle(_directionMeta,
+          direction.isAcceptableOrUnknown(data['direction']!, _directionMeta));
+    }
+    if (data.containsKey('target_value')) {
+      context.handle(
+          _targetValueMeta,
+          targetValue.isAcceptableOrUnknown(
+              data['target_value']!, _targetValueMeta));
+    }
+    if (data.containsKey('status')) {
+      context.handle(_statusMeta,
+          status.isAcceptableOrUnknown(data['status']!, _statusMeta));
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Kpi map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Kpi(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
+      title: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}title'])!,
+      unit: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}unit'])!,
+      emoji: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}emoji'])!,
+      direction: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}direction'])!,
+      targetValue: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}target_value']),
+      status: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}status'])!,
+      createdAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
+    );
+  }
+
+  @override
+  $KpisTable createAlias(String alias) {
+    return $KpisTable(attachedDatabase, alias);
+  }
+}
+
+class Kpi extends DataClass implements Insertable<Kpi> {
+  final String id;
+  final String title;
+  final String unit;
+  final String emoji;
+  final String direction;
+  final double? targetValue;
+  final String status;
+  final DateTime createdAt;
+  const Kpi(
+      {required this.id,
+      required this.title,
+      required this.unit,
+      required this.emoji,
+      required this.direction,
+      this.targetValue,
+      required this.status,
+      required this.createdAt});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['title'] = Variable<String>(title);
+    map['unit'] = Variable<String>(unit);
+    map['emoji'] = Variable<String>(emoji);
+    map['direction'] = Variable<String>(direction);
+    if (!nullToAbsent || targetValue != null) {
+      map['target_value'] = Variable<double>(targetValue);
+    }
+    map['status'] = Variable<String>(status);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    return map;
+  }
+
+  KpisCompanion toCompanion(bool nullToAbsent) {
+    return KpisCompanion(
+      id: Value(id),
+      title: Value(title),
+      unit: Value(unit),
+      emoji: Value(emoji),
+      direction: Value(direction),
+      targetValue: targetValue == null && nullToAbsent
+          ? const Value.absent()
+          : Value(targetValue),
+      status: Value(status),
+      createdAt: Value(createdAt),
+    );
+  }
+
+  factory Kpi.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return Kpi(
+      id: serializer.fromJson<String>(json['id']),
+      title: serializer.fromJson<String>(json['title']),
+      unit: serializer.fromJson<String>(json['unit']),
+      emoji: serializer.fromJson<String>(json['emoji']),
+      direction: serializer.fromJson<String>(json['direction']),
+      targetValue: serializer.fromJson<double?>(json['targetValue']),
+      status: serializer.fromJson<String>(json['status']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'title': serializer.toJson<String>(title),
+      'unit': serializer.toJson<String>(unit),
+      'emoji': serializer.toJson<String>(emoji),
+      'direction': serializer.toJson<String>(direction),
+      'targetValue': serializer.toJson<double?>(targetValue),
+      'status': serializer.toJson<String>(status),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+    };
+  }
+
+  Kpi copyWith(
+          {String? id,
+          String? title,
+          String? unit,
+          String? emoji,
+          String? direction,
+          Value<double?> targetValue = const Value.absent(),
+          String? status,
+          DateTime? createdAt}) =>
+      Kpi(
+        id: id ?? this.id,
+        title: title ?? this.title,
+        unit: unit ?? this.unit,
+        emoji: emoji ?? this.emoji,
+        direction: direction ?? this.direction,
+        targetValue: targetValue.present ? targetValue.value : this.targetValue,
+        status: status ?? this.status,
+        createdAt: createdAt ?? this.createdAt,
+      );
+  Kpi copyWithCompanion(KpisCompanion data) {
+    return Kpi(
+      id: data.id.present ? data.id.value : this.id,
+      title: data.title.present ? data.title.value : this.title,
+      unit: data.unit.present ? data.unit.value : this.unit,
+      emoji: data.emoji.present ? data.emoji.value : this.emoji,
+      direction: data.direction.present ? data.direction.value : this.direction,
+      targetValue:
+          data.targetValue.present ? data.targetValue.value : this.targetValue,
+      status: data.status.present ? data.status.value : this.status,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('Kpi(')
+          ..write('id: $id, ')
+          ..write('title: $title, ')
+          ..write('unit: $unit, ')
+          ..write('emoji: $emoji, ')
+          ..write('direction: $direction, ')
+          ..write('targetValue: $targetValue, ')
+          ..write('status: $status, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      id, title, unit, emoji, direction, targetValue, status, createdAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is Kpi &&
+          other.id == this.id &&
+          other.title == this.title &&
+          other.unit == this.unit &&
+          other.emoji == this.emoji &&
+          other.direction == this.direction &&
+          other.targetValue == this.targetValue &&
+          other.status == this.status &&
+          other.createdAt == this.createdAt);
+}
+
+class KpisCompanion extends UpdateCompanion<Kpi> {
+  final Value<String> id;
+  final Value<String> title;
+  final Value<String> unit;
+  final Value<String> emoji;
+  final Value<String> direction;
+  final Value<double?> targetValue;
+  final Value<String> status;
+  final Value<DateTime> createdAt;
+  final Value<int> rowid;
+  const KpisCompanion({
+    this.id = const Value.absent(),
+    this.title = const Value.absent(),
+    this.unit = const Value.absent(),
+    this.emoji = const Value.absent(),
+    this.direction = const Value.absent(),
+    this.targetValue = const Value.absent(),
+    this.status = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  KpisCompanion.insert({
+    required String id,
+    required String title,
+    required String unit,
+    this.emoji = const Value.absent(),
+    this.direction = const Value.absent(),
+    this.targetValue = const Value.absent(),
+    this.status = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  })  : id = Value(id),
+        title = Value(title),
+        unit = Value(unit);
+  static Insertable<Kpi> custom({
+    Expression<String>? id,
+    Expression<String>? title,
+    Expression<String>? unit,
+    Expression<String>? emoji,
+    Expression<String>? direction,
+    Expression<double>? targetValue,
+    Expression<String>? status,
+    Expression<DateTime>? createdAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (title != null) 'title': title,
+      if (unit != null) 'unit': unit,
+      if (emoji != null) 'emoji': emoji,
+      if (direction != null) 'direction': direction,
+      if (targetValue != null) 'target_value': targetValue,
+      if (status != null) 'status': status,
+      if (createdAt != null) 'created_at': createdAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  KpisCompanion copyWith(
+      {Value<String>? id,
+      Value<String>? title,
+      Value<String>? unit,
+      Value<String>? emoji,
+      Value<String>? direction,
+      Value<double?>? targetValue,
+      Value<String>? status,
+      Value<DateTime>? createdAt,
+      Value<int>? rowid}) {
+    return KpisCompanion(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      unit: unit ?? this.unit,
+      emoji: emoji ?? this.emoji,
+      direction: direction ?? this.direction,
+      targetValue: targetValue ?? this.targetValue,
+      status: status ?? this.status,
+      createdAt: createdAt ?? this.createdAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (title.present) {
+      map['title'] = Variable<String>(title.value);
+    }
+    if (unit.present) {
+      map['unit'] = Variable<String>(unit.value);
+    }
+    if (emoji.present) {
+      map['emoji'] = Variable<String>(emoji.value);
+    }
+    if (direction.present) {
+      map['direction'] = Variable<String>(direction.value);
+    }
+    if (targetValue.present) {
+      map['target_value'] = Variable<double>(targetValue.value);
+    }
+    if (status.present) {
+      map['status'] = Variable<String>(status.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('KpisCompanion(')
+          ..write('id: $id, ')
+          ..write('title: $title, ')
+          ..write('unit: $unit, ')
+          ..write('emoji: $emoji, ')
+          ..write('direction: $direction, ')
+          ..write('targetValue: $targetValue, ')
+          ..write('status: $status, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $KpiLogsTable extends KpiLogs with TableInfo<$KpiLogsTable, KpiLog> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $KpiLogsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+      'id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _kpiIdMeta = const VerificationMeta('kpiId');
+  @override
+  late final GeneratedColumn<String> kpiId = GeneratedColumn<String>(
+      'kpi_id', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES kpis (id)'));
+  static const VerificationMeta _valueMeta = const VerificationMeta('value');
+  @override
+  late final GeneratedColumn<double> value = GeneratedColumn<double>(
+      'value', aliasedName, false,
+      type: DriftSqlType.double, requiredDuringInsert: true);
+  static const VerificationMeta _dateMeta = const VerificationMeta('date');
+  @override
+  late final GeneratedColumn<DateTime> date = GeneratedColumn<DateTime>(
+      'date', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _notesMeta = const VerificationMeta('notes');
+  @override
+  late final GeneratedColumn<String> notes = GeneratedColumn<String>(
+      'notes', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _createdAtMeta =
+      const VerificationMeta('createdAt');
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+      'created_at', aliasedName, false,
+      type: DriftSqlType.dateTime,
+      requiredDuringInsert: false,
+      defaultValue: currentDateAndTime);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, kpiId, value, date, notes, createdAt];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'kpi_logs';
+  @override
+  VerificationContext validateIntegrity(Insertable<KpiLog> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('kpi_id')) {
+      context.handle(
+          _kpiIdMeta, kpiId.isAcceptableOrUnknown(data['kpi_id']!, _kpiIdMeta));
+    } else if (isInserting) {
+      context.missing(_kpiIdMeta);
+    }
+    if (data.containsKey('value')) {
+      context.handle(
+          _valueMeta, value.isAcceptableOrUnknown(data['value']!, _valueMeta));
+    } else if (isInserting) {
+      context.missing(_valueMeta);
+    }
+    if (data.containsKey('date')) {
+      context.handle(
+          _dateMeta, date.isAcceptableOrUnknown(data['date']!, _dateMeta));
+    } else if (isInserting) {
+      context.missing(_dateMeta);
+    }
+    if (data.containsKey('notes')) {
+      context.handle(
+          _notesMeta, notes.isAcceptableOrUnknown(data['notes']!, _notesMeta));
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  KpiLog map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return KpiLog(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
+      kpiId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}kpi_id'])!,
+      value: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}value'])!,
+      date: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}date'])!,
+      notes: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}notes']),
+      createdAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
+    );
+  }
+
+  @override
+  $KpiLogsTable createAlias(String alias) {
+    return $KpiLogsTable(attachedDatabase, alias);
+  }
+}
+
+class KpiLog extends DataClass implements Insertable<KpiLog> {
+  final String id;
+  final String kpiId;
+  final double value;
+  final DateTime date;
+  final String? notes;
+  final DateTime createdAt;
+  const KpiLog(
+      {required this.id,
+      required this.kpiId,
+      required this.value,
+      required this.date,
+      this.notes,
+      required this.createdAt});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['kpi_id'] = Variable<String>(kpiId);
+    map['value'] = Variable<double>(value);
+    map['date'] = Variable<DateTime>(date);
+    if (!nullToAbsent || notes != null) {
+      map['notes'] = Variable<String>(notes);
+    }
+    map['created_at'] = Variable<DateTime>(createdAt);
+    return map;
+  }
+
+  KpiLogsCompanion toCompanion(bool nullToAbsent) {
+    return KpiLogsCompanion(
+      id: Value(id),
+      kpiId: Value(kpiId),
+      value: Value(value),
+      date: Value(date),
+      notes:
+          notes == null && nullToAbsent ? const Value.absent() : Value(notes),
+      createdAt: Value(createdAt),
+    );
+  }
+
+  factory KpiLog.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return KpiLog(
+      id: serializer.fromJson<String>(json['id']),
+      kpiId: serializer.fromJson<String>(json['kpiId']),
+      value: serializer.fromJson<double>(json['value']),
+      date: serializer.fromJson<DateTime>(json['date']),
+      notes: serializer.fromJson<String?>(json['notes']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'kpiId': serializer.toJson<String>(kpiId),
+      'value': serializer.toJson<double>(value),
+      'date': serializer.toJson<DateTime>(date),
+      'notes': serializer.toJson<String?>(notes),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+    };
+  }
+
+  KpiLog copyWith(
+          {String? id,
+          String? kpiId,
+          double? value,
+          DateTime? date,
+          Value<String?> notes = const Value.absent(),
+          DateTime? createdAt}) =>
+      KpiLog(
+        id: id ?? this.id,
+        kpiId: kpiId ?? this.kpiId,
+        value: value ?? this.value,
+        date: date ?? this.date,
+        notes: notes.present ? notes.value : this.notes,
+        createdAt: createdAt ?? this.createdAt,
+      );
+  KpiLog copyWithCompanion(KpiLogsCompanion data) {
+    return KpiLog(
+      id: data.id.present ? data.id.value : this.id,
+      kpiId: data.kpiId.present ? data.kpiId.value : this.kpiId,
+      value: data.value.present ? data.value.value : this.value,
+      date: data.date.present ? data.date.value : this.date,
+      notes: data.notes.present ? data.notes.value : this.notes,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('KpiLog(')
+          ..write('id: $id, ')
+          ..write('kpiId: $kpiId, ')
+          ..write('value: $value, ')
+          ..write('date: $date, ')
+          ..write('notes: $notes, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, kpiId, value, date, notes, createdAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is KpiLog &&
+          other.id == this.id &&
+          other.kpiId == this.kpiId &&
+          other.value == this.value &&
+          other.date == this.date &&
+          other.notes == this.notes &&
+          other.createdAt == this.createdAt);
+}
+
+class KpiLogsCompanion extends UpdateCompanion<KpiLog> {
+  final Value<String> id;
+  final Value<String> kpiId;
+  final Value<double> value;
+  final Value<DateTime> date;
+  final Value<String?> notes;
+  final Value<DateTime> createdAt;
+  final Value<int> rowid;
+  const KpiLogsCompanion({
+    this.id = const Value.absent(),
+    this.kpiId = const Value.absent(),
+    this.value = const Value.absent(),
+    this.date = const Value.absent(),
+    this.notes = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  KpiLogsCompanion.insert({
+    required String id,
+    required String kpiId,
+    required double value,
+    required DateTime date,
+    this.notes = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  })  : id = Value(id),
+        kpiId = Value(kpiId),
+        value = Value(value),
+        date = Value(date);
+  static Insertable<KpiLog> custom({
+    Expression<String>? id,
+    Expression<String>? kpiId,
+    Expression<double>? value,
+    Expression<DateTime>? date,
+    Expression<String>? notes,
+    Expression<DateTime>? createdAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (kpiId != null) 'kpi_id': kpiId,
+      if (value != null) 'value': value,
+      if (date != null) 'date': date,
+      if (notes != null) 'notes': notes,
+      if (createdAt != null) 'created_at': createdAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  KpiLogsCompanion copyWith(
+      {Value<String>? id,
+      Value<String>? kpiId,
+      Value<double>? value,
+      Value<DateTime>? date,
+      Value<String?>? notes,
+      Value<DateTime>? createdAt,
+      Value<int>? rowid}) {
+    return KpiLogsCompanion(
+      id: id ?? this.id,
+      kpiId: kpiId ?? this.kpiId,
+      value: value ?? this.value,
+      date: date ?? this.date,
+      notes: notes ?? this.notes,
+      createdAt: createdAt ?? this.createdAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (kpiId.present) {
+      map['kpi_id'] = Variable<String>(kpiId.value);
+    }
+    if (value.present) {
+      map['value'] = Variable<double>(value.value);
+    }
+    if (date.present) {
+      map['date'] = Variable<DateTime>(date.value);
+    }
+    if (notes.present) {
+      map['notes'] = Variable<String>(notes.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('KpiLogsCompanion(')
+          ..write('id: $id, ')
+          ..write('kpiId: $kpiId, ')
+          ..write('value: $value, ')
+          ..write('date: $date, ')
+          ..write('notes: $notes, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -3680,6 +4439,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $HabitsTable habits = $HabitsTable(this);
   late final $HabitLogsTable habitLogs = $HabitLogsTable(this);
   late final $TimeLogsTable timeLogs = $TimeLogsTable(this);
+  late final $KpisTable kpis = $KpisTable(this);
+  late final $KpiLogsTable kpiLogs = $KpiLogsTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -3693,7 +4454,9 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         financialGoals,
         habits,
         habitLogs,
-        timeLogs
+        timeLogs,
+        kpis,
+        kpiLogs
       ];
 }
 
@@ -6110,6 +6873,581 @@ typedef $$TimeLogsTableProcessedTableManager = ProcessedTableManager<
     (TimeLog, BaseReferences<_$AppDatabase, $TimeLogsTable, TimeLog>),
     TimeLog,
     PrefetchHooks Function()>;
+typedef $$KpisTableCreateCompanionBuilder = KpisCompanion Function({
+  required String id,
+  required String title,
+  required String unit,
+  Value<String> emoji,
+  Value<String> direction,
+  Value<double?> targetValue,
+  Value<String> status,
+  Value<DateTime> createdAt,
+  Value<int> rowid,
+});
+typedef $$KpisTableUpdateCompanionBuilder = KpisCompanion Function({
+  Value<String> id,
+  Value<String> title,
+  Value<String> unit,
+  Value<String> emoji,
+  Value<String> direction,
+  Value<double?> targetValue,
+  Value<String> status,
+  Value<DateTime> createdAt,
+  Value<int> rowid,
+});
+
+final class $$KpisTableReferences
+    extends BaseReferences<_$AppDatabase, $KpisTable, Kpi> {
+  $$KpisTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static MultiTypedResultKey<$KpiLogsTable, List<KpiLog>> _kpiLogsRefsTable(
+          _$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(db.kpiLogs,
+          aliasName: $_aliasNameGenerator(db.kpis.id, db.kpiLogs.kpiId));
+
+  $$KpiLogsTableProcessedTableManager get kpiLogsRefs {
+    final manager = $$KpiLogsTableTableManager($_db, $_db.kpiLogs)
+        .filter((f) => f.kpiId.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_kpiLogsRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+}
+
+class $$KpisTableFilterComposer extends Composer<_$AppDatabase, $KpisTable> {
+  $$KpisTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get title => $composableBuilder(
+      column: $table.title, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get unit => $composableBuilder(
+      column: $table.unit, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get emoji => $composableBuilder(
+      column: $table.emoji, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get direction => $composableBuilder(
+      column: $table.direction, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<double> get targetValue => $composableBuilder(
+      column: $table.targetValue, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get status => $composableBuilder(
+      column: $table.status, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+
+  Expression<bool> kpiLogsRefs(
+      Expression<bool> Function($$KpiLogsTableFilterComposer f) f) {
+    final $$KpiLogsTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.kpiLogs,
+        getReferencedColumn: (t) => t.kpiId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$KpiLogsTableFilterComposer(
+              $db: $db,
+              $table: $db.kpiLogs,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+}
+
+class $$KpisTableOrderingComposer extends Composer<_$AppDatabase, $KpisTable> {
+  $$KpisTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get title => $composableBuilder(
+      column: $table.title, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get unit => $composableBuilder(
+      column: $table.unit, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get emoji => $composableBuilder(
+      column: $table.emoji, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get direction => $composableBuilder(
+      column: $table.direction, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<double> get targetValue => $composableBuilder(
+      column: $table.targetValue, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get status => $composableBuilder(
+      column: $table.status, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+}
+
+class $$KpisTableAnnotationComposer
+    extends Composer<_$AppDatabase, $KpisTable> {
+  $$KpisTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get title =>
+      $composableBuilder(column: $table.title, builder: (column) => column);
+
+  GeneratedColumn<String> get unit =>
+      $composableBuilder(column: $table.unit, builder: (column) => column);
+
+  GeneratedColumn<String> get emoji =>
+      $composableBuilder(column: $table.emoji, builder: (column) => column);
+
+  GeneratedColumn<String> get direction =>
+      $composableBuilder(column: $table.direction, builder: (column) => column);
+
+  GeneratedColumn<double> get targetValue => $composableBuilder(
+      column: $table.targetValue, builder: (column) => column);
+
+  GeneratedColumn<String> get status =>
+      $composableBuilder(column: $table.status, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  Expression<T> kpiLogsRefs<T extends Object>(
+      Expression<T> Function($$KpiLogsTableAnnotationComposer a) f) {
+    final $$KpiLogsTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.kpiLogs,
+        getReferencedColumn: (t) => t.kpiId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$KpiLogsTableAnnotationComposer(
+              $db: $db,
+              $table: $db.kpiLogs,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+}
+
+class $$KpisTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $KpisTable,
+    Kpi,
+    $$KpisTableFilterComposer,
+    $$KpisTableOrderingComposer,
+    $$KpisTableAnnotationComposer,
+    $$KpisTableCreateCompanionBuilder,
+    $$KpisTableUpdateCompanionBuilder,
+    (Kpi, $$KpisTableReferences),
+    Kpi,
+    PrefetchHooks Function({bool kpiLogsRefs})> {
+  $$KpisTableTableManager(_$AppDatabase db, $KpisTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$KpisTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$KpisTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$KpisTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<String> id = const Value.absent(),
+            Value<String> title = const Value.absent(),
+            Value<String> unit = const Value.absent(),
+            Value<String> emoji = const Value.absent(),
+            Value<String> direction = const Value.absent(),
+            Value<double?> targetValue = const Value.absent(),
+            Value<String> status = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              KpisCompanion(
+            id: id,
+            title: title,
+            unit: unit,
+            emoji: emoji,
+            direction: direction,
+            targetValue: targetValue,
+            status: status,
+            createdAt: createdAt,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required String id,
+            required String title,
+            required String unit,
+            Value<String> emoji = const Value.absent(),
+            Value<String> direction = const Value.absent(),
+            Value<double?> targetValue = const Value.absent(),
+            Value<String> status = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              KpisCompanion.insert(
+            id: id,
+            title: title,
+            unit: unit,
+            emoji: emoji,
+            direction: direction,
+            targetValue: targetValue,
+            status: status,
+            createdAt: createdAt,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) =>
+                  (e.readTable(table), $$KpisTableReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: ({kpiLogsRefs = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [if (kpiLogsRefs) db.kpiLogs],
+              addJoins: null,
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (kpiLogsRefs)
+                    await $_getPrefetchedData<Kpi, $KpisTable, KpiLog>(
+                        currentTable: table,
+                        referencedTable:
+                            $$KpisTableReferences._kpiLogsRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$KpisTableReferences(db, table, p0).kpiLogsRefs,
+                        referencedItemsForCurrentItem: (item,
+                                referencedItems) =>
+                            referencedItems.where((e) => e.kpiId == item.id),
+                        typedResults: items)
+                ];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$KpisTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $KpisTable,
+    Kpi,
+    $$KpisTableFilterComposer,
+    $$KpisTableOrderingComposer,
+    $$KpisTableAnnotationComposer,
+    $$KpisTableCreateCompanionBuilder,
+    $$KpisTableUpdateCompanionBuilder,
+    (Kpi, $$KpisTableReferences),
+    Kpi,
+    PrefetchHooks Function({bool kpiLogsRefs})>;
+typedef $$KpiLogsTableCreateCompanionBuilder = KpiLogsCompanion Function({
+  required String id,
+  required String kpiId,
+  required double value,
+  required DateTime date,
+  Value<String?> notes,
+  Value<DateTime> createdAt,
+  Value<int> rowid,
+});
+typedef $$KpiLogsTableUpdateCompanionBuilder = KpiLogsCompanion Function({
+  Value<String> id,
+  Value<String> kpiId,
+  Value<double> value,
+  Value<DateTime> date,
+  Value<String?> notes,
+  Value<DateTime> createdAt,
+  Value<int> rowid,
+});
+
+final class $$KpiLogsTableReferences
+    extends BaseReferences<_$AppDatabase, $KpiLogsTable, KpiLog> {
+  $$KpiLogsTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $KpisTable _kpiIdTable(_$AppDatabase db) =>
+      db.kpis.createAlias($_aliasNameGenerator(db.kpiLogs.kpiId, db.kpis.id));
+
+  $$KpisTableProcessedTableManager get kpiId {
+    final $_column = $_itemColumn<String>('kpi_id')!;
+
+    final manager = $$KpisTableTableManager($_db, $_db.kpis)
+        .filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_kpiIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+}
+
+class $$KpiLogsTableFilterComposer
+    extends Composer<_$AppDatabase, $KpiLogsTable> {
+  $$KpiLogsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<double> get value => $composableBuilder(
+      column: $table.value, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get date => $composableBuilder(
+      column: $table.date, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get notes => $composableBuilder(
+      column: $table.notes, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+
+  $$KpisTableFilterComposer get kpiId {
+    final $$KpisTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.kpiId,
+        referencedTable: $db.kpis,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$KpisTableFilterComposer(
+              $db: $db,
+              $table: $db.kpis,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$KpiLogsTableOrderingComposer
+    extends Composer<_$AppDatabase, $KpiLogsTable> {
+  $$KpiLogsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<double> get value => $composableBuilder(
+      column: $table.value, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get date => $composableBuilder(
+      column: $table.date, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get notes => $composableBuilder(
+      column: $table.notes, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+
+  $$KpisTableOrderingComposer get kpiId {
+    final $$KpisTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.kpiId,
+        referencedTable: $db.kpis,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$KpisTableOrderingComposer(
+              $db: $db,
+              $table: $db.kpis,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$KpiLogsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $KpiLogsTable> {
+  $$KpiLogsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<double> get value =>
+      $composableBuilder(column: $table.value, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get date =>
+      $composableBuilder(column: $table.date, builder: (column) => column);
+
+  GeneratedColumn<String> get notes =>
+      $composableBuilder(column: $table.notes, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  $$KpisTableAnnotationComposer get kpiId {
+    final $$KpisTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.kpiId,
+        referencedTable: $db.kpis,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$KpisTableAnnotationComposer(
+              $db: $db,
+              $table: $db.kpis,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$KpiLogsTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $KpiLogsTable,
+    KpiLog,
+    $$KpiLogsTableFilterComposer,
+    $$KpiLogsTableOrderingComposer,
+    $$KpiLogsTableAnnotationComposer,
+    $$KpiLogsTableCreateCompanionBuilder,
+    $$KpiLogsTableUpdateCompanionBuilder,
+    (KpiLog, $$KpiLogsTableReferences),
+    KpiLog,
+    PrefetchHooks Function({bool kpiId})> {
+  $$KpiLogsTableTableManager(_$AppDatabase db, $KpiLogsTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$KpiLogsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$KpiLogsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$KpiLogsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<String> id = const Value.absent(),
+            Value<String> kpiId = const Value.absent(),
+            Value<double> value = const Value.absent(),
+            Value<DateTime> date = const Value.absent(),
+            Value<String?> notes = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              KpiLogsCompanion(
+            id: id,
+            kpiId: kpiId,
+            value: value,
+            date: date,
+            notes: notes,
+            createdAt: createdAt,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required String id,
+            required String kpiId,
+            required double value,
+            required DateTime date,
+            Value<String?> notes = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              KpiLogsCompanion.insert(
+            id: id,
+            kpiId: kpiId,
+            value: value,
+            date: date,
+            notes: notes,
+            createdAt: createdAt,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) =>
+                  (e.readTable(table), $$KpiLogsTableReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: ({kpiId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (kpiId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.kpiId,
+                    referencedTable: $$KpiLogsTableReferences._kpiIdTable(db),
+                    referencedColumn:
+                        $$KpiLogsTableReferences._kpiIdTable(db).id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$KpiLogsTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $KpiLogsTable,
+    KpiLog,
+    $$KpiLogsTableFilterComposer,
+    $$KpiLogsTableOrderingComposer,
+    $$KpiLogsTableAnnotationComposer,
+    $$KpiLogsTableCreateCompanionBuilder,
+    $$KpiLogsTableUpdateCompanionBuilder,
+    (KpiLog, $$KpiLogsTableReferences),
+    KpiLog,
+    PrefetchHooks Function({bool kpiId})>;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -6132,4 +7470,7 @@ class $AppDatabaseManager {
       $$HabitLogsTableTableManager(_db, _db.habitLogs);
   $$TimeLogsTableTableManager get timeLogs =>
       $$TimeLogsTableTableManager(_db, _db.timeLogs);
+  $$KpisTableTableManager get kpis => $$KpisTableTableManager(_db, _db.kpis);
+  $$KpiLogsTableTableManager get kpiLogs =>
+      $$KpiLogsTableTableManager(_db, _db.kpiLogs);
 }
