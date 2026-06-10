@@ -698,3 +698,98 @@ If it fails any of these rules, it should not be built.
    - اجرای dart run build_runner build
    - اجرای flutter analyze
    - اجرای git add و git commit
+# Life Manager — Final Master Reference V7.1
+## Claude Code Final Edition
+
+This file is based on the approved V7 reference and includes real-world usage amendments.
+
+# New in V7.1
+
+## Universal Edit Support
+Every user-created entity must support:
+- Create
+- View
+- Edit
+- Delete
+
+Applies to:
+- Tasks
+- Long Goals
+- Short Goals
+- Habits
+- Transactions
+- Debts
+- Financial Goals
+- KPIs
+
+## Task Model
+- Title (Required)
+- Description (Optional)
+- Priority
+- Status
+- Due Date (Optional)
+- Goal Link (Optional)
+- Life Area (Optional)
+- Created At
+- Updated At
+
+Rules:
+- Description is hidden in task lists.
+- Description is shown in task detail view.
+- Description is editable.
+- Description supports Markdown.
+
+## Goal Model
+Long Goals and Short Goals support:
+- Title
+- Description
+- Status
+- Created At
+- Updated At
+
+Rules:
+- Description is editable.
+- Description supports Markdown.
+- Description is shown in goal detail view.
+
+## Transaction Notes
+Transactions support:
+- Notes (Optional)
+- Created At
+- Updated At
+
+Rules:
+- Notes support Markdown.
+- Notes are editable.
+
+## Detail Screens
+Required:
+- Task Detail Screen
+- Goal Detail Screen
+- Transaction Detail Screen
+
+## Standard Metadata
+All primary entities include:
+- created_at
+- updated_at
+
+## Database Updates
+Add where applicable:
+- description TEXT NULL
+- notes TEXT NULL
+- due_date DATETIME NULL
+- updated_at DATETIME
+
+## Extended Definition of Done
+A feature is complete only when:
+- Create works
+- View works
+- Edit works
+- Delete works (when allowed)
+- Persists locally
+- Works offline
+- Tests pass
+
+---
+
+The remainder of the approved V7 specification remains in force unchanged.
