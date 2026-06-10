@@ -793,3 +793,6 @@ A feature is complete only when:
 ---
 
 The remainder of the approved V7 specification remains in force unchanged.
+
+## Localization Rule
+All new UI text must be defined in a strings/constants file, not hardcoded inline.
