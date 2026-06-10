@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:shamsi_date/shamsi_date.dart';
 import '../../../shared/database/database.dart';
 import '../providers/goal_providers.dart';
+import 'edit_long_goal_sheet.dart';
 
 class LongGoalTile extends ConsumerWidget {
   const LongGoalTile({super.key, required this.goal});
@@ -90,7 +91,21 @@ class LongGoalTile extends ConsumerWidget {
                     ],
                   ),
                 ),
-                Icon(Icons.chevron_right, color: theme.colorScheme.outline),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                      icon: Icon(Icons.edit_outlined,
+                          size: 20, color: theme.colorScheme.outline),
+                      onPressed: () =>
+                          showEditLongGoalSheet(context, goal),
+                      visualDensity: VisualDensity.compact,
+                      padding: EdgeInsets.zero,
+                    ),
+                    Icon(Icons.chevron_right,
+                        color: theme.colorScheme.outline),
+                  ],
+                ),
               ],
             ),
           ),

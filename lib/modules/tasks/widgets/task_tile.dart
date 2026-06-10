@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../shared/database/database.dart';
 import '../providers/task_providers.dart';
+import 'edit_task_sheet.dart';
 
 class TaskTile extends ConsumerWidget {
   const TaskTile({super.key, required this.task});
@@ -38,6 +39,7 @@ class TaskTile extends ConsumerWidget {
         child: InkWell(
           borderRadius: BorderRadius.circular(12),
           onTap: () => ref.read(taskRepositoryProvider).toggleDone(task),
+          onLongPress: () => showEditTaskSheet(context, task),
           child: Padding(
             padding:
                 const EdgeInsets.symmetric(horizontal: 12, vertical: 8),

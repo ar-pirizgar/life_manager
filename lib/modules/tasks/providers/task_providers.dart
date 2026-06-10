@@ -15,6 +15,7 @@ class TaskRepository {
   Future<void> addTask({
     required String title,
     required DateTime dueDate,
+    String? description,
     String? shortGoalId,
     String? category,
     String? notes,
@@ -24,6 +25,7 @@ class TaskRepository {
           TasksCompanion.insert(
             id: _uuid.v4(),
             title: title,
+            description: Value(description),
             dueDate: dueDate,
             shortGoalId: Value(shortGoalId),
             category: Value(category),

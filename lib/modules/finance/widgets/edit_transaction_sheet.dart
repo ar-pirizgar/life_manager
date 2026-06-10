@@ -1,39 +1,52 @@
 import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:uuid/uuid.dart';
 
 import '../../../shared/database/database.dart';
 import '../../../shared/database/database_provider.dart';
 import '../../../shared/utils/jalali_helper.dart';
 import '../providers/finance_providers.dart';
 
-Future<void> showAddTransactionSheet(BuildContext context) =>
+Future<void> showEditTransactionSheet(
+        BuildContext context, Transaction tx) =>
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       useSafeArea: true,
-      builder: (_) => const _AddTransactionSheet(),
+      builder: (_) => _EditTransactionSheet(tx: tx),
     );
 
-class _AddTransactionSheet extends ConsumerStatefulWidget {
-  const _AddTransactionSheet();
+class _EditTransactionSheet extends ConsumerStatefulWidget {
+  const _EditTransactionSheet({required this.tx});
+  final Transaction tx;
 
   @override
-  ConsumerState<_AddTransactionSheet> createState() =>
-      _AddTransactionSheetState();
+  ConsumerState<_EditTransactionSheet> createState() =>
+      _EditTransactionSheetState();
 }
 
-class _AddTransactionSheetState extends ConsumerState<_AddTransactionSheet> {
+class _EditTransactionSheetState
+    extends ConsumerState<_EditTransactionSheet> {
   final _formKey = GlobalKey<FormState>();
-  final _titleCtrl = TextEditingController();
-  final _amountCtrl = TextEditingController();
-  final _notesCtrl = TextEditingController();
-
-  TxType _type = TxType.expense;
-  TxCategory _category = TxCategory.other;
-  DateTime _date = DateTime.now();
+  late final TextEditingController _titleCtrl;
+  late final TextEditingController _amountCtrl;
+  late final TextEditingController _notesCtrl;
+  late TxType _type;
+  late TxCategory _category;
+  late DateTime _date;
   bool _saving = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _titleCtrl = TextEditingController(text: widget.tx.title);
+    _amountCtrl =
+        TextEditingController(text: widget.tx.amount.toStringAsFixed(0));
+    _notesCtrl = TextEditingController(text: widget.tx.notes ?? '');
+    _type = TxType.fromKey(widget.tx.type);
+    _category = TxCategory.fromKey(widget.tx.category);
+    _date = widget.tx.date;
+  }
 
   @override
   void dispose() {
@@ -58,23 +71,21 @@ class _AddTransactionSheetState extends ConsumerState<_AddTransactionSheet> {
   Future<void> _save() async {
     if (!_formKey.currentState!.validate()) return;
     setState(() => _saving = true);
+    final db = ref.read(databaseProvider);
     try {
       final amount =
           double.parse(_amountCtrl.text.replaceAll(',', '').trim());
-      final db = ref.read(databaseProvider);
-      await db.into(db.transactions).insert(
-            TransactionsCompanion(
-              id: Value(const Uuid().v4()),
-              title: Value(_titleCtrl.text.trim()),
-              amount: Value(amount),
-              type: Value(_type.key),
-              category: Value(_category.key),
-              date: Value(_date),
-              notes: Value(_notesCtrl.text.trim().isEmpty
-                  ? null
-                  : _notesCtrl.text.trim()),
-            ),
-          );
+      final notes = _notesCtrl.text.trim();
+      await (db.update(db.transactions)
+            ..where((t) => t.id.equals(widget.tx.id)))
+          .write(TransactionsCompanion(
+        title: Value(_titleCtrl.text.trim()),
+        amount: Value(amount),
+        type: Value(_type.key),
+        category: Value(_category.key),
+        date: Value(_date),
+        notes: Value(notes.isEmpty ? null : notes),
+      ));
       if (mounted) Navigator.pop(context);
     } catch (_) {
       if (mounted) setState(() => _saving = false);
@@ -105,6 +116,9 @@ class _AddTransactionSheetState extends ConsumerState<_AddTransactionSheet> {
               ),
             ),
             const SizedBox(height: 16),
+            Text('ویرایش تراکنش',
+                style: Theme.of(context).textTheme.titleLarge),
+            const SizedBox(height: 16),
             SegmentedButton<TxType>(
               segments: TxType.values
                   .map((t) => ButtonSegment(
@@ -124,7 +138,6 @@ class _AddTransactionSheetState extends ConsumerState<_AddTransactionSheet> {
             const SizedBox(height: 16),
             TextFormField(
               controller: _amountCtrl,
-              autofocus: true,
               keyboardType:
                   const TextInputType.numberWithOptions(decimal: true),
               decoration: const InputDecoration(labelText: 'مبلغ'),
@@ -194,4 +207,3 @@ class _AddTransactionSheetState extends ConsumerState<_AddTransactionSheet> {
     );
   }
 }
-

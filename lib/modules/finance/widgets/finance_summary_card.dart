@@ -9,7 +9,17 @@ class FinanceSummaryCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final summary = ref.watch(monthSummaryProvider);
+    final txs =
+        ref.watch(currentMonthTransactionsProvider).valueOrNull ?? [];
+    double income = 0, expense = 0;
+    for (final t in txs) {
+      if (t.type == 'income') {
+        income += t.amount;
+      } else {
+        expense += t.amount;
+      }
+    }
+    final summary = FinanceSummary(income: income, expense: expense);
     final colors = Theme.of(context).colorScheme;
 
     return Card(

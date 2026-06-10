@@ -115,6 +115,7 @@ class FinancialGoalTile extends ConsumerWidget {
   }
 
   Future<void> _updateProgress(BuildContext context, WidgetRef ref) async {
+    final db = ref.read(databaseProvider);
     final ctrl = TextEditingController(
         text: goal.currentAmount == 0 ? '' : goal.currentAmount.toString());
     final result = await showDialog<double>(
@@ -146,7 +147,6 @@ class FinancialGoalTile extends ConsumerWidget {
     );
     ctrl.dispose();
     if (result != null) {
-      final db = ref.read(databaseProvider);
       await (db.update(db.financialGoals)
             ..where((g) => g.id.equals(goal.id)))
           .write(FinancialGoalsCompanion(currentAmount: Value(result)));
@@ -154,6 +154,7 @@ class FinancialGoalTile extends ConsumerWidget {
   }
 
   Future<void> _delete(BuildContext context, WidgetRef ref) async {
+    final db = ref.read(databaseProvider);
     final ok = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -176,7 +177,6 @@ class FinancialGoalTile extends ConsumerWidget {
       ),
     );
     if (ok == true) {
-      final db = ref.read(databaseProvider);
       await (db.delete(db.financialGoals)
             ..where((g) => g.id.equals(goal.id)))
           .go();

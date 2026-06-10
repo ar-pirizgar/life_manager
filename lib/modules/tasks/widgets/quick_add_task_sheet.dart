@@ -22,9 +22,11 @@ class QuickAddTaskSheet extends ConsumerStatefulWidget {
 
 class _QuickAddTaskSheetState extends ConsumerState<QuickAddTaskSheet> {
   final _controller = TextEditingController();
+  final _descCtrl = TextEditingController();
   final _focusNode = FocusNode();
   late DateTime _selectedDate;
   String _priority = 'medium';
+  bool _showDesc = false;
 
   @override
   void initState() {
@@ -39,6 +41,7 @@ class _QuickAddTaskSheetState extends ConsumerState<QuickAddTaskSheet> {
   @override
   void dispose() {
     _controller.dispose();
+    _descCtrl.dispose();
     _focusNode.dispose();
     super.dispose();
   }
@@ -74,8 +77,10 @@ class _QuickAddTaskSheetState extends ConsumerState<QuickAddTaskSheet> {
     final title = _controller.text.trim();
     if (title.isEmpty) return;
 
+    final desc = _descCtrl.text.trim();
     await ref.read(taskRepositoryProvider).addTask(
           title: title,
+          description: desc.isEmpty ? null : desc,
           dueDate: _selectedDate,
           priority: _priority,
         );
@@ -117,13 +122,42 @@ class _QuickAddTaskSheetState extends ConsumerState<QuickAddTaskSheet> {
             TextField(
               controller: _controller,
               focusNode: _focusNode,
-              textInputAction: TextInputAction.done,
-              onSubmitted: (_) => _save(),
+              textInputAction:
+                  _showDesc ? TextInputAction.next : TextInputAction.done,
+              onSubmitted: (_) => _showDesc ? null : _save(),
               decoration: const InputDecoration(
                 hintText: 'چه کاری باید انجام بشه؟',
               ),
             ),
-            const SizedBox(height: 16),
+            if (_showDesc) ...[
+              const SizedBox(height: 8),
+              TextField(
+                controller: _descCtrl,
+                maxLines: 3,
+                minLines: 1,
+                textInputAction: TextInputAction.done,
+                onSubmitted: (_) => _save(),
+                decoration: const InputDecoration(
+                  hintText: 'توضیحات (اختیاری)',
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                ),
+              ),
+            ] else ...[
+              Align(
+                alignment: Alignment.centerRight,
+                child: TextButton.icon(
+                  onPressed: () => setState(() => _showDesc = true),
+                  icon: const Icon(Icons.add, size: 16),
+                  label: const Text('توضیحات'),
+                  style: TextButton.styleFrom(
+                    visualDensity: VisualDensity.compact,
+                    padding: EdgeInsets.zero,
+                  ),
+                ),
+              ),
+            ],
+            const SizedBox(height: 8),
             // انتخاب سریع تاریخ
             Row(
               children: [

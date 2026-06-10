@@ -48,6 +48,7 @@ class ShortGoals extends Table {
 class Tasks extends Table {
   TextColumn get id => text()();
   TextColumn get title => text()();
+  TextColumn get description => text().nullable()();
   // تاریخ انجام تسک
   DateTimeColumn get dueDate => dateTime()();
   // لینک اختیاری به هدف کوتاه‌مدت
@@ -180,7 +181,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 5;
+  int get schemaVersion => 6;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -202,6 +203,9 @@ class AppDatabase extends _$AppDatabase {
           if (from < 5) {
             await m.createTable(habits);
             await m.createTable(habitLogs);
+          }
+          if (from < 6) {
+            await m.addColumn(tasks, tasks.description);
           }
         },
       );

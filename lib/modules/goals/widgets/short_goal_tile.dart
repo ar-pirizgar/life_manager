@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shamsi_date/shamsi_date.dart';
 import '../../../shared/database/database.dart';
 import '../providers/goal_providers.dart';
+import 'edit_short_goal_sheet.dart';
 
 class ShortGoalTile extends ConsumerWidget {
   const ShortGoalTile({super.key, required this.goal, this.showParent = true});
@@ -40,6 +41,7 @@ class ShortGoalTile extends ConsumerWidget {
           borderRadius: BorderRadius.circular(12),
           onTap: () =>
               ref.read(goalRepositoryProvider).toggleShortGoalComplete(goal),
+          onLongPress: () => showEditShortGoalSheet(context, goal),
           child: Padding(
             padding:
                 const EdgeInsets.symmetric(horizontal: 12, vertical: 10),

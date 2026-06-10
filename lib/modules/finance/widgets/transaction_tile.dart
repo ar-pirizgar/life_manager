@@ -5,6 +5,7 @@ import '../../../shared/database/database.dart';
 import '../../../shared/database/database_provider.dart';
 import '../../../shared/utils/jalali_helper.dart';
 import '../providers/finance_providers.dart';
+import 'edit_transaction_sheet.dart';
 
 class TransactionTile extends ConsumerWidget {
   const TransactionTile({super.key, required this.tx});
@@ -73,6 +74,7 @@ class TransactionTile extends ConsumerWidget {
             .go();
       },
       child: ListTile(
+        onTap: () => showEditTransactionSheet(context, tx),
         leading: Container(
           width: 40,
           height: 40,

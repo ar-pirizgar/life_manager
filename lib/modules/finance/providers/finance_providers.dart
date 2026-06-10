@@ -86,20 +86,6 @@ final allTransactionsProvider = StreamProvider<List<Transaction>>((ref) {
   return ref.watch(databaseProvider).watchAllTransactions();
 });
 
-final monthSummaryProvider = Provider<FinanceSummary>((ref) {
-  final txs =
-      ref.watch(currentMonthTransactionsProvider).valueOrNull ?? [];
-  double income = 0, expense = 0;
-  for (final t in txs) {
-    if (t.type == 'income') {
-      income += t.amount;
-    } else {
-      expense += t.amount;
-    }
-  }
-  return FinanceSummary(income: income, expense: expense);
-});
-
 final activeDebtsProvider = StreamProvider<List<Debt>>((ref) {
   return ref.watch(databaseProvider).watchActiveDebts();
 });

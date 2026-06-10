@@ -95,6 +95,7 @@ class DebtTile extends ConsumerWidget {
   }
 
   Future<void> _settle(BuildContext context, WidgetRef ref) async {
+    final db = ref.read(databaseProvider);
     final ok = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -113,7 +114,6 @@ class DebtTile extends ConsumerWidget {
       ),
     );
     if (ok == true) {
-      final db = ref.read(databaseProvider);
       await (db.update(db.debts)..where((d) => d.id.equals(debt.id)))
           .write(const DebtsCompanion(status: Value('settled')));
     }
