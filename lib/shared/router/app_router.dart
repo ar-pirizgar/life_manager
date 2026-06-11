@@ -9,6 +9,7 @@ import '../../modules/goals/screens/goals_screen.dart';
 import '../../modules/habits/screens/habits_screen.dart';
 import '../../modules/home/screens/home_screen.dart';
 import '../../modules/more/screens/more_screen.dart';
+import '../../modules/health/screens/health_screen.dart';
 import '../../modules/reviews/screens/monthly_reflection_screen.dart';
 import '../../modules/reviews/screens/reviews_hub_screen.dart';
 import '../../modules/reviews/screens/weekly_review_screen.dart';
@@ -76,6 +77,10 @@ final appRouter = GoRouter(
                 GoRoute(
                   path: 'habits',
                   builder: (_, __) => const HabitsScreen(),
+                ),
+                GoRoute(
+                  path: 'health',
+                  builder: (_, __) => const HealthScreen(),
                 ),
                 GoRoute(
                   path: 'dashboard',

@@ -150,6 +150,37 @@ class HabitLogs extends Table {
   Set<Column> get primaryKey => {id};
 }
 
+// --- ماژول سلامت ---
+
+class HealthLogs extends Table {
+  TextColumn get id => text()();
+  DateTimeColumn get date => dateTime()();
+  RealColumn get weight => real().nullable()();
+  RealColumn get waistCm => real().nullable()();
+  RealColumn get bodyFatPct => real().nullable()();
+  IntColumn get energyLevel => integer().nullable()();
+  IntColumn get sleepQuality => integer().nullable()();
+  TextColumn get notes => text().nullable()();
+  DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
+  DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
+class HealthTargets extends Table {
+  TextColumn get id => text()();
+  RealColumn get targetWeight => real().nullable()();
+  RealColumn get targetWaistCm => real().nullable()();
+  RealColumn get targetBodyFatPct => real().nullable()();
+  DateTimeColumn get targetDate => dateTime().nullable()();
+  DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
+  DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
 // --- ماژول مرور و بازتاب ---
 
 class WeeklyReviews extends Table {
@@ -248,12 +279,13 @@ class TimeLogs extends Table {
   TimeLogs,
   Kpis, KpiLogs,
   WeeklyReviews, MonthlyReflections,
+  HealthLogs, HealthTargets,
 ])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 8;
+  int get schemaVersion => 9;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -286,6 +318,10 @@ class AppDatabase extends _$AppDatabase {
           if (from < 8) {
             await m.createTable(weeklyReviews);
             await m.createTable(monthlyReflections);
+          }
+          if (from < 9) {
+            await m.createTable(healthLogs);
+            await m.createTable(healthTargets);
           }
         },
       );
@@ -479,6 +515,56 @@ class AppDatabase extends _$AppDatabase {
   Future<List<ShortGoal>> getAllShortGoals() =>
       (select(shortGoals)..orderBy([(g) => OrderingTerm.desc(g.createdAt)]))
           .get();
+
+  // ── Health ───────────────────────────────────────────────────
+
+  Stream<List<HealthLog>> watchAllHealthLogs() =>
+      (select(healthLogs)
+            ..orderBy([(l) => OrderingTerm.desc(l.date)]))
+          .watch();
+
+  Future<HealthLog?> getLatestHealthLog() =>
+      (select(healthLogs)
+            ..orderBy([(l) => OrderingTerm.desc(l.date)])
+            ..limit(1))
+          .getSingleOrNull();
+
+  Future<HealthLog?> getFirstHealthLog() =>
+      (select(healthLogs)
+            ..orderBy([(l) => OrderingTerm.asc(l.date)])
+            ..limit(1))
+          .getSingleOrNull();
+
+  Future<List<HealthLog>> getHealthLogsForChart(int days) {
+    final since = DateTime.now().subtract(Duration(days: days));
+    return (select(healthLogs)
+          ..where((l) => l.date.isBiggerOrEqualValue(since))
+          ..orderBy([(l) => OrderingTerm.asc(l.date)]))
+        .get();
+  }
+
+  Future<void> insertHealthLog(HealthLogsCompanion entry) =>
+      into(healthLogs).insert(entry);
+
+  Future<void> updateHealthLog(HealthLogsCompanion entry) =>
+      (update(healthLogs)..where((l) => l.id.equals(entry.id.value))).write(entry);
+
+  Future<void> deleteHealthLog(String id) =>
+      (delete(healthLogs)..where((l) => l.id.equals(id))).go();
+
+  Future<HealthTarget?> getHealthTarget() =>
+      (select(healthTargets)..limit(1)).getSingleOrNull();
+
+  Future<void> upsertHealthTarget(HealthTargetsCompanion entry) async {
+    final existing =
+        await (select(healthTargets)..limit(1)).getSingleOrNull();
+    if (existing != null) {
+      await (update(healthTargets)..where((t) => t.id.equals(existing.id)))
+          .write(entry);
+    } else {
+      await into(healthTargets).insert(entry);
+    }
+  }
 
   // ── Finance ──────────────────────────────────────────────────
 

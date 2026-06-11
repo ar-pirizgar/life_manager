@@ -26,6 +26,13 @@ class MoreScreen extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           _MoreTile(
+            icon: Icons.monitor_heart_outlined,
+            title: 'سلامت',
+            subtitle: 'ردیابی وزن، دور کمر و روندهای بدنی',
+            onTap: () => context.go('/more/health'),
+          ),
+          const SizedBox(height: 8),
+          _MoreTile(
             icon: Icons.dashboard_outlined,
             title: 'داشبورد',
             subtitle: 'آمار و تحلیل عملکرد',

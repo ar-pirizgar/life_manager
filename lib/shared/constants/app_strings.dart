@@ -90,6 +90,45 @@ class AppStrings {
   static const weekLabel = 'هفته';
   static const of = 'تا';
 
+  // ── Health ────────────────────────────────────────────────────
+  static const healthTitle = 'سلامت';
+  static const healthDashboardTab = 'داشبورد';
+  static const healthHistoryTab = 'تاریخچه';
+  static const addHealthLog = 'ثبت وضعیت سلامت';
+  static const editHealthLog = 'ویرایش ثبت';
+  static const healthLogDetail = 'جزئیات ثبت';
+  static const weightLabel = 'وزن (کیلوگرم)';
+  static const waistLabel = 'دور کمر (سانتیمتر)';
+  static const bodyFatLabel = 'درصد چربی بدن';
+  static const energyLabel = 'سطح انرژی';
+  static const sleepLabel = 'کیفیت خواب';
+  static const healthNotesLabel = 'یادداشت';
+  static const currentMetric = 'فعلی';
+  static const startMetric = 'شروع';
+  static const changeMetric = 'تغییر';
+  static const setTargets = 'تعیین اهداف';
+  static const editTargets = 'ویرایش اهداف';
+  static const healthTargetsTitle = 'اهداف سلامت';
+  static const targetWeightLabel = 'هدف وزن (کیلوگرم)';
+  static const targetWaistLabel = 'هدف دور کمر (سانتیمتر)';
+  static const targetBodyFatLabel = 'هدف درصد چربی';
+  static const targetDateLabel = 'تاریخ هدف (اختیاری)';
+  static const noHealthLogs = 'هنوز ثبتی وجود ندارد';
+  static const noHealthLogsHint = 'اولین وضعیت سلامت خود را ثبت کنید';
+  static const atLeastOneField = 'حداقل یک مقدار باید وارد شود';
+  static const healthLogSaved = 'ثبت سلامت ذخیره شد';
+  static const healthLogDeleted = 'ثبت حذف شد';
+  static const weightTrend = 'روند وزن';
+  static const notEnoughData = 'داده کافی برای نمودار وجود ندارد';
+  static const outOf10 = 'از ۱۰';
+  static const currentStatus = 'وضعیت فعلی';
+  static const progressVsStart = 'پیشرفت از ابتدا';
+  static const healthTargetsSaved = 'اهداف سلامت ذخیره شد';
+  static const noTargetSet = 'هدفی تعیین نشده';
+  static const weightUnit = 'kg';
+  static const waistUnit = 'cm';
+  static const bodyFatUnit = '%';
+
   // ── Common ────────────────────────────────────────────────────
   static const save = 'ذخیره';
   static const cancel = 'لغو';
