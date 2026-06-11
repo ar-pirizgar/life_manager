@@ -32,6 +32,13 @@ class MoreScreen extends StatelessWidget {
             onTap: () => context.go('/more/dashboard'),
           ),
           const SizedBox(height: 8),
+          _MoreTile(
+            icon: Icons.auto_stories_outlined,
+            title: 'مرور و بازتاب',
+            subtitle: 'مرور هفتگی، بازتاب ماهانه، مرور اهداف',
+            onTap: () => context.go('/more/reviews'),
+          ),
+          const SizedBox(height: 8),
           const _MoreTile(
             icon: Icons.settings_outlined,
             title: 'تنظیمات',

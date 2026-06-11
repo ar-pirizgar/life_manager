@@ -47,6 +47,49 @@ class AppStrings {
   static const kpiHistory = 'تاریخچه';
   static const noLogs = 'هنوز مقداری ثبت نشده';
 
+  // ── Reviews ──────────────────────────────────────────────────
+  static const reviewsTitle = 'مرور و بازتاب';
+  static const weeklyReviewTitle = 'مرور هفتگی';
+  static const monthlyReflectionTitle = 'بازتاب ماهانه';
+  static const startWeeklyReview = 'شروع مرور هفته جاری';
+  static const startMonthlyReflection = 'شروع بازتاب ماه جاری';
+  static const noReviewsYet = 'هنوز مروری ثبت نشده';
+  static const pastWeeklyReviews = 'مرورهای قبلی';
+  static const pastMonthlyReflections = 'بازتاب‌های قبلی';
+
+  // Weekly stats labels
+  static const reviewCompletedTasks = 'تسک‌های انجام شده';
+  static const reviewHabitRate = 'عادت‌ها';
+  static const reviewTotalTime = 'زمان ثبت شده';
+  static const reviewDeepWork = 'کار عمیق';
+  static const reviewIncome = 'درآمد';
+  static const reviewExpense = 'هزینه';
+  static const reviewGoals = 'اهداف';
+
+  // Reflection questions
+  static const reflectWorkedLabel = 'چه چیزی خوب پیش رفت؟';
+  static const reflectFailedLabel = 'چه چیزی درست نشد؟';
+  static const reflectLearnedLabel = 'چه یاد گرفتم؟';
+  static const reflectContinueLabel = 'چه چیزی باید ادامه یابد؟';
+  static const reflectStopLabel = 'چه چیزی باید متوقف شود؟';
+  static const reflectStartLabel = 'چه چیزی باید شروع شود؟';
+  static const reflectProudLabel = 'به چه چیزی افتخار می‌کنم؟';
+  static const reflectAnswerHint = 'پاسخ خود را بنویسید...';
+
+  // Goal review
+  static const goalReviewTitle = 'مرور اهداف';
+  static const goalHealthOnTrack = 'سر راهه';
+  static const goalHealthAtRisk = 'در خطر';
+  static const goalHealthOffTrack = 'خارج از مسیر';
+  static const noActiveGoals = 'هیچ هدف فعالی ندارید';
+  static const goalProgress = 'پیشرفت';
+
+  // Actions
+  static const saveReview = 'ذخیره مرور';
+  static const reviewSaved = 'مرور ذخیره شد';
+  static const weekLabel = 'هفته';
+  static const of = 'تا';
+
   // ── Common ────────────────────────────────────────────────────
   static const save = 'ذخیره';
   static const cancel = 'لغو';

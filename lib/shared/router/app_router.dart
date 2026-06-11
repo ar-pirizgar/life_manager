@@ -9,6 +9,9 @@ import '../../modules/goals/screens/goals_screen.dart';
 import '../../modules/habits/screens/habits_screen.dart';
 import '../../modules/home/screens/home_screen.dart';
 import '../../modules/more/screens/more_screen.dart';
+import '../../modules/reviews/screens/monthly_reflection_screen.dart';
+import '../../modules/reviews/screens/reviews_hub_screen.dart';
+import '../../modules/reviews/screens/weekly_review_screen.dart';
 import '../../modules/tasks/screens/tasks_screen.dart';
 import '../../modules/timer/screens/timer_screen.dart';
 
@@ -81,6 +84,20 @@ final appRouter = GoRouter(
                     GoRoute(
                       path: 'kpis',
                       builder: (_, __) => const KpiListScreen(),
+                    ),
+                  ],
+                ),
+                GoRoute(
+                  path: 'reviews',
+                  builder: (_, __) => const ReviewsHubScreen(),
+                  routes: [
+                    GoRoute(
+                      path: 'weekly',
+                      builder: (_, __) => const WeeklyReviewScreen(),
+                    ),
+                    GoRoute(
+                      path: 'monthly',
+                      builder: (_, __) => const MonthlyReflectionScreen(),
                     ),
                   ],
                 ),

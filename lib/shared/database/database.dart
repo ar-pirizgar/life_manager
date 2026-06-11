@@ -150,6 +150,45 @@ class HabitLogs extends Table {
   Set<Column> get primaryKey => {id};
 }
 
+// --- ماژول مرور و بازتاب ---
+
+class WeeklyReviews extends Table {
+  TextColumn get id => text()();
+  DateTimeColumn get weekStart => dateTime()();
+  IntColumn get completedTasks => integer().withDefault(const Constant(0))();
+  IntColumn get totalTasks => integer().withDefault(const Constant(0))();
+  RealColumn get habitSuccessRate =>
+      real().withDefault(const Constant<double>(0))();
+  IntColumn get totalMinutes => integer().withDefault(const Constant(0))();
+  IntColumn get deepWorkMinutes => integer().withDefault(const Constant(0))();
+  RealColumn get income => real().withDefault(const Constant<double>(0))();
+  RealColumn get expense => real().withDefault(const Constant<double>(0))();
+  IntColumn get activeGoalsCount => integer().withDefault(const Constant(0))();
+  IntColumn get completedGoalsCount =>
+      integer().withDefault(const Constant(0))();
+  TextColumn get answeredWorked => text().nullable()();
+  TextColumn get answeredFailed => text().nullable()();
+  TextColumn get answeredLearned => text().nullable()();
+  DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
+class MonthlyReflections extends Table {
+  TextColumn get id => text()();
+  IntColumn get year => integer()();
+  IntColumn get month => integer()();
+  TextColumn get answeredContinue => text().nullable()();
+  TextColumn get answeredStop => text().nullable()();
+  TextColumn get answeredStart => text().nullable()();
+  TextColumn get answeredProud => text().nullable()();
+  DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
 // --- ماژول KPI ---
 
 class Kpis extends Table {
@@ -208,12 +247,13 @@ class TimeLogs extends Table {
   Habits, HabitLogs,
   TimeLogs,
   Kpis, KpiLogs,
+  WeeklyReviews, MonthlyReflections,
 ])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 7;
+  int get schemaVersion => 8;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -242,6 +282,10 @@ class AppDatabase extends _$AppDatabase {
           if (from < 7) {
             await m.createTable(kpis);
             await m.createTable(kpiLogs);
+          }
+          if (from < 8) {
+            await m.createTable(weeklyReviews);
+            await m.createTable(monthlyReflections);
           }
         },
       );
@@ -368,6 +412,73 @@ class AppDatabase extends _$AppDatabase {
 
   Future<void> deleteKpiLog(String id) =>
       (delete(kpiLogs)..where((l) => l.id.equals(id))).go();
+
+  // ── Reviews ──────────────────────────────────────────────────
+
+  Stream<List<WeeklyReview>> watchAllWeeklyReviews() =>
+      (select(weeklyReviews)
+            ..orderBy([(r) => OrderingTerm.desc(r.weekStart)]))
+          .watch();
+
+  Stream<List<MonthlyReflection>> watchAllMonthlyReflections() =>
+      (select(monthlyReflections)
+            ..orderBy([
+              (r) => OrderingTerm.desc(r.year),
+              (r) => OrderingTerm.desc(r.month),
+            ]))
+          .watch();
+
+  Future<WeeklyReview?> getWeeklyReviewForWeek(DateTime weekStart) {
+    final start = DateTime(weekStart.year, weekStart.month, weekStart.day);
+    final end = start.add(const Duration(days: 1));
+    return (select(weeklyReviews)
+          ..where((r) =>
+              r.weekStart.isBiggerOrEqualValue(start) &
+              r.weekStart.isSmallerThanValue(end)))
+        .getSingleOrNull();
+  }
+
+  Future<MonthlyReflection?> getMonthlyReflection(int year, int month) =>
+      (select(monthlyReflections)
+            ..where((r) => r.year.equals(year) & r.month.equals(month)))
+          .getSingleOrNull();
+
+  Future<List<Task>> getTasksInRange(DateTime start, DateTime end) =>
+      (select(tasks)
+            ..where((t) =>
+                t.dueDate.isBiggerOrEqualValue(start) &
+                t.dueDate.isSmallerThanValue(end)))
+          .get();
+
+  Future<List<HabitLog>> getHabitLogsInRange(DateTime start, DateTime end) =>
+      (select(habitLogs)
+            ..where((l) =>
+                l.date.isBiggerOrEqualValue(start) &
+                l.date.isSmallerThanValue(end)))
+          .get();
+
+  Future<List<TimeLog>> getTimeLogsInRange(DateTime start, DateTime end) =>
+      (select(timeLogs)
+            ..where((t) =>
+                t.startedAt.isBiggerOrEqualValue(start) &
+                t.startedAt.isSmallerThanValue(end)))
+          .get();
+
+  Future<List<Transaction>> getTransactionsInRange(
+          DateTime start, DateTime end) =>
+      (select(transactions)
+            ..where((t) =>
+                t.date.isBiggerOrEqualValue(start) &
+                t.date.isSmallerThanValue(end)))
+          .get();
+
+  Future<List<LongGoal>> getAllLongGoals() =>
+      (select(longGoals)..orderBy([(g) => OrderingTerm.desc(g.createdAt)]))
+          .get();
+
+  Future<List<ShortGoal>> getAllShortGoals() =>
+      (select(shortGoals)..orderBy([(g) => OrderingTerm.desc(g.createdAt)]))
+          .get();
 
   // ── Finance ──────────────────────────────────────────────────
 

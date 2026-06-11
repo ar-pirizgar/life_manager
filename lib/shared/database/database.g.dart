@@ -4427,6 +4427,1204 @@ class KpiLogsCompanion extends UpdateCompanion<KpiLog> {
   }
 }
 
+class $WeeklyReviewsTable extends WeeklyReviews
+    with TableInfo<$WeeklyReviewsTable, WeeklyReview> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $WeeklyReviewsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+      'id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _weekStartMeta =
+      const VerificationMeta('weekStart');
+  @override
+  late final GeneratedColumn<DateTime> weekStart = GeneratedColumn<DateTime>(
+      'week_start', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _completedTasksMeta =
+      const VerificationMeta('completedTasks');
+  @override
+  late final GeneratedColumn<int> completedTasks = GeneratedColumn<int>(
+      'completed_tasks', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
+  static const VerificationMeta _totalTasksMeta =
+      const VerificationMeta('totalTasks');
+  @override
+  late final GeneratedColumn<int> totalTasks = GeneratedColumn<int>(
+      'total_tasks', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
+  static const VerificationMeta _habitSuccessRateMeta =
+      const VerificationMeta('habitSuccessRate');
+  @override
+  late final GeneratedColumn<double> habitSuccessRate = GeneratedColumn<double>(
+      'habit_success_rate', aliasedName, false,
+      type: DriftSqlType.double,
+      requiredDuringInsert: false,
+      defaultValue: const Constant<double>(0));
+  static const VerificationMeta _totalMinutesMeta =
+      const VerificationMeta('totalMinutes');
+  @override
+  late final GeneratedColumn<int> totalMinutes = GeneratedColumn<int>(
+      'total_minutes', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
+  static const VerificationMeta _deepWorkMinutesMeta =
+      const VerificationMeta('deepWorkMinutes');
+  @override
+  late final GeneratedColumn<int> deepWorkMinutes = GeneratedColumn<int>(
+      'deep_work_minutes', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
+  static const VerificationMeta _incomeMeta = const VerificationMeta('income');
+  @override
+  late final GeneratedColumn<double> income = GeneratedColumn<double>(
+      'income', aliasedName, false,
+      type: DriftSqlType.double,
+      requiredDuringInsert: false,
+      defaultValue: const Constant<double>(0));
+  static const VerificationMeta _expenseMeta =
+      const VerificationMeta('expense');
+  @override
+  late final GeneratedColumn<double> expense = GeneratedColumn<double>(
+      'expense', aliasedName, false,
+      type: DriftSqlType.double,
+      requiredDuringInsert: false,
+      defaultValue: const Constant<double>(0));
+  static const VerificationMeta _activeGoalsCountMeta =
+      const VerificationMeta('activeGoalsCount');
+  @override
+  late final GeneratedColumn<int> activeGoalsCount = GeneratedColumn<int>(
+      'active_goals_count', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
+  static const VerificationMeta _completedGoalsCountMeta =
+      const VerificationMeta('completedGoalsCount');
+  @override
+  late final GeneratedColumn<int> completedGoalsCount = GeneratedColumn<int>(
+      'completed_goals_count', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
+  static const VerificationMeta _answeredWorkedMeta =
+      const VerificationMeta('answeredWorked');
+  @override
+  late final GeneratedColumn<String> answeredWorked = GeneratedColumn<String>(
+      'answered_worked', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _answeredFailedMeta =
+      const VerificationMeta('answeredFailed');
+  @override
+  late final GeneratedColumn<String> answeredFailed = GeneratedColumn<String>(
+      'answered_failed', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _answeredLearnedMeta =
+      const VerificationMeta('answeredLearned');
+  @override
+  late final GeneratedColumn<String> answeredLearned = GeneratedColumn<String>(
+      'answered_learned', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _createdAtMeta =
+      const VerificationMeta('createdAt');
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+      'created_at', aliasedName, false,
+      type: DriftSqlType.dateTime,
+      requiredDuringInsert: false,
+      defaultValue: currentDateAndTime);
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        weekStart,
+        completedTasks,
+        totalTasks,
+        habitSuccessRate,
+        totalMinutes,
+        deepWorkMinutes,
+        income,
+        expense,
+        activeGoalsCount,
+        completedGoalsCount,
+        answeredWorked,
+        answeredFailed,
+        answeredLearned,
+        createdAt
+      ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'weekly_reviews';
+  @override
+  VerificationContext validateIntegrity(Insertable<WeeklyReview> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('week_start')) {
+      context.handle(_weekStartMeta,
+          weekStart.isAcceptableOrUnknown(data['week_start']!, _weekStartMeta));
+    } else if (isInserting) {
+      context.missing(_weekStartMeta);
+    }
+    if (data.containsKey('completed_tasks')) {
+      context.handle(
+          _completedTasksMeta,
+          completedTasks.isAcceptableOrUnknown(
+              data['completed_tasks']!, _completedTasksMeta));
+    }
+    if (data.containsKey('total_tasks')) {
+      context.handle(
+          _totalTasksMeta,
+          totalTasks.isAcceptableOrUnknown(
+              data['total_tasks']!, _totalTasksMeta));
+    }
+    if (data.containsKey('habit_success_rate')) {
+      context.handle(
+          _habitSuccessRateMeta,
+          habitSuccessRate.isAcceptableOrUnknown(
+              data['habit_success_rate']!, _habitSuccessRateMeta));
+    }
+    if (data.containsKey('total_minutes')) {
+      context.handle(
+          _totalMinutesMeta,
+          totalMinutes.isAcceptableOrUnknown(
+              data['total_minutes']!, _totalMinutesMeta));
+    }
+    if (data.containsKey('deep_work_minutes')) {
+      context.handle(
+          _deepWorkMinutesMeta,
+          deepWorkMinutes.isAcceptableOrUnknown(
+              data['deep_work_minutes']!, _deepWorkMinutesMeta));
+    }
+    if (data.containsKey('income')) {
+      context.handle(_incomeMeta,
+          income.isAcceptableOrUnknown(data['income']!, _incomeMeta));
+    }
+    if (data.containsKey('expense')) {
+      context.handle(_expenseMeta,
+          expense.isAcceptableOrUnknown(data['expense']!, _expenseMeta));
+    }
+    if (data.containsKey('active_goals_count')) {
+      context.handle(
+          _activeGoalsCountMeta,
+          activeGoalsCount.isAcceptableOrUnknown(
+              data['active_goals_count']!, _activeGoalsCountMeta));
+    }
+    if (data.containsKey('completed_goals_count')) {
+      context.handle(
+          _completedGoalsCountMeta,
+          completedGoalsCount.isAcceptableOrUnknown(
+              data['completed_goals_count']!, _completedGoalsCountMeta));
+    }
+    if (data.containsKey('answered_worked')) {
+      context.handle(
+          _answeredWorkedMeta,
+          answeredWorked.isAcceptableOrUnknown(
+              data['answered_worked']!, _answeredWorkedMeta));
+    }
+    if (data.containsKey('answered_failed')) {
+      context.handle(
+          _answeredFailedMeta,
+          answeredFailed.isAcceptableOrUnknown(
+              data['answered_failed']!, _answeredFailedMeta));
+    }
+    if (data.containsKey('answered_learned')) {
+      context.handle(
+          _answeredLearnedMeta,
+          answeredLearned.isAcceptableOrUnknown(
+              data['answered_learned']!, _answeredLearnedMeta));
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  WeeklyReview map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return WeeklyReview(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
+      weekStart: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}week_start'])!,
+      completedTasks: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}completed_tasks'])!,
+      totalTasks: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}total_tasks'])!,
+      habitSuccessRate: attachedDatabase.typeMapping.read(
+          DriftSqlType.double, data['${effectivePrefix}habit_success_rate'])!,
+      totalMinutes: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}total_minutes'])!,
+      deepWorkMinutes: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}deep_work_minutes'])!,
+      income: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}income'])!,
+      expense: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}expense'])!,
+      activeGoalsCount: attachedDatabase.typeMapping.read(
+          DriftSqlType.int, data['${effectivePrefix}active_goals_count'])!,
+      completedGoalsCount: attachedDatabase.typeMapping.read(
+          DriftSqlType.int, data['${effectivePrefix}completed_goals_count'])!,
+      answeredWorked: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}answered_worked']),
+      answeredFailed: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}answered_failed']),
+      answeredLearned: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}answered_learned']),
+      createdAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
+    );
+  }
+
+  @override
+  $WeeklyReviewsTable createAlias(String alias) {
+    return $WeeklyReviewsTable(attachedDatabase, alias);
+  }
+}
+
+class WeeklyReview extends DataClass implements Insertable<WeeklyReview> {
+  final String id;
+  final DateTime weekStart;
+  final int completedTasks;
+  final int totalTasks;
+  final double habitSuccessRate;
+  final int totalMinutes;
+  final int deepWorkMinutes;
+  final double income;
+  final double expense;
+  final int activeGoalsCount;
+  final int completedGoalsCount;
+  final String? answeredWorked;
+  final String? answeredFailed;
+  final String? answeredLearned;
+  final DateTime createdAt;
+  const WeeklyReview(
+      {required this.id,
+      required this.weekStart,
+      required this.completedTasks,
+      required this.totalTasks,
+      required this.habitSuccessRate,
+      required this.totalMinutes,
+      required this.deepWorkMinutes,
+      required this.income,
+      required this.expense,
+      required this.activeGoalsCount,
+      required this.completedGoalsCount,
+      this.answeredWorked,
+      this.answeredFailed,
+      this.answeredLearned,
+      required this.createdAt});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['week_start'] = Variable<DateTime>(weekStart);
+    map['completed_tasks'] = Variable<int>(completedTasks);
+    map['total_tasks'] = Variable<int>(totalTasks);
+    map['habit_success_rate'] = Variable<double>(habitSuccessRate);
+    map['total_minutes'] = Variable<int>(totalMinutes);
+    map['deep_work_minutes'] = Variable<int>(deepWorkMinutes);
+    map['income'] = Variable<double>(income);
+    map['expense'] = Variable<double>(expense);
+    map['active_goals_count'] = Variable<int>(activeGoalsCount);
+    map['completed_goals_count'] = Variable<int>(completedGoalsCount);
+    if (!nullToAbsent || answeredWorked != null) {
+      map['answered_worked'] = Variable<String>(answeredWorked);
+    }
+    if (!nullToAbsent || answeredFailed != null) {
+      map['answered_failed'] = Variable<String>(answeredFailed);
+    }
+    if (!nullToAbsent || answeredLearned != null) {
+      map['answered_learned'] = Variable<String>(answeredLearned);
+    }
+    map['created_at'] = Variable<DateTime>(createdAt);
+    return map;
+  }
+
+  WeeklyReviewsCompanion toCompanion(bool nullToAbsent) {
+    return WeeklyReviewsCompanion(
+      id: Value(id),
+      weekStart: Value(weekStart),
+      completedTasks: Value(completedTasks),
+      totalTasks: Value(totalTasks),
+      habitSuccessRate: Value(habitSuccessRate),
+      totalMinutes: Value(totalMinutes),
+      deepWorkMinutes: Value(deepWorkMinutes),
+      income: Value(income),
+      expense: Value(expense),
+      activeGoalsCount: Value(activeGoalsCount),
+      completedGoalsCount: Value(completedGoalsCount),
+      answeredWorked: answeredWorked == null && nullToAbsent
+          ? const Value.absent()
+          : Value(answeredWorked),
+      answeredFailed: answeredFailed == null && nullToAbsent
+          ? const Value.absent()
+          : Value(answeredFailed),
+      answeredLearned: answeredLearned == null && nullToAbsent
+          ? const Value.absent()
+          : Value(answeredLearned),
+      createdAt: Value(createdAt),
+    );
+  }
+
+  factory WeeklyReview.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return WeeklyReview(
+      id: serializer.fromJson<String>(json['id']),
+      weekStart: serializer.fromJson<DateTime>(json['weekStart']),
+      completedTasks: serializer.fromJson<int>(json['completedTasks']),
+      totalTasks: serializer.fromJson<int>(json['totalTasks']),
+      habitSuccessRate: serializer.fromJson<double>(json['habitSuccessRate']),
+      totalMinutes: serializer.fromJson<int>(json['totalMinutes']),
+      deepWorkMinutes: serializer.fromJson<int>(json['deepWorkMinutes']),
+      income: serializer.fromJson<double>(json['income']),
+      expense: serializer.fromJson<double>(json['expense']),
+      activeGoalsCount: serializer.fromJson<int>(json['activeGoalsCount']),
+      completedGoalsCount:
+          serializer.fromJson<int>(json['completedGoalsCount']),
+      answeredWorked: serializer.fromJson<String?>(json['answeredWorked']),
+      answeredFailed: serializer.fromJson<String?>(json['answeredFailed']),
+      answeredLearned: serializer.fromJson<String?>(json['answeredLearned']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'weekStart': serializer.toJson<DateTime>(weekStart),
+      'completedTasks': serializer.toJson<int>(completedTasks),
+      'totalTasks': serializer.toJson<int>(totalTasks),
+      'habitSuccessRate': serializer.toJson<double>(habitSuccessRate),
+      'totalMinutes': serializer.toJson<int>(totalMinutes),
+      'deepWorkMinutes': serializer.toJson<int>(deepWorkMinutes),
+      'income': serializer.toJson<double>(income),
+      'expense': serializer.toJson<double>(expense),
+      'activeGoalsCount': serializer.toJson<int>(activeGoalsCount),
+      'completedGoalsCount': serializer.toJson<int>(completedGoalsCount),
+      'answeredWorked': serializer.toJson<String?>(answeredWorked),
+      'answeredFailed': serializer.toJson<String?>(answeredFailed),
+      'answeredLearned': serializer.toJson<String?>(answeredLearned),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+    };
+  }
+
+  WeeklyReview copyWith(
+          {String? id,
+          DateTime? weekStart,
+          int? completedTasks,
+          int? totalTasks,
+          double? habitSuccessRate,
+          int? totalMinutes,
+          int? deepWorkMinutes,
+          double? income,
+          double? expense,
+          int? activeGoalsCount,
+          int? completedGoalsCount,
+          Value<String?> answeredWorked = const Value.absent(),
+          Value<String?> answeredFailed = const Value.absent(),
+          Value<String?> answeredLearned = const Value.absent(),
+          DateTime? createdAt}) =>
+      WeeklyReview(
+        id: id ?? this.id,
+        weekStart: weekStart ?? this.weekStart,
+        completedTasks: completedTasks ?? this.completedTasks,
+        totalTasks: totalTasks ?? this.totalTasks,
+        habitSuccessRate: habitSuccessRate ?? this.habitSuccessRate,
+        totalMinutes: totalMinutes ?? this.totalMinutes,
+        deepWorkMinutes: deepWorkMinutes ?? this.deepWorkMinutes,
+        income: income ?? this.income,
+        expense: expense ?? this.expense,
+        activeGoalsCount: activeGoalsCount ?? this.activeGoalsCount,
+        completedGoalsCount: completedGoalsCount ?? this.completedGoalsCount,
+        answeredWorked:
+            answeredWorked.present ? answeredWorked.value : this.answeredWorked,
+        answeredFailed:
+            answeredFailed.present ? answeredFailed.value : this.answeredFailed,
+        answeredLearned: answeredLearned.present
+            ? answeredLearned.value
+            : this.answeredLearned,
+        createdAt: createdAt ?? this.createdAt,
+      );
+  WeeklyReview copyWithCompanion(WeeklyReviewsCompanion data) {
+    return WeeklyReview(
+      id: data.id.present ? data.id.value : this.id,
+      weekStart: data.weekStart.present ? data.weekStart.value : this.weekStart,
+      completedTasks: data.completedTasks.present
+          ? data.completedTasks.value
+          : this.completedTasks,
+      totalTasks:
+          data.totalTasks.present ? data.totalTasks.value : this.totalTasks,
+      habitSuccessRate: data.habitSuccessRate.present
+          ? data.habitSuccessRate.value
+          : this.habitSuccessRate,
+      totalMinutes: data.totalMinutes.present
+          ? data.totalMinutes.value
+          : this.totalMinutes,
+      deepWorkMinutes: data.deepWorkMinutes.present
+          ? data.deepWorkMinutes.value
+          : this.deepWorkMinutes,
+      income: data.income.present ? data.income.value : this.income,
+      expense: data.expense.present ? data.expense.value : this.expense,
+      activeGoalsCount: data.activeGoalsCount.present
+          ? data.activeGoalsCount.value
+          : this.activeGoalsCount,
+      completedGoalsCount: data.completedGoalsCount.present
+          ? data.completedGoalsCount.value
+          : this.completedGoalsCount,
+      answeredWorked: data.answeredWorked.present
+          ? data.answeredWorked.value
+          : this.answeredWorked,
+      answeredFailed: data.answeredFailed.present
+          ? data.answeredFailed.value
+          : this.answeredFailed,
+      answeredLearned: data.answeredLearned.present
+          ? data.answeredLearned.value
+          : this.answeredLearned,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('WeeklyReview(')
+          ..write('id: $id, ')
+          ..write('weekStart: $weekStart, ')
+          ..write('completedTasks: $completedTasks, ')
+          ..write('totalTasks: $totalTasks, ')
+          ..write('habitSuccessRate: $habitSuccessRate, ')
+          ..write('totalMinutes: $totalMinutes, ')
+          ..write('deepWorkMinutes: $deepWorkMinutes, ')
+          ..write('income: $income, ')
+          ..write('expense: $expense, ')
+          ..write('activeGoalsCount: $activeGoalsCount, ')
+          ..write('completedGoalsCount: $completedGoalsCount, ')
+          ..write('answeredWorked: $answeredWorked, ')
+          ..write('answeredFailed: $answeredFailed, ')
+          ..write('answeredLearned: $answeredLearned, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      id,
+      weekStart,
+      completedTasks,
+      totalTasks,
+      habitSuccessRate,
+      totalMinutes,
+      deepWorkMinutes,
+      income,
+      expense,
+      activeGoalsCount,
+      completedGoalsCount,
+      answeredWorked,
+      answeredFailed,
+      answeredLearned,
+      createdAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is WeeklyReview &&
+          other.id == this.id &&
+          other.weekStart == this.weekStart &&
+          other.completedTasks == this.completedTasks &&
+          other.totalTasks == this.totalTasks &&
+          other.habitSuccessRate == this.habitSuccessRate &&
+          other.totalMinutes == this.totalMinutes &&
+          other.deepWorkMinutes == this.deepWorkMinutes &&
+          other.income == this.income &&
+          other.expense == this.expense &&
+          other.activeGoalsCount == this.activeGoalsCount &&
+          other.completedGoalsCount == this.completedGoalsCount &&
+          other.answeredWorked == this.answeredWorked &&
+          other.answeredFailed == this.answeredFailed &&
+          other.answeredLearned == this.answeredLearned &&
+          other.createdAt == this.createdAt);
+}
+
+class WeeklyReviewsCompanion extends UpdateCompanion<WeeklyReview> {
+  final Value<String> id;
+  final Value<DateTime> weekStart;
+  final Value<int> completedTasks;
+  final Value<int> totalTasks;
+  final Value<double> habitSuccessRate;
+  final Value<int> totalMinutes;
+  final Value<int> deepWorkMinutes;
+  final Value<double> income;
+  final Value<double> expense;
+  final Value<int> activeGoalsCount;
+  final Value<int> completedGoalsCount;
+  final Value<String?> answeredWorked;
+  final Value<String?> answeredFailed;
+  final Value<String?> answeredLearned;
+  final Value<DateTime> createdAt;
+  final Value<int> rowid;
+  const WeeklyReviewsCompanion({
+    this.id = const Value.absent(),
+    this.weekStart = const Value.absent(),
+    this.completedTasks = const Value.absent(),
+    this.totalTasks = const Value.absent(),
+    this.habitSuccessRate = const Value.absent(),
+    this.totalMinutes = const Value.absent(),
+    this.deepWorkMinutes = const Value.absent(),
+    this.income = const Value.absent(),
+    this.expense = const Value.absent(),
+    this.activeGoalsCount = const Value.absent(),
+    this.completedGoalsCount = const Value.absent(),
+    this.answeredWorked = const Value.absent(),
+    this.answeredFailed = const Value.absent(),
+    this.answeredLearned = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  WeeklyReviewsCompanion.insert({
+    required String id,
+    required DateTime weekStart,
+    this.completedTasks = const Value.absent(),
+    this.totalTasks = const Value.absent(),
+    this.habitSuccessRate = const Value.absent(),
+    this.totalMinutes = const Value.absent(),
+    this.deepWorkMinutes = const Value.absent(),
+    this.income = const Value.absent(),
+    this.expense = const Value.absent(),
+    this.activeGoalsCount = const Value.absent(),
+    this.completedGoalsCount = const Value.absent(),
+    this.answeredWorked = const Value.absent(),
+    this.answeredFailed = const Value.absent(),
+    this.answeredLearned = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  })  : id = Value(id),
+        weekStart = Value(weekStart);
+  static Insertable<WeeklyReview> custom({
+    Expression<String>? id,
+    Expression<DateTime>? weekStart,
+    Expression<int>? completedTasks,
+    Expression<int>? totalTasks,
+    Expression<double>? habitSuccessRate,
+    Expression<int>? totalMinutes,
+    Expression<int>? deepWorkMinutes,
+    Expression<double>? income,
+    Expression<double>? expense,
+    Expression<int>? activeGoalsCount,
+    Expression<int>? completedGoalsCount,
+    Expression<String>? answeredWorked,
+    Expression<String>? answeredFailed,
+    Expression<String>? answeredLearned,
+    Expression<DateTime>? createdAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (weekStart != null) 'week_start': weekStart,
+      if (completedTasks != null) 'completed_tasks': completedTasks,
+      if (totalTasks != null) 'total_tasks': totalTasks,
+      if (habitSuccessRate != null) 'habit_success_rate': habitSuccessRate,
+      if (totalMinutes != null) 'total_minutes': totalMinutes,
+      if (deepWorkMinutes != null) 'deep_work_minutes': deepWorkMinutes,
+      if (income != null) 'income': income,
+      if (expense != null) 'expense': expense,
+      if (activeGoalsCount != null) 'active_goals_count': activeGoalsCount,
+      if (completedGoalsCount != null)
+        'completed_goals_count': completedGoalsCount,
+      if (answeredWorked != null) 'answered_worked': answeredWorked,
+      if (answeredFailed != null) 'answered_failed': answeredFailed,
+      if (answeredLearned != null) 'answered_learned': answeredLearned,
+      if (createdAt != null) 'created_at': createdAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  WeeklyReviewsCompanion copyWith(
+      {Value<String>? id,
+      Value<DateTime>? weekStart,
+      Value<int>? completedTasks,
+      Value<int>? totalTasks,
+      Value<double>? habitSuccessRate,
+      Value<int>? totalMinutes,
+      Value<int>? deepWorkMinutes,
+      Value<double>? income,
+      Value<double>? expense,
+      Value<int>? activeGoalsCount,
+      Value<int>? completedGoalsCount,
+      Value<String?>? answeredWorked,
+      Value<String?>? answeredFailed,
+      Value<String?>? answeredLearned,
+      Value<DateTime>? createdAt,
+      Value<int>? rowid}) {
+    return WeeklyReviewsCompanion(
+      id: id ?? this.id,
+      weekStart: weekStart ?? this.weekStart,
+      completedTasks: completedTasks ?? this.completedTasks,
+      totalTasks: totalTasks ?? this.totalTasks,
+      habitSuccessRate: habitSuccessRate ?? this.habitSuccessRate,
+      totalMinutes: totalMinutes ?? this.totalMinutes,
+      deepWorkMinutes: deepWorkMinutes ?? this.deepWorkMinutes,
+      income: income ?? this.income,
+      expense: expense ?? this.expense,
+      activeGoalsCount: activeGoalsCount ?? this.activeGoalsCount,
+      completedGoalsCount: completedGoalsCount ?? this.completedGoalsCount,
+      answeredWorked: answeredWorked ?? this.answeredWorked,
+      answeredFailed: answeredFailed ?? this.answeredFailed,
+      answeredLearned: answeredLearned ?? this.answeredLearned,
+      createdAt: createdAt ?? this.createdAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (weekStart.present) {
+      map['week_start'] = Variable<DateTime>(weekStart.value);
+    }
+    if (completedTasks.present) {
+      map['completed_tasks'] = Variable<int>(completedTasks.value);
+    }
+    if (totalTasks.present) {
+      map['total_tasks'] = Variable<int>(totalTasks.value);
+    }
+    if (habitSuccessRate.present) {
+      map['habit_success_rate'] = Variable<double>(habitSuccessRate.value);
+    }
+    if (totalMinutes.present) {
+      map['total_minutes'] = Variable<int>(totalMinutes.value);
+    }
+    if (deepWorkMinutes.present) {
+      map['deep_work_minutes'] = Variable<int>(deepWorkMinutes.value);
+    }
+    if (income.present) {
+      map['income'] = Variable<double>(income.value);
+    }
+    if (expense.present) {
+      map['expense'] = Variable<double>(expense.value);
+    }
+    if (activeGoalsCount.present) {
+      map['active_goals_count'] = Variable<int>(activeGoalsCount.value);
+    }
+    if (completedGoalsCount.present) {
+      map['completed_goals_count'] = Variable<int>(completedGoalsCount.value);
+    }
+    if (answeredWorked.present) {
+      map['answered_worked'] = Variable<String>(answeredWorked.value);
+    }
+    if (answeredFailed.present) {
+      map['answered_failed'] = Variable<String>(answeredFailed.value);
+    }
+    if (answeredLearned.present) {
+      map['answered_learned'] = Variable<String>(answeredLearned.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('WeeklyReviewsCompanion(')
+          ..write('id: $id, ')
+          ..write('weekStart: $weekStart, ')
+          ..write('completedTasks: $completedTasks, ')
+          ..write('totalTasks: $totalTasks, ')
+          ..write('habitSuccessRate: $habitSuccessRate, ')
+          ..write('totalMinutes: $totalMinutes, ')
+          ..write('deepWorkMinutes: $deepWorkMinutes, ')
+          ..write('income: $income, ')
+          ..write('expense: $expense, ')
+          ..write('activeGoalsCount: $activeGoalsCount, ')
+          ..write('completedGoalsCount: $completedGoalsCount, ')
+          ..write('answeredWorked: $answeredWorked, ')
+          ..write('answeredFailed: $answeredFailed, ')
+          ..write('answeredLearned: $answeredLearned, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $MonthlyReflectionsTable extends MonthlyReflections
+    with TableInfo<$MonthlyReflectionsTable, MonthlyReflection> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $MonthlyReflectionsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+      'id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _yearMeta = const VerificationMeta('year');
+  @override
+  late final GeneratedColumn<int> year = GeneratedColumn<int>(
+      'year', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _monthMeta = const VerificationMeta('month');
+  @override
+  late final GeneratedColumn<int> month = GeneratedColumn<int>(
+      'month', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _answeredContinueMeta =
+      const VerificationMeta('answeredContinue');
+  @override
+  late final GeneratedColumn<String> answeredContinue = GeneratedColumn<String>(
+      'answered_continue', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _answeredStopMeta =
+      const VerificationMeta('answeredStop');
+  @override
+  late final GeneratedColumn<String> answeredStop = GeneratedColumn<String>(
+      'answered_stop', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _answeredStartMeta =
+      const VerificationMeta('answeredStart');
+  @override
+  late final GeneratedColumn<String> answeredStart = GeneratedColumn<String>(
+      'answered_start', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _answeredProudMeta =
+      const VerificationMeta('answeredProud');
+  @override
+  late final GeneratedColumn<String> answeredProud = GeneratedColumn<String>(
+      'answered_proud', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _createdAtMeta =
+      const VerificationMeta('createdAt');
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+      'created_at', aliasedName, false,
+      type: DriftSqlType.dateTime,
+      requiredDuringInsert: false,
+      defaultValue: currentDateAndTime);
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        year,
+        month,
+        answeredContinue,
+        answeredStop,
+        answeredStart,
+        answeredProud,
+        createdAt
+      ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'monthly_reflections';
+  @override
+  VerificationContext validateIntegrity(Insertable<MonthlyReflection> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('year')) {
+      context.handle(
+          _yearMeta, year.isAcceptableOrUnknown(data['year']!, _yearMeta));
+    } else if (isInserting) {
+      context.missing(_yearMeta);
+    }
+    if (data.containsKey('month')) {
+      context.handle(
+          _monthMeta, month.isAcceptableOrUnknown(data['month']!, _monthMeta));
+    } else if (isInserting) {
+      context.missing(_monthMeta);
+    }
+    if (data.containsKey('answered_continue')) {
+      context.handle(
+          _answeredContinueMeta,
+          answeredContinue.isAcceptableOrUnknown(
+              data['answered_continue']!, _answeredContinueMeta));
+    }
+    if (data.containsKey('answered_stop')) {
+      context.handle(
+          _answeredStopMeta,
+          answeredStop.isAcceptableOrUnknown(
+              data['answered_stop']!, _answeredStopMeta));
+    }
+    if (data.containsKey('answered_start')) {
+      context.handle(
+          _answeredStartMeta,
+          answeredStart.isAcceptableOrUnknown(
+              data['answered_start']!, _answeredStartMeta));
+    }
+    if (data.containsKey('answered_proud')) {
+      context.handle(
+          _answeredProudMeta,
+          answeredProud.isAcceptableOrUnknown(
+              data['answered_proud']!, _answeredProudMeta));
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  MonthlyReflection map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return MonthlyReflection(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
+      year: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}year'])!,
+      month: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}month'])!,
+      answeredContinue: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}answered_continue']),
+      answeredStop: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}answered_stop']),
+      answeredStart: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}answered_start']),
+      answeredProud: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}answered_proud']),
+      createdAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
+    );
+  }
+
+  @override
+  $MonthlyReflectionsTable createAlias(String alias) {
+    return $MonthlyReflectionsTable(attachedDatabase, alias);
+  }
+}
+
+class MonthlyReflection extends DataClass
+    implements Insertable<MonthlyReflection> {
+  final String id;
+  final int year;
+  final int month;
+  final String? answeredContinue;
+  final String? answeredStop;
+  final String? answeredStart;
+  final String? answeredProud;
+  final DateTime createdAt;
+  const MonthlyReflection(
+      {required this.id,
+      required this.year,
+      required this.month,
+      this.answeredContinue,
+      this.answeredStop,
+      this.answeredStart,
+      this.answeredProud,
+      required this.createdAt});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['year'] = Variable<int>(year);
+    map['month'] = Variable<int>(month);
+    if (!nullToAbsent || answeredContinue != null) {
+      map['answered_continue'] = Variable<String>(answeredContinue);
+    }
+    if (!nullToAbsent || answeredStop != null) {
+      map['answered_stop'] = Variable<String>(answeredStop);
+    }
+    if (!nullToAbsent || answeredStart != null) {
+      map['answered_start'] = Variable<String>(answeredStart);
+    }
+    if (!nullToAbsent || answeredProud != null) {
+      map['answered_proud'] = Variable<String>(answeredProud);
+    }
+    map['created_at'] = Variable<DateTime>(createdAt);
+    return map;
+  }
+
+  MonthlyReflectionsCompanion toCompanion(bool nullToAbsent) {
+    return MonthlyReflectionsCompanion(
+      id: Value(id),
+      year: Value(year),
+      month: Value(month),
+      answeredContinue: answeredContinue == null && nullToAbsent
+          ? const Value.absent()
+          : Value(answeredContinue),
+      answeredStop: answeredStop == null && nullToAbsent
+          ? const Value.absent()
+          : Value(answeredStop),
+      answeredStart: answeredStart == null && nullToAbsent
+          ? const Value.absent()
+          : Value(answeredStart),
+      answeredProud: answeredProud == null && nullToAbsent
+          ? const Value.absent()
+          : Value(answeredProud),
+      createdAt: Value(createdAt),
+    );
+  }
+
+  factory MonthlyReflection.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return MonthlyReflection(
+      id: serializer.fromJson<String>(json['id']),
+      year: serializer.fromJson<int>(json['year']),
+      month: serializer.fromJson<int>(json['month']),
+      answeredContinue: serializer.fromJson<String?>(json['answeredContinue']),
+      answeredStop: serializer.fromJson<String?>(json['answeredStop']),
+      answeredStart: serializer.fromJson<String?>(json['answeredStart']),
+      answeredProud: serializer.fromJson<String?>(json['answeredProud']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'year': serializer.toJson<int>(year),
+      'month': serializer.toJson<int>(month),
+      'answeredContinue': serializer.toJson<String?>(answeredContinue),
+      'answeredStop': serializer.toJson<String?>(answeredStop),
+      'answeredStart': serializer.toJson<String?>(answeredStart),
+      'answeredProud': serializer.toJson<String?>(answeredProud),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+    };
+  }
+
+  MonthlyReflection copyWith(
+          {String? id,
+          int? year,
+          int? month,
+          Value<String?> answeredContinue = const Value.absent(),
+          Value<String?> answeredStop = const Value.absent(),
+          Value<String?> answeredStart = const Value.absent(),
+          Value<String?> answeredProud = const Value.absent(),
+          DateTime? createdAt}) =>
+      MonthlyReflection(
+        id: id ?? this.id,
+        year: year ?? this.year,
+        month: month ?? this.month,
+        answeredContinue: answeredContinue.present
+            ? answeredContinue.value
+            : this.answeredContinue,
+        answeredStop:
+            answeredStop.present ? answeredStop.value : this.answeredStop,
+        answeredStart:
+            answeredStart.present ? answeredStart.value : this.answeredStart,
+        answeredProud:
+            answeredProud.present ? answeredProud.value : this.answeredProud,
+        createdAt: createdAt ?? this.createdAt,
+      );
+  MonthlyReflection copyWithCompanion(MonthlyReflectionsCompanion data) {
+    return MonthlyReflection(
+      id: data.id.present ? data.id.value : this.id,
+      year: data.year.present ? data.year.value : this.year,
+      month: data.month.present ? data.month.value : this.month,
+      answeredContinue: data.answeredContinue.present
+          ? data.answeredContinue.value
+          : this.answeredContinue,
+      answeredStop: data.answeredStop.present
+          ? data.answeredStop.value
+          : this.answeredStop,
+      answeredStart: data.answeredStart.present
+          ? data.answeredStart.value
+          : this.answeredStart,
+      answeredProud: data.answeredProud.present
+          ? data.answeredProud.value
+          : this.answeredProud,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('MonthlyReflection(')
+          ..write('id: $id, ')
+          ..write('year: $year, ')
+          ..write('month: $month, ')
+          ..write('answeredContinue: $answeredContinue, ')
+          ..write('answeredStop: $answeredStop, ')
+          ..write('answeredStart: $answeredStart, ')
+          ..write('answeredProud: $answeredProud, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, year, month, answeredContinue,
+      answeredStop, answeredStart, answeredProud, createdAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is MonthlyReflection &&
+          other.id == this.id &&
+          other.year == this.year &&
+          other.month == this.month &&
+          other.answeredContinue == this.answeredContinue &&
+          other.answeredStop == this.answeredStop &&
+          other.answeredStart == this.answeredStart &&
+          other.answeredProud == this.answeredProud &&
+          other.createdAt == this.createdAt);
+}
+
+class MonthlyReflectionsCompanion extends UpdateCompanion<MonthlyReflection> {
+  final Value<String> id;
+  final Value<int> year;
+  final Value<int> month;
+  final Value<String?> answeredContinue;
+  final Value<String?> answeredStop;
+  final Value<String?> answeredStart;
+  final Value<String?> answeredProud;
+  final Value<DateTime> createdAt;
+  final Value<int> rowid;
+  const MonthlyReflectionsCompanion({
+    this.id = const Value.absent(),
+    this.year = const Value.absent(),
+    this.month = const Value.absent(),
+    this.answeredContinue = const Value.absent(),
+    this.answeredStop = const Value.absent(),
+    this.answeredStart = const Value.absent(),
+    this.answeredProud = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  MonthlyReflectionsCompanion.insert({
+    required String id,
+    required int year,
+    required int month,
+    this.answeredContinue = const Value.absent(),
+    this.answeredStop = const Value.absent(),
+    this.answeredStart = const Value.absent(),
+    this.answeredProud = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  })  : id = Value(id),
+        year = Value(year),
+        month = Value(month);
+  static Insertable<MonthlyReflection> custom({
+    Expression<String>? id,
+    Expression<int>? year,
+    Expression<int>? month,
+    Expression<String>? answeredContinue,
+    Expression<String>? answeredStop,
+    Expression<String>? answeredStart,
+    Expression<String>? answeredProud,
+    Expression<DateTime>? createdAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (year != null) 'year': year,
+      if (month != null) 'month': month,
+      if (answeredContinue != null) 'answered_continue': answeredContinue,
+      if (answeredStop != null) 'answered_stop': answeredStop,
+      if (answeredStart != null) 'answered_start': answeredStart,
+      if (answeredProud != null) 'answered_proud': answeredProud,
+      if (createdAt != null) 'created_at': createdAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  MonthlyReflectionsCompanion copyWith(
+      {Value<String>? id,
+      Value<int>? year,
+      Value<int>? month,
+      Value<String?>? answeredContinue,
+      Value<String?>? answeredStop,
+      Value<String?>? answeredStart,
+      Value<String?>? answeredProud,
+      Value<DateTime>? createdAt,
+      Value<int>? rowid}) {
+    return MonthlyReflectionsCompanion(
+      id: id ?? this.id,
+      year: year ?? this.year,
+      month: month ?? this.month,
+      answeredContinue: answeredContinue ?? this.answeredContinue,
+      answeredStop: answeredStop ?? this.answeredStop,
+      answeredStart: answeredStart ?? this.answeredStart,
+      answeredProud: answeredProud ?? this.answeredProud,
+      createdAt: createdAt ?? this.createdAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (year.present) {
+      map['year'] = Variable<int>(year.value);
+    }
+    if (month.present) {
+      map['month'] = Variable<int>(month.value);
+    }
+    if (answeredContinue.present) {
+      map['answered_continue'] = Variable<String>(answeredContinue.value);
+    }
+    if (answeredStop.present) {
+      map['answered_stop'] = Variable<String>(answeredStop.value);
+    }
+    if (answeredStart.present) {
+      map['answered_start'] = Variable<String>(answeredStart.value);
+    }
+    if (answeredProud.present) {
+      map['answered_proud'] = Variable<String>(answeredProud.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('MonthlyReflectionsCompanion(')
+          ..write('id: $id, ')
+          ..write('year: $year, ')
+          ..write('month: $month, ')
+          ..write('answeredContinue: $answeredContinue, ')
+          ..write('answeredStop: $answeredStop, ')
+          ..write('answeredStart: $answeredStart, ')
+          ..write('answeredProud: $answeredProud, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -4441,6 +5639,9 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $TimeLogsTable timeLogs = $TimeLogsTable(this);
   late final $KpisTable kpis = $KpisTable(this);
   late final $KpiLogsTable kpiLogs = $KpiLogsTable(this);
+  late final $WeeklyReviewsTable weeklyReviews = $WeeklyReviewsTable(this);
+  late final $MonthlyReflectionsTable monthlyReflections =
+      $MonthlyReflectionsTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -4456,7 +5657,9 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         habitLogs,
         timeLogs,
         kpis,
-        kpiLogs
+        kpiLogs,
+        weeklyReviews,
+        monthlyReflections
       ];
 }
 
@@ -7448,6 +8651,571 @@ typedef $$KpiLogsTableProcessedTableManager = ProcessedTableManager<
     (KpiLog, $$KpiLogsTableReferences),
     KpiLog,
     PrefetchHooks Function({bool kpiId})>;
+typedef $$WeeklyReviewsTableCreateCompanionBuilder = WeeklyReviewsCompanion
+    Function({
+  required String id,
+  required DateTime weekStart,
+  Value<int> completedTasks,
+  Value<int> totalTasks,
+  Value<double> habitSuccessRate,
+  Value<int> totalMinutes,
+  Value<int> deepWorkMinutes,
+  Value<double> income,
+  Value<double> expense,
+  Value<int> activeGoalsCount,
+  Value<int> completedGoalsCount,
+  Value<String?> answeredWorked,
+  Value<String?> answeredFailed,
+  Value<String?> answeredLearned,
+  Value<DateTime> createdAt,
+  Value<int> rowid,
+});
+typedef $$WeeklyReviewsTableUpdateCompanionBuilder = WeeklyReviewsCompanion
+    Function({
+  Value<String> id,
+  Value<DateTime> weekStart,
+  Value<int> completedTasks,
+  Value<int> totalTasks,
+  Value<double> habitSuccessRate,
+  Value<int> totalMinutes,
+  Value<int> deepWorkMinutes,
+  Value<double> income,
+  Value<double> expense,
+  Value<int> activeGoalsCount,
+  Value<int> completedGoalsCount,
+  Value<String?> answeredWorked,
+  Value<String?> answeredFailed,
+  Value<String?> answeredLearned,
+  Value<DateTime> createdAt,
+  Value<int> rowid,
+});
+
+class $$WeeklyReviewsTableFilterComposer
+    extends Composer<_$AppDatabase, $WeeklyReviewsTable> {
+  $$WeeklyReviewsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get weekStart => $composableBuilder(
+      column: $table.weekStart, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get completedTasks => $composableBuilder(
+      column: $table.completedTasks,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get totalTasks => $composableBuilder(
+      column: $table.totalTasks, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<double> get habitSuccessRate => $composableBuilder(
+      column: $table.habitSuccessRate,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get totalMinutes => $composableBuilder(
+      column: $table.totalMinutes, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get deepWorkMinutes => $composableBuilder(
+      column: $table.deepWorkMinutes,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<double> get income => $composableBuilder(
+      column: $table.income, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<double> get expense => $composableBuilder(
+      column: $table.expense, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get activeGoalsCount => $composableBuilder(
+      column: $table.activeGoalsCount,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get completedGoalsCount => $composableBuilder(
+      column: $table.completedGoalsCount,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get answeredWorked => $composableBuilder(
+      column: $table.answeredWorked,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get answeredFailed => $composableBuilder(
+      column: $table.answeredFailed,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get answeredLearned => $composableBuilder(
+      column: $table.answeredLearned,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+}
+
+class $$WeeklyReviewsTableOrderingComposer
+    extends Composer<_$AppDatabase, $WeeklyReviewsTable> {
+  $$WeeklyReviewsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get weekStart => $composableBuilder(
+      column: $table.weekStart, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get completedTasks => $composableBuilder(
+      column: $table.completedTasks,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get totalTasks => $composableBuilder(
+      column: $table.totalTasks, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<double> get habitSuccessRate => $composableBuilder(
+      column: $table.habitSuccessRate,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get totalMinutes => $composableBuilder(
+      column: $table.totalMinutes,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get deepWorkMinutes => $composableBuilder(
+      column: $table.deepWorkMinutes,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<double> get income => $composableBuilder(
+      column: $table.income, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<double> get expense => $composableBuilder(
+      column: $table.expense, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get activeGoalsCount => $composableBuilder(
+      column: $table.activeGoalsCount,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get completedGoalsCount => $composableBuilder(
+      column: $table.completedGoalsCount,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get answeredWorked => $composableBuilder(
+      column: $table.answeredWorked,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get answeredFailed => $composableBuilder(
+      column: $table.answeredFailed,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get answeredLearned => $composableBuilder(
+      column: $table.answeredLearned,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+}
+
+class $$WeeklyReviewsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $WeeklyReviewsTable> {
+  $$WeeklyReviewsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get weekStart =>
+      $composableBuilder(column: $table.weekStart, builder: (column) => column);
+
+  GeneratedColumn<int> get completedTasks => $composableBuilder(
+      column: $table.completedTasks, builder: (column) => column);
+
+  GeneratedColumn<int> get totalTasks => $composableBuilder(
+      column: $table.totalTasks, builder: (column) => column);
+
+  GeneratedColumn<double> get habitSuccessRate => $composableBuilder(
+      column: $table.habitSuccessRate, builder: (column) => column);
+
+  GeneratedColumn<int> get totalMinutes => $composableBuilder(
+      column: $table.totalMinutes, builder: (column) => column);
+
+  GeneratedColumn<int> get deepWorkMinutes => $composableBuilder(
+      column: $table.deepWorkMinutes, builder: (column) => column);
+
+  GeneratedColumn<double> get income =>
+      $composableBuilder(column: $table.income, builder: (column) => column);
+
+  GeneratedColumn<double> get expense =>
+      $composableBuilder(column: $table.expense, builder: (column) => column);
+
+  GeneratedColumn<int> get activeGoalsCount => $composableBuilder(
+      column: $table.activeGoalsCount, builder: (column) => column);
+
+  GeneratedColumn<int> get completedGoalsCount => $composableBuilder(
+      column: $table.completedGoalsCount, builder: (column) => column);
+
+  GeneratedColumn<String> get answeredWorked => $composableBuilder(
+      column: $table.answeredWorked, builder: (column) => column);
+
+  GeneratedColumn<String> get answeredFailed => $composableBuilder(
+      column: $table.answeredFailed, builder: (column) => column);
+
+  GeneratedColumn<String> get answeredLearned => $composableBuilder(
+      column: $table.answeredLearned, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+}
+
+class $$WeeklyReviewsTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $WeeklyReviewsTable,
+    WeeklyReview,
+    $$WeeklyReviewsTableFilterComposer,
+    $$WeeklyReviewsTableOrderingComposer,
+    $$WeeklyReviewsTableAnnotationComposer,
+    $$WeeklyReviewsTableCreateCompanionBuilder,
+    $$WeeklyReviewsTableUpdateCompanionBuilder,
+    (
+      WeeklyReview,
+      BaseReferences<_$AppDatabase, $WeeklyReviewsTable, WeeklyReview>
+    ),
+    WeeklyReview,
+    PrefetchHooks Function()> {
+  $$WeeklyReviewsTableTableManager(_$AppDatabase db, $WeeklyReviewsTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$WeeklyReviewsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$WeeklyReviewsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$WeeklyReviewsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<String> id = const Value.absent(),
+            Value<DateTime> weekStart = const Value.absent(),
+            Value<int> completedTasks = const Value.absent(),
+            Value<int> totalTasks = const Value.absent(),
+            Value<double> habitSuccessRate = const Value.absent(),
+            Value<int> totalMinutes = const Value.absent(),
+            Value<int> deepWorkMinutes = const Value.absent(),
+            Value<double> income = const Value.absent(),
+            Value<double> expense = const Value.absent(),
+            Value<int> activeGoalsCount = const Value.absent(),
+            Value<int> completedGoalsCount = const Value.absent(),
+            Value<String?> answeredWorked = const Value.absent(),
+            Value<String?> answeredFailed = const Value.absent(),
+            Value<String?> answeredLearned = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              WeeklyReviewsCompanion(
+            id: id,
+            weekStart: weekStart,
+            completedTasks: completedTasks,
+            totalTasks: totalTasks,
+            habitSuccessRate: habitSuccessRate,
+            totalMinutes: totalMinutes,
+            deepWorkMinutes: deepWorkMinutes,
+            income: income,
+            expense: expense,
+            activeGoalsCount: activeGoalsCount,
+            completedGoalsCount: completedGoalsCount,
+            answeredWorked: answeredWorked,
+            answeredFailed: answeredFailed,
+            answeredLearned: answeredLearned,
+            createdAt: createdAt,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required String id,
+            required DateTime weekStart,
+            Value<int> completedTasks = const Value.absent(),
+            Value<int> totalTasks = const Value.absent(),
+            Value<double> habitSuccessRate = const Value.absent(),
+            Value<int> totalMinutes = const Value.absent(),
+            Value<int> deepWorkMinutes = const Value.absent(),
+            Value<double> income = const Value.absent(),
+            Value<double> expense = const Value.absent(),
+            Value<int> activeGoalsCount = const Value.absent(),
+            Value<int> completedGoalsCount = const Value.absent(),
+            Value<String?> answeredWorked = const Value.absent(),
+            Value<String?> answeredFailed = const Value.absent(),
+            Value<String?> answeredLearned = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              WeeklyReviewsCompanion.insert(
+            id: id,
+            weekStart: weekStart,
+            completedTasks: completedTasks,
+            totalTasks: totalTasks,
+            habitSuccessRate: habitSuccessRate,
+            totalMinutes: totalMinutes,
+            deepWorkMinutes: deepWorkMinutes,
+            income: income,
+            expense: expense,
+            activeGoalsCount: activeGoalsCount,
+            completedGoalsCount: completedGoalsCount,
+            answeredWorked: answeredWorked,
+            answeredFailed: answeredFailed,
+            answeredLearned: answeredLearned,
+            createdAt: createdAt,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$WeeklyReviewsTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $WeeklyReviewsTable,
+    WeeklyReview,
+    $$WeeklyReviewsTableFilterComposer,
+    $$WeeklyReviewsTableOrderingComposer,
+    $$WeeklyReviewsTableAnnotationComposer,
+    $$WeeklyReviewsTableCreateCompanionBuilder,
+    $$WeeklyReviewsTableUpdateCompanionBuilder,
+    (
+      WeeklyReview,
+      BaseReferences<_$AppDatabase, $WeeklyReviewsTable, WeeklyReview>
+    ),
+    WeeklyReview,
+    PrefetchHooks Function()>;
+typedef $$MonthlyReflectionsTableCreateCompanionBuilder
+    = MonthlyReflectionsCompanion Function({
+  required String id,
+  required int year,
+  required int month,
+  Value<String?> answeredContinue,
+  Value<String?> answeredStop,
+  Value<String?> answeredStart,
+  Value<String?> answeredProud,
+  Value<DateTime> createdAt,
+  Value<int> rowid,
+});
+typedef $$MonthlyReflectionsTableUpdateCompanionBuilder
+    = MonthlyReflectionsCompanion Function({
+  Value<String> id,
+  Value<int> year,
+  Value<int> month,
+  Value<String?> answeredContinue,
+  Value<String?> answeredStop,
+  Value<String?> answeredStart,
+  Value<String?> answeredProud,
+  Value<DateTime> createdAt,
+  Value<int> rowid,
+});
+
+class $$MonthlyReflectionsTableFilterComposer
+    extends Composer<_$AppDatabase, $MonthlyReflectionsTable> {
+  $$MonthlyReflectionsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get year => $composableBuilder(
+      column: $table.year, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get month => $composableBuilder(
+      column: $table.month, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get answeredContinue => $composableBuilder(
+      column: $table.answeredContinue,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get answeredStop => $composableBuilder(
+      column: $table.answeredStop, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get answeredStart => $composableBuilder(
+      column: $table.answeredStart, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get answeredProud => $composableBuilder(
+      column: $table.answeredProud, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+}
+
+class $$MonthlyReflectionsTableOrderingComposer
+    extends Composer<_$AppDatabase, $MonthlyReflectionsTable> {
+  $$MonthlyReflectionsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get year => $composableBuilder(
+      column: $table.year, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get month => $composableBuilder(
+      column: $table.month, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get answeredContinue => $composableBuilder(
+      column: $table.answeredContinue,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get answeredStop => $composableBuilder(
+      column: $table.answeredStop,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get answeredStart => $composableBuilder(
+      column: $table.answeredStart,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get answeredProud => $composableBuilder(
+      column: $table.answeredProud,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+}
+
+class $$MonthlyReflectionsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $MonthlyReflectionsTable> {
+  $$MonthlyReflectionsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<int> get year =>
+      $composableBuilder(column: $table.year, builder: (column) => column);
+
+  GeneratedColumn<int> get month =>
+      $composableBuilder(column: $table.month, builder: (column) => column);
+
+  GeneratedColumn<String> get answeredContinue => $composableBuilder(
+      column: $table.answeredContinue, builder: (column) => column);
+
+  GeneratedColumn<String> get answeredStop => $composableBuilder(
+      column: $table.answeredStop, builder: (column) => column);
+
+  GeneratedColumn<String> get answeredStart => $composableBuilder(
+      column: $table.answeredStart, builder: (column) => column);
+
+  GeneratedColumn<String> get answeredProud => $composableBuilder(
+      column: $table.answeredProud, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+}
+
+class $$MonthlyReflectionsTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $MonthlyReflectionsTable,
+    MonthlyReflection,
+    $$MonthlyReflectionsTableFilterComposer,
+    $$MonthlyReflectionsTableOrderingComposer,
+    $$MonthlyReflectionsTableAnnotationComposer,
+    $$MonthlyReflectionsTableCreateCompanionBuilder,
+    $$MonthlyReflectionsTableUpdateCompanionBuilder,
+    (
+      MonthlyReflection,
+      BaseReferences<_$AppDatabase, $MonthlyReflectionsTable, MonthlyReflection>
+    ),
+    MonthlyReflection,
+    PrefetchHooks Function()> {
+  $$MonthlyReflectionsTableTableManager(
+      _$AppDatabase db, $MonthlyReflectionsTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$MonthlyReflectionsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$MonthlyReflectionsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$MonthlyReflectionsTableAnnotationComposer(
+                  $db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<String> id = const Value.absent(),
+            Value<int> year = const Value.absent(),
+            Value<int> month = const Value.absent(),
+            Value<String?> answeredContinue = const Value.absent(),
+            Value<String?> answeredStop = const Value.absent(),
+            Value<String?> answeredStart = const Value.absent(),
+            Value<String?> answeredProud = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              MonthlyReflectionsCompanion(
+            id: id,
+            year: year,
+            month: month,
+            answeredContinue: answeredContinue,
+            answeredStop: answeredStop,
+            answeredStart: answeredStart,
+            answeredProud: answeredProud,
+            createdAt: createdAt,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required String id,
+            required int year,
+            required int month,
+            Value<String?> answeredContinue = const Value.absent(),
+            Value<String?> answeredStop = const Value.absent(),
+            Value<String?> answeredStart = const Value.absent(),
+            Value<String?> answeredProud = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              MonthlyReflectionsCompanion.insert(
+            id: id,
+            year: year,
+            month: month,
+            answeredContinue: answeredContinue,
+            answeredStop: answeredStop,
+            answeredStart: answeredStart,
+            answeredProud: answeredProud,
+            createdAt: createdAt,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$MonthlyReflectionsTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $MonthlyReflectionsTable,
+    MonthlyReflection,
+    $$MonthlyReflectionsTableFilterComposer,
+    $$MonthlyReflectionsTableOrderingComposer,
+    $$MonthlyReflectionsTableAnnotationComposer,
+    $$MonthlyReflectionsTableCreateCompanionBuilder,
+    $$MonthlyReflectionsTableUpdateCompanionBuilder,
+    (
+      MonthlyReflection,
+      BaseReferences<_$AppDatabase, $MonthlyReflectionsTable, MonthlyReflection>
+    ),
+    MonthlyReflection,
+    PrefetchHooks Function()>;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -7473,4 +9241,8 @@ class $AppDatabaseManager {
   $$KpisTableTableManager get kpis => $$KpisTableTableManager(_db, _db.kpis);
   $$KpiLogsTableTableManager get kpiLogs =>
       $$KpiLogsTableTableManager(_db, _db.kpiLogs);
+  $$WeeklyReviewsTableTableManager get weeklyReviews =>
+      $$WeeklyReviewsTableTableManager(_db, _db.weeklyReviews);
+  $$MonthlyReflectionsTableTableManager get monthlyReflections =>
+      $$MonthlyReflectionsTableTableManager(_db, _db.monthlyReflections);
 }
