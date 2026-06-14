@@ -348,6 +348,20 @@ class AppDatabase extends _$AppDatabase {
       (update(habits)..where((h) => h.id.equals(habitId)))
           .write(const HabitsCompanion(status: Value('archived')));
 
+  Future<void> updateHabit(
+    String habitId, {
+    required String title,
+    required String emoji,
+    required String timeOfDay,
+  }) =>
+      (update(habits)..where((h) => h.id.equals(habitId))).write(
+        HabitsCompanion(
+          title: Value(title),
+          emoji: Value(emoji),
+          timeOfDay: Value(timeOfDay),
+        ),
+      );
+
   // ── Timer ────────────────────────────────────────────────────
 
   Stream<List<TimeLog>> watchTodayTimeLogs() {

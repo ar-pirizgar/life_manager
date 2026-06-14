@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../shared/constants/app_strings.dart';
 import '../../../shared/database/database.dart';
 import '../../../shared/database/database_provider.dart';
 import '../../../shared/utils/jalali_helper.dart';
 import '../providers/habit_providers.dart';
+import 'add_habit_sheet.dart';
 
 class HabitCard extends ConsumerWidget {
   const HabitCard({super.key, required this.habit});
@@ -258,20 +260,22 @@ class _PopupMenu extends ConsumerWidget {
       iconSize: 18,
       padding: EdgeInsets.zero,
       onSelected: (value) async {
-        if (value == 'archive') {
+        if (value == 'edit') {
+          await showAddHabitSheet(context, habit: habit);
+        } else if (value == 'archive') {
           final ok = await showDialog<bool>(
             context: context,
             builder: (ctx) => AlertDialog(
-              title: const Text('بایگانی عادت'),
-              content: Text('«${habit.title}» بایگانی شود؟\nتاریخچه حفظ می‌شود.'),
+              title: const Text(AppStrings.archiveHabitTitle),
+              content: Text('«${habit.title}» ${AppStrings.archiveHabitBody}'),
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(ctx, false),
-                  child: const Text('لغو'),
+                  child: const Text(AppStrings.cancel),
                 ),
                 FilledButton(
                   onPressed: () => Navigator.pop(ctx, true),
-                  child: const Text('بایگانی'),
+                  child: const Text(AppStrings.archive),
                 ),
               ],
             ),
@@ -283,12 +287,22 @@ class _PopupMenu extends ConsumerWidget {
       },
       itemBuilder: (_) => const [
         PopupMenuItem(
+          value: 'edit',
+          child: Row(
+            children: [
+              Icon(Icons.edit_outlined, size: 18),
+              SizedBox(width: 8),
+              Text(AppStrings.edit),
+            ],
+          ),
+        ),
+        PopupMenuItem(
           value: 'archive',
           child: Row(
             children: [
               Icon(Icons.archive_outlined, size: 18),
               SizedBox(width: 8),
-              Text('بایگانی'),
+              Text(AppStrings.archive),
             ],
           ),
         ),

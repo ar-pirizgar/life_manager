@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../shared/constants/app_strings.dart';
+import '../../../shared/database/database.dart';
+import '../../../shared/database/database_provider.dart';
 import '../../../shared/utils/jalali_helper.dart';
+import '../../habits/providers/habit_providers.dart';
 import '../../tasks/providers/task_providers.dart';
 import '../../finance/widgets/add_transaction_sheet.dart';
 import '../../tasks/widgets/quick_add_task_sheet.dart';
 import '../../tasks/widgets/task_tile.dart';
 
-/// صفحه اصلی اپ.
-/// شامل دکمه‌های ثبت سریع و لیست تسک‌های امروز.
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
@@ -16,12 +18,14 @@ class HomeScreen extends ConsumerWidget {
     final theme = Theme.of(context);
     final now = DateTime.now();
     final todayTasks = ref.watch(todayTasksProvider);
+    final habitsAsync = ref.watch(activeHabitsProvider);
+    final doneSet = ref.watch(todayDoneSetProvider);
 
     return Scaffold(
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
-            // هدر تاریخ
+            // Date header
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
@@ -45,7 +49,7 @@ class HomeScreen extends ConsumerWidget {
               ),
             ),
 
-            // دکمه‌های ثبت سریع
+            // Quick action buttons
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -75,7 +79,7 @@ class HomeScreen extends ConsumerWidget {
 
             const SliverToBoxAdapter(child: SizedBox(height: 24)),
 
-            // عنوان بخش تسک‌های امروز
+            // Today's tasks section title
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -90,7 +94,7 @@ class HomeScreen extends ConsumerWidget {
 
             const SliverToBoxAdapter(child: SizedBox(height: 8)),
 
-            // لیست تسک‌های امروز
+            // Today's tasks list
             todayTasks.when(
               data: (tasks) {
                 if (tasks.isEmpty) {
@@ -140,6 +144,55 @@ class HomeScreen extends ConsumerWidget {
               ),
             ),
 
+            const SliverToBoxAdapter(child: SizedBox(height: 24)),
+
+            // Today's habits section title
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Text(
+                  AppStrings.todayHabits,
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+
+            const SliverToBoxAdapter(child: SizedBox(height: 8)),
+
+            // Today's habits list
+            habitsAsync.when(
+              data: (habits) {
+                if (habits.isEmpty) {
+                  return SliverToBoxAdapter(
+                    child: Padding(
+                      padding:
+                          const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                      child: Text(
+                        AppStrings.noHabitsToday,
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ),
+                  );
+                }
+                return SliverPadding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  sliver: SliverList.builder(
+                    itemCount: habits.length,
+                    itemBuilder: (_, i) => _HomeHabitRow(
+                      habit: habits[i],
+                      isDone: doneSet.contains(habits[i].id),
+                    ),
+                  ),
+                );
+              },
+              loading: () => const SliverToBoxAdapter(child: SizedBox.shrink()),
+              error: (_, __) => const SliverToBoxAdapter(child: SizedBox.shrink()),
+            ),
+
             const SliverToBoxAdapter(child: SizedBox(height: 100)),
           ],
         ),
@@ -147,6 +200,77 @@ class HomeScreen extends ConsumerWidget {
     );
   }
 }
+
+// ─── Home Habit Row ───────────────────────────────────────────
+
+class _HomeHabitRow extends ConsumerWidget {
+  const _HomeHabitRow({required this.habit, required this.isDone});
+
+  final Habit habit;
+  final bool isDone;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colors = Theme.of(context).colorScheme;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: InkWell(
+        onTap: () =>
+            ref.read(databaseProvider).toggleHabitLog(habit.id, DateTime.now()),
+        borderRadius: BorderRadius.circular(12),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+          decoration: BoxDecoration(
+            color: isDone
+                ? colors.primaryContainer.withValues(alpha: 0.4)
+                : colors.surfaceContainerLowest,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: isDone ? colors.primary.withValues(alpha: 0.3) : colors.outlineVariant,
+            ),
+          ),
+          child: Row(
+            children: [
+              Text(habit.emoji, style: const TextStyle(fontSize: 20)),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  habit.title,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    decoration: isDone ? TextDecoration.lineThrough : null,
+                    color: isDone ? colors.onSurfaceVariant : colors.onSurface,
+                  ),
+                ),
+              ),
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                width: 28,
+                height: 28,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: isDone ? colors.primary : Colors.transparent,
+                  border: isDone
+                      ? null
+                      : Border.all(color: colors.outlineVariant, width: 2),
+                ),
+                alignment: Alignment.center,
+                child: Icon(
+                  Icons.check,
+                  size: 16,
+                  color: isDone ? colors.onPrimary : colors.outlineVariant,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ─── Quick Button ─────────────────────────────────────────────
 
 class _QuickButton extends StatelessWidget {
   const _QuickButton({
