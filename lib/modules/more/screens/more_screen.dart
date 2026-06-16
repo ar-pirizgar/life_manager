@@ -12,6 +12,13 @@ class MoreScreen extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         children: [
           _MoreTile(
+            icon: Icons.calendar_month_outlined,
+            title: 'تقویم',
+            subtitle: 'نمای هفتگی و ماهانه کارها',
+            onTap: () => context.go('/more/calendar'),
+          ),
+          const SizedBox(height: 8),
+          _MoreTile(
             icon: Icons.timer_outlined,
             title: 'تایمر',
             subtitle: 'ردیابی زمان و کار عمیق',

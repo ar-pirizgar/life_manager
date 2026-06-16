@@ -144,9 +144,10 @@ class AppStrings {
   static const homeHabitsTab = 'عادت‌های امروز';
   static const homeNoTasks = 'تسکی برای امروز نداری';
   static const homeNoHabits = 'عادتی تعریف نشده';
-  static const homeAddTask = 'افزودن تسک';
+  static const homeAddTask = '+ افزودن تسک';
+  static const homeAddExpense = '+ افزودن هزینه';
   static const priorityCriticalLabel = 'خیلی فوری';
-  static const priorityHighLabel = 'فوری';
+  static const priorityHighLabel = 'بالا';
   static const priorityMediumLabel = 'متوسط';
   static const priorityLowLabel = 'کم';
   static const streakDays = 'روز';
@@ -162,6 +163,15 @@ class AppStrings {
   static const todayHabits = 'عادت‌های امروز';
   static const noHabitsToday = 'عادتی برای امروز تعریف نشده';
   static const noHabitsHint = 'از بخش بیشتر > عادت‌ها اضافه کنید';
+
+  // ── Calendar ─────────────────────────────────────────────────
+  static const calendarTitle = 'تقویم';
+  static const calendarSubtitle = 'نمای هفتگی و ماهانه کارها';
+  static const calendarWeekly = 'هفتگی';
+  static const calendarMonthly = 'ماهانه';
+  static const calendarGregorian = 'میلادی';
+  static const calendarJalali = 'شمسی';
+  static const calendarNoTasksForDay = 'تسکی برای این روز ثبت نشده';
 
   // ── Common ────────────────────────────────────────────────────
   static const save = 'ذخیره';

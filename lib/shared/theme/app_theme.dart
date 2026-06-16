@@ -21,13 +21,20 @@ class AppColors {
 
   // اولویت تسک
   static const Color priorityCritical = Color(0xFFE24035);
-  static const Color priorityHigh = Color(0xFFE5A94E);
+  static const Color priorityHigh = Color(0xFFE01814);
   static const Color priorityMedium = Color(0xFFD6C535);
   static const Color priorityLow = Color(0xFF3F8ADD);
 
   // عادت‌ها / موفقیت
   static const Color success = Color(0xFF2E8B45);
   static const Color successAccent = Color(0xFF5DCB7A);
+
+  // اکشن‌های مالی
+  static const Color financeGreen = Color(0xFF3FB68B);
+
+  // کارت تسک انجام‌شده
+  static const Color doneCardBackground = Color(0xFF1A1A1A);
+  static const Color doneCardBorder = Color(0xFF2A2A2A);
 
   /// رنگ متناظر با مقدار اولویت تسک
   static Color priorityFor(String priority) => switch (priority) {

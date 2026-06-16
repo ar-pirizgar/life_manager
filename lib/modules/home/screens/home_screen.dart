@@ -5,6 +5,7 @@ import '../../../shared/constants/app_strings.dart';
 import '../../../shared/database/database.dart';
 import '../../../shared/database/database_provider.dart';
 import '../../../shared/theme/app_theme.dart';
+import '../../finance/widgets/add_transaction_sheet.dart';
 import '../../habits/providers/habit_providers.dart';
 import '../../habits/widgets/add_habit_sheet.dart';
 import '../../tasks/providers/task_providers.dart';
@@ -87,6 +88,26 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
 
 // ─── Tasks Tab ────────────────────────────────────────────────
 
+int _priorityRank(String priority) => switch (priority) {
+      'critical' => 0,
+      'high' => 1,
+      'medium' => 2,
+      'low' => 3,
+      _ => 4,
+    };
+
+List<Task> _sortTasksForHome(List<Task> tasks) {
+  final sorted = [...tasks];
+  sorted.sort((a, b) {
+    final aDone = a.status == 'done';
+    final bDone = b.status == 'done';
+    if (aDone != bDone) return aDone ? 1 : -1;
+    if (aDone && bDone) return 0;
+    return _priorityRank(a.priority).compareTo(_priorityRank(b.priority));
+  });
+  return sorted;
+}
+
 class _TasksTab extends ConsumerWidget {
   const _TasksTab();
 
@@ -97,13 +118,15 @@ class _TasksTab extends ConsumerWidget {
       children: [
         Expanded(
           child: todayTasks.when(
-            data: (tasks) => tasks.isEmpty
-                ? const _EmptyTasks()
-                : ListView.builder(
-                    padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
-                    itemCount: tasks.length,
-                    itemBuilder: (_, i) => _TaskCard(task: tasks[i]),
-                  ),
+            data: (tasks) {
+              if (tasks.isEmpty) return const _EmptyTasks();
+              final sorted = _sortTasksForHome(tasks);
+              return ListView.builder(
+                padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+                itemCount: sorted.length,
+                itemBuilder: (_, i) => _TaskCard(task: sorted[i]),
+              );
+            },
             loading: () => const Center(child: CircularProgressIndicator()),
             error: (e, _) => Center(
               child: Text(
@@ -113,7 +136,7 @@ class _TasksTab extends ConsumerWidget {
             ),
           ),
         ),
-        const _AddTaskButton(),
+        const _BottomActionButtons(),
       ],
     );
   }
@@ -143,38 +166,47 @@ class _TaskCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final priorityColor = AppColors.priorityFor(task.priority);
     final isDone = task.status == 'done';
+    final secondaryColor =
+        isDone ? AppColors.textMuted.withValues(alpha: 0.6) : AppColors.textSecondary;
 
     return GestureDetector(
       onLongPress: () => showEditTaskSheet(context, task),
       child: Container(
         margin: const EdgeInsets.only(bottom: 8),
         decoration: BoxDecoration(
-          color: priorityColor.withValues(alpha: 0.06),
+          color: isDone
+              ? AppColors.doneCardBackground
+              : priorityColor.withValues(alpha: 0.06),
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: priorityColor.withValues(alpha: 0.22)),
+          border: Border.all(
+            color: isDone
+                ? AppColors.doneCardBorder
+                : priorityColor.withValues(alpha: 0.22),
+          ),
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(12),
           child: Stack(
             children: [
               // هاله‌ی ملایم گوشه‌ی بالا-راست (= بالا-شروع در RTL)
-              Positioned(
-                top: -28,
-                right: -28,
-                child: Container(
-                  width: 90,
-                  height: 90,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    gradient: RadialGradient(
-                      colors: [
-                        priorityColor.withValues(alpha: 0.13),
-                        Colors.transparent,
-                      ],
+              if (!isDone)
+                Positioned(
+                  top: -28,
+                  right: -28,
+                  child: Container(
+                    width: 90,
+                    height: 90,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      gradient: RadialGradient(
+                        colors: [
+                          priorityColor.withValues(alpha: 0.13),
+                          Colors.transparent,
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
               Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
@@ -190,7 +222,9 @@ class _TaskCard extends ConsumerWidget {
                         height: 22,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: isDone ? priorityColor : Colors.transparent,
+                          color: isDone
+                              ? AppColors.doneCardBorder
+                              : Colors.transparent,
                           border: isDone
                               ? null
                               : Border.all(
@@ -199,7 +233,7 @@ class _TaskCard extends ConsumerWidget {
                         ),
                         child: isDone
                             ? const Icon(Icons.check,
-                                size: 14, color: Colors.white)
+                                size: 14, color: AppColors.textMuted)
                             : null,
                       ),
                     ),
@@ -220,9 +254,6 @@ class _TaskCard extends ConsumerWidget {
                                         : AppColors.textPrimary,
                                     fontSize: 14,
                                     fontWeight: FontWeight.w500,
-                                    decoration: isDone
-                                        ? TextDecoration.lineThrough
-                                        : null,
                                   ),
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
@@ -230,21 +261,21 @@ class _TaskCard extends ConsumerWidget {
                               ),
                               if (task.category != null) ...[
                                 const SizedBox(width: 5),
-                                const Icon(Icons.label_outline,
-                                    size: 13, color: AppColors.textMuted),
+                                Icon(Icons.label_outline,
+                                    size: 13, color: secondaryColor),
                               ],
                             ],
                           ),
                           const SizedBox(height: 3),
                           Row(
                             children: [
-                              const Icon(Icons.access_time_outlined,
-                                  size: 11, color: AppColors.textSecondary),
+                              Icon(Icons.access_time_outlined,
+                                  size: 11, color: secondaryColor),
                               const SizedBox(width: 3),
                               Text(
                                 _formatDueDate(task.dueDate),
-                                style: const TextStyle(
-                                  color: AppColors.textSecondary,
+                                style: TextStyle(
+                                  color: secondaryColor,
                                   fontSize: 11,
                                 ),
                               ),
@@ -252,8 +283,8 @@ class _TaskCard extends ConsumerWidget {
                                 const SizedBox(width: 6),
                                 Text(
                                   task.category!,
-                                  style: const TextStyle(
-                                    color: AppColors.textSecondary,
+                                  style: TextStyle(
+                                    color: secondaryColor,
                                     fontSize: 11,
                                   ),
                                 ),
@@ -265,7 +296,7 @@ class _TaskCard extends ConsumerWidget {
                     ),
                     const SizedBox(width: 8),
                     // نشانگر اولویت (سمت چپ در RTL)
-                    _PriorityBadge(priority: task.priority),
+                    _PriorityBadge(priority: task.priority, isDone: isDone),
                   ],
                 ),
               ),
@@ -278,8 +309,9 @@ class _TaskCard extends ConsumerWidget {
 }
 
 class _PriorityBadge extends StatelessWidget {
-  const _PriorityBadge({required this.priority});
+  const _PriorityBadge({required this.priority, this.isDone = false});
   final String priority;
+  final bool isDone;
 
   String get _label => switch (priority) {
         'critical' => AppStrings.priorityCriticalLabel,
@@ -288,51 +320,25 @@ class _PriorityBadge extends StatelessWidget {
         _ => AppStrings.priorityLowLabel,
       };
 
-  int get _dotCount => switch (priority) {
-        'critical' => 3,
-        'high' => 2,
-        _ => 1,
-      };
-
   @override
   Widget build(BuildContext context) {
-    final color = AppColors.priorityFor(priority);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
-          decoration: BoxDecoration(
-            color: color.withValues(alpha: 0.12),
-            borderRadius: BorderRadius.circular(6),
-            border: Border.all(color: color.withValues(alpha: 0.3), width: 0.5),
-          ),
-          child: Text(
-            _label,
-            style: TextStyle(
-              color: color,
-              fontSize: 10,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
+    final color =
+        isDone ? AppColors.textMuted : AppColors.priorityFor(priority);
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(6),
+        border: Border.all(color: color.withValues(alpha: 0.3), width: 0.5),
+      ),
+      child: Text(
+        _label,
+        style: TextStyle(
+          color: color,
+          fontSize: 10,
+          fontWeight: FontWeight.w600,
         ),
-        const SizedBox(height: 5),
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            for (int i = 0; i < _dotCount; i++) ...[
-              if (i > 0) const SizedBox(width: 3),
-              Container(
-                width: 5,
-                height: 5,
-                decoration:
-                    BoxDecoration(color: color, shape: BoxShape.circle),
-              ),
-            ],
-          ],
-        ),
-      ],
+      ),
     );
   }
 }
@@ -359,37 +365,67 @@ class _EmptyTasks extends StatelessWidget {
   }
 }
 
-class _AddTaskButton extends StatelessWidget {
-  const _AddTaskButton();
+class _BottomActionButtons extends StatelessWidget {
+  const _BottomActionButtons();
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-      child: InkWell(
-        onTap: () => QuickAddTaskSheet.show(context),
-        borderRadius: BorderRadius.circular(12),
-        child: Container(
-          height: 48,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            border:
-                Border.all(color: AppColors.primary.withValues(alpha: 0.4)),
+      child: Row(
+        children: [
+          Expanded(
+            child: _ActionButton(
+              label: AppStrings.homeAddExpense,
+              color: AppColors.financeGreen,
+              onTap: () => showAddTransactionSheet(context),
+            ),
           ),
-          child: const Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.add, color: AppColors.primary, size: 20),
-              SizedBox(width: 6),
-              Text(
-                AppStrings.homeAddTask,
-                style: TextStyle(
-                  color: AppColors.primary,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ],
+          const SizedBox(width: 8),
+          Expanded(
+            child: _ActionButton(
+              label: AppStrings.homeAddTask,
+              color: AppColors.primary,
+              onTap: () => QuickAddTaskSheet.show(context),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ActionButton extends StatelessWidget {
+  const _ActionButton({
+    required this.label,
+    required this.color,
+    required this.onTap,
+  });
+  final String label;
+  final Color color;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        height: 48,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: color.withValues(alpha: 0.4)),
+        ),
+        child: Center(
+          child: Text(
+            label,
+            style: TextStyle(
+              color: color,
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
         ),
       ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../modules/calendar/screens/calendar_screen.dart';
 import '../../modules/dashboard/screens/dashboard_screen.dart';
 import '../../modules/dashboard/screens/kpi_list_screen.dart';
 import '../../modules/finance/screens/finance_screen.dart';
@@ -70,6 +71,10 @@ final appRouter = GoRouter(
               path: '/more',
               builder: (_, __) => const MoreScreen(),
               routes: [
+                GoRoute(
+                  path: 'calendar',
+                  builder: (_, __) => const CalendarScreen(),
+                ),
                 GoRoute(
                   path: 'timer',
                   builder: (_, __) => const TimerScreen(),

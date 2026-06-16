@@ -85,6 +85,20 @@ class TaskRepository {
           ..orderBy([(t) => OrderingTerm.desc(t.dueDate)]))
         .watch();
   }
+
+  /// تسک‌های یک بازه تاریخی (برای تقویم)
+  Stream<List<Task>> watchTasksForDateRange(DateTime start, DateTime end) {
+    final rangeStart = DateTime(start.year, start.month, start.day);
+    final rangeEnd =
+        DateTime(end.year, end.month, end.day).add(const Duration(days: 1));
+    return (_db.select(_db.tasks)
+          ..where((t) =>
+              t.dueDate.isBiggerOrEqualValue(rangeStart) &
+              t.dueDate.isSmallerThanValue(rangeEnd) &
+              t.status.equals('cancelled').not())
+          ..orderBy([(t) => OrderingTerm.asc(t.dueDate)]))
+        .watch();
+  }
 }
 
 /// Provider ریپازیتوری
