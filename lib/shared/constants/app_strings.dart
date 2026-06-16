@@ -91,6 +91,16 @@ class AppStrings {
   static const of = 'تا';
 
   // ── Health ────────────────────────────────────────────────────
+  static const healthSection = 'سلامت';
+  static const weightShort = 'وزن';
+  static const waistShort = 'دور کمر';
+  static const bodyFatShort = 'چربی بدن';
+  static const noHealthDataDashboard = 'داده سلامت ثبت نشده';
+  static const reviewHealthSummary = 'خلاصه سلامت';
+  static const noHealthLogThisWeek = 'در این هفته ثبتی ندارید';
+  static const reviewWeight = 'وزن';
+  static const reviewWaist = 'دور کمر';
+  static const reviewBodyFat = 'چربی بدن';
   static const healthTitle = 'سلامت';
   static const healthDashboardTab = 'داشبورد';
   static const healthHistoryTab = 'تاریخچه';
@@ -128,6 +138,18 @@ class AppStrings {
   static const weightUnit = 'kg';
   static const waistUnit = 'cm';
   static const bodyFatUnit = '%';
+
+  // ── Home ─────────────────────────────────────────────────────
+  static const homeTasksTab = 'تسک‌های امروز';
+  static const homeHabitsTab = 'عادت‌های امروز';
+  static const homeNoTasks = 'تسکی برای امروز نداری';
+  static const homeNoHabits = 'عادتی تعریف نشده';
+  static const homeAddTask = 'افزودن تسک';
+  static const priorityCriticalLabel = 'خیلی فوری';
+  static const priorityHighLabel = 'فوری';
+  static const priorityMediumLabel = 'متوسط';
+  static const priorityLowLabel = 'کم';
+  static const streakDays = 'روز';
 
   // ── Common ────────────────────────────────────────────────────
   static const save = 'ذخیره';

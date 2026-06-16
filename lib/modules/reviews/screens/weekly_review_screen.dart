@@ -135,6 +135,11 @@ class _WeeklyReviewScreenState extends ConsumerState<WeeklyReviewScreen> {
     );
   }
 
+  String _fmtVal(double v) {
+    if (v == v.truncateToDouble()) return v.toInt().toString();
+    return v.toStringAsFixed(1);
+  }
+
   Widget _buildBody(WeekStats stats) {
     final colors = Theme.of(context).colorScheme;
     final habitsPercent = (stats.habitSuccessRate * 100).round();
@@ -190,8 +195,46 @@ class _WeeklyReviewScreenState extends ConsumerState<WeeklyReviewScreen> {
                     icon: Icons.shopping_cart_outlined,
                     label: AppStrings.reviewExpense,
                     value: '-${stats.expense.toStringAsFixed(0)}',
-                    isLast: true,
+                    isLast: stats.weekHealthLog == null,
                   ),
+                  if (stats.weekHealthLog != null) ...[
+                    ReviewStatRow(
+                      icon: Icons.monitor_weight_outlined,
+                      label: AppStrings.reviewWeight,
+                      value: stats.weekHealthLog!.weight != null
+                          ? '${_fmtVal(stats.weekHealthLog!.weight!)} ${AppStrings.weightUnit}'
+                          : '—',
+                    ),
+                    ReviewStatRow(
+                      icon: Icons.straighten,
+                      label: AppStrings.reviewWaist,
+                      value: stats.weekHealthLog!.waistCm != null
+                          ? '${_fmtVal(stats.weekHealthLog!.waistCm!)} ${AppStrings.waistUnit}'
+                          : '—',
+                    ),
+                    ReviewStatRow(
+                      icon: Icons.monitor_heart_outlined,
+                      label: AppStrings.reviewBodyFat,
+                      value: stats.weekHealthLog!.bodyFatPct != null
+                          ? '${_fmtVal(stats.weekHealthLog!.bodyFatPct!)}${AppStrings.bodyFatUnit}'
+                          : '—',
+                    ),
+                    ReviewStatRow(
+                      icon: Icons.bolt_outlined,
+                      label: AppStrings.energyLabel,
+                      value: stats.weekHealthLog!.energyLevel != null
+                          ? '${stats.weekHealthLog!.energyLevel} ${AppStrings.outOf10}'
+                          : '—',
+                    ),
+                    ReviewStatRow(
+                      icon: Icons.bedtime_outlined,
+                      label: AppStrings.sleepLabel,
+                      value: stats.weekHealthLog!.sleepQuality != null
+                          ? '${stats.weekHealthLog!.sleepQuality} ${AppStrings.outOf10}'
+                          : '—',
+                      isLast: true,
+                    ),
+                  ],
                 ],
               ),
             ),

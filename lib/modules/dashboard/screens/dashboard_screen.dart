@@ -9,6 +9,7 @@ import '../../../shared/utils/jalali_helper.dart';
 import '../../finance/providers/finance_providers.dart';
 import '../../goals/providers/goal_providers.dart';
 import '../../habits/providers/habit_providers.dart';
+import '../../health/providers/health_providers.dart';
 import '../../tasks/providers/task_providers.dart';
 import '../../timer/providers/timer_providers.dart';
 import '../providers/dashboard_providers.dart';
@@ -38,6 +39,8 @@ class DashboardScreen extends ConsumerWidget {
               _FinanceSection(),
               const SizedBox(height: 20),
               _GoalsSection(),
+              const SizedBox(height: 20),
+              _HealthSection(),
               const SizedBox(height: 20),
               _KpisSection(),
             ],
@@ -493,6 +496,99 @@ class _GoalsSection extends ConsumerWidget {
         ),
       ],
     );
+  }
+}
+
+// ── Health Section ────────────────────────────────────────────
+
+class _HealthSection extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final asyncLog = ref.watch(latestHealthLogProvider);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        _SectionHeader(
+          AppStrings.healthSection,
+          actionLabel: AppStrings.seeAll,
+          onAction: () => context.go('/more/health'),
+        ),
+        asyncLog.when(
+          loading: () => const Card(
+            child: Padding(
+              padding: EdgeInsets.all(24),
+              child: Center(child: CircularProgressIndicator()),
+            ),
+          ),
+          error: (_, __) => const SizedBox.shrink(),
+          data: (log) => log == null
+              ? Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(24),
+                    child: Column(
+                      children: [
+                        Icon(Icons.monitor_heart_outlined,
+                            size: 40,
+                            color: Theme.of(context).colorScheme.outline),
+                        const SizedBox(height: 12),
+                        const Text(AppStrings.noHealthDataDashboard,
+                            style: TextStyle(fontWeight: FontWeight.w500)),
+                      ],
+                    ),
+                  ),
+                )
+              : Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: _StatTile(
+                            icon: Icons.monitor_weight_outlined,
+                            label: AppStrings.weightShort,
+                            value: _fmtMetric(log.weight, AppStrings.weightUnit),
+                          ),
+                        ),
+                        Container(
+                            width: 1,
+                            height: 56,
+                            color: Theme.of(context)
+                                .colorScheme
+                                .outlineVariant),
+                        Expanded(
+                          child: _StatTile(
+                            icon: Icons.straighten,
+                            label: AppStrings.waistShort,
+                            value: _fmtMetric(log.waistCm, AppStrings.waistUnit),
+                          ),
+                        ),
+                        Container(
+                            width: 1,
+                            height: 56,
+                            color: Theme.of(context)
+                                .colorScheme
+                                .outlineVariant),
+                        Expanded(
+                          child: _StatTile(
+                            icon: Icons.percent,
+                            label: AppStrings.bodyFatShort,
+                            value: _fmtMetric(log.bodyFatPct, AppStrings.bodyFatUnit),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+        ),
+      ],
+    );
+  }
+
+  String _fmtMetric(double? v, String unit) {
+    if (v == null) return '—';
+    final s = v == v.truncateToDouble() ? v.toInt().toString() : v.toStringAsFixed(1);
+    return '$s $unit';
   }
 }
 

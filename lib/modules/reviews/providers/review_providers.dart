@@ -21,6 +21,7 @@ class WeekStats {
     required this.expense,
     required this.activeGoals,
     required this.completedGoals,
+    this.weekHealthLog,
   });
 
   final int completedTasks;
@@ -33,6 +34,7 @@ class WeekStats {
   final double expense;
   final int activeGoals;
   final int completedGoals;
+  final HealthLog? weekHealthLog;
 
   double get habitSuccessRate {
     final possible = totalHabits * 7;
@@ -91,6 +93,7 @@ final weekStatsProvider =
     db.getTransactionsInRange(weekStart, weekEnd),
     db.watchActiveHabits().first,
     db.getAllLongGoals(),
+    db.getHealthLogsInRange(weekStart, weekEnd),
   ]);
 
   final taskList = results[0] as List<Task>;
@@ -99,6 +102,8 @@ final weekStatsProvider =
   final txList = results[3] as List<Transaction>;
   final habitList = results[4] as List<Habit>;
   final goalList = results[5] as List<LongGoal>;
+  final healthLogList = results[6] as List<HealthLog>;
+  final weekHealthLog = healthLogList.isNotEmpty ? healthLogList.first : null;
 
   final completedTasks = taskList.where((t) => t.status == 'done').length;
   final doneHabitLogs =
@@ -132,6 +137,7 @@ final weekStatsProvider =
     expense: expense,
     activeGoals: activeGoals,
     completedGoals: completedGoals,
+    weekHealthLog: weekHealthLog,
   );
 });
 

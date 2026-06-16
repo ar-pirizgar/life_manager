@@ -535,6 +535,14 @@ class AppDatabase extends _$AppDatabase {
             ..limit(1))
           .getSingleOrNull();
 
+  Future<List<HealthLog>> getHealthLogsInRange(DateTime start, DateTime end) =>
+      (select(healthLogs)
+            ..where((l) =>
+                l.date.isBiggerOrEqualValue(start) &
+                l.date.isSmallerThanValue(end))
+            ..orderBy([(l) => OrderingTerm.desc(l.date)]))
+          .get();
+
   Future<List<HealthLog>> getHealthLogsForChart(int days) {
     final since = DateTime.now().subtract(Duration(days: days));
     return (select(healthLogs)

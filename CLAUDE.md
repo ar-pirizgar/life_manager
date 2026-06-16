@@ -1,8 +1,8 @@
-# Life Manager — Final Master Reference V7
+# Life Manager — Final Master Reference V7.2
 ## Claude Code Final Edition
 
 > Status: FINAL AUTHORITATIVE REFERENCE
-> Version: 7.0
+> Version: 7.2
 > Purpose: Single Source of Truth for Life Manager
 
 ---
@@ -15,6 +15,7 @@
 - Habits
 - Timer
 - Finance
+- Health
 - Dashboard
 - KPI System
 - Daily Score
@@ -27,6 +28,8 @@
 - Personal Knowledge System
 - Personal CRM
 - Decision Journal
+- AI Coach
+- Forecasting Engine
 
 These systems must not be implemented during MVP development.
 
@@ -58,10 +61,10 @@ Tasks, Goals, Habits, Timer, Finance
 Dashboard, KPI System, Scores, Reviews
 
 ## Phase 3
-AI Coach, Forecasting, Insights
+Health Module
 
 ## Future
-Knowledge System, CRM, Decision Journal
+AI Coach, Forecasting, Knowledge System, CRM, Decision Journal
 
 ---
 
@@ -99,6 +102,7 @@ A unified system that manages:
 - Time
 - Habits
 - Money
+- Health
 - Knowledge
 - Personal Growth
 
@@ -163,6 +167,7 @@ MORE
 MORE:
 - TIMER
 - HABITS
+- HEALTH
 - DASHBOARD
 - SETTINGS
 
@@ -181,6 +186,7 @@ Global FAB:
 - Start Timer
 - Add Goal
 - Add Habit
+- Log Health Metric
 
 # 7. User Journey
 
@@ -204,12 +210,14 @@ Global FAB:
 - Review goals
 - Process inbox
 - Review metrics
+- Log health metrics
 
 ## Monthly
 - Reflection
 - Goal review
 - Financial review
 - Life balance review
+- Health review
 
 # 8. Home Module
 Purpose: Command Center
@@ -360,7 +368,73 @@ Habit Metrics:
 
 Daily Habit Instances Generated Automatically.
 
-# 18. Dashboard Module
+# 18. Health Module
+
+Purpose: Body and Wellness Tracking
+
+## Overview
+A dedicated module for tracking physical health metrics over time.
+Designed for long-term trend analysis, not daily noise.
+
+## Primary Metrics
+- Weight (kg)
+- Waist Circumference (cm)
+- Body Fat Percentage (%)
+
+## Secondary Metrics (Optional, user-defined)
+- Any additional physical measurement the user wants to track
+- Stored as user-defined health metrics (similar to KPI system)
+
+## Logging Rules
+- Primary log frequency: Weekly (every Saturday morning)
+- Each log entry includes: date, value, optional note
+- Historical entries are never deleted
+- All entries editable
+
+## Health Log Entry
+Fields:
+- Date (Required)
+- Weight (Optional)
+- Waist Circumference (Optional)
+- Body Fat Percentage (Optional)
+- Energy Level (1–10, subjective)
+- Sleep Quality (1–10, subjective)
+- Notes (Optional, Markdown supported)
+
+Rule: At least one field must be filled to save a log entry.
+
+## Health Dashboard
+Displays:
+- Current values (latest log)
+- Starting values (first log)
+- Total change since start
+- Trend chart per metric (last 8 weeks and all-time)
+- Progress toward target (if target is set)
+
+## Health Targets (Optional)
+User can define personal targets:
+- Target Weight
+- Target Waist Circumference
+- Target Body Fat Percentage
+- Target Date (Optional)
+
+Targets are for reference and progress display only.
+The app never generates warnings or pressure based on targets.
+
+## Health Views
+- Dashboard (summary + charts)
+- Log History (all entries, newest first)
+- Add Log Entry
+- Edit Log Entry
+
+## Health Module Rules
+- No gamification (no streaks, no scores)
+- No judgment language in UI
+- Data is for awareness, not pressure
+- Charts show trend, not goal gap
+- Weekly logging is recommended, not enforced
+
+# 19. Dashboard Module
 
 Purpose: Convert Data Into Decisions
 
@@ -370,11 +444,12 @@ Sections:
 - Time
 - Finance
 - Habits
+- Health
 - Life Balance
 
 All KPI cards expandable.
 
-# 19. KPI System
+# 20. KPI System
 
 User-defined metrics.
 
@@ -386,7 +461,7 @@ Examples:
 - Exercise Hours
 - Deep Work Hours
 
-# 20. Daily Score
+# 21. Daily Score
 - Task Completion 30%
 - Habit Completion 30%
 - Goal Progress 20%
@@ -394,7 +469,7 @@ Examples:
 
 Range: 0–100
 
-# 21. Focus Score
+# 22. Focus Score
 - Task Completion 25%
 - Habit Completion 20%
 - Goal Progress 20%
@@ -403,7 +478,7 @@ Range: 0–100
 
 Range: 0–100
 
-# 22. Life Balance Score
+# 23. Life Balance Score
 
 Measures balance across Life Areas using:
 - Time
@@ -413,7 +488,7 @@ Measures balance across Life Areas using:
 
 Purpose: Detect neglected areas.
 
-# 23. Weekly Review System
+# 24. Weekly Review System
 
 Includes:
 - Completed Tasks
@@ -421,6 +496,7 @@ Includes:
 - Habit Performance
 - Time Allocation
 - Finance Summary
+- Health Summary (if log exists for the week)
 - Insights
 
 Reflection Questions:
@@ -428,7 +504,7 @@ Reflection Questions:
 - What failed?
 - What was learned?
 
-# 24. Monthly Reflection System
+# 25. Monthly Reflection System
 
 Questions:
 - What should continue?
@@ -438,28 +514,7 @@ Questions:
 
 Stored permanently.
 
-# 25. AI Coach Layer
-
-Rule: AI advises. AI never controls.
-
-Capabilities:
-- Goal Risk Detection
-- Habit Analysis
-- Time Analysis
-- Spending Analysis
-- Pattern Recognition
-- Weekly Summaries
-- Monthly Summaries
-- Forecasting
-
-# 26. Forecasting Engine
-
-Predict:
-- Goal Completion Date
-- Financial Goal Completion
-- Habit Success Probability
-
-# 27. Personal Knowledge System (Future)
+# 26. Personal Knowledge System (Future)
 
 Store:
 - Ideas
@@ -474,7 +529,7 @@ Linked to:
 - Projects
 - Life Areas
 
-# 28. Personal CRM (Future)
+# 27. Personal CRM (Future)
 
 Track:
 - People
@@ -482,7 +537,7 @@ Track:
 - Follow-ups
 - Important Dates
 
-# 29. Decision Journal (Future)
+# 28. Decision Journal (Future)
 
 Record:
 - Decision
@@ -491,6 +546,14 @@ Record:
 - Actual Outcome
 
 Purpose: Improve decision quality.
+
+# 29. AI Coach (Future)
+
+Rule: AI advises. AI never controls.
+
+Note: Will be designed based on real usage patterns after sufficient
+data has been accumulated across all modules including Health.
+Implementation deferred until at least 6 months of real usage.
 
 # 30. Design Direction
 
@@ -549,6 +612,7 @@ features/
   goals/
   finance/
   habits/
+  health/
   timer/
   dashboard/
   settings/
@@ -566,6 +630,8 @@ Tables:
 - time_logs
 - habits
 - habit_logs
+- health_logs
+- health_targets
 - settings
 - kpis
 - reviews
@@ -576,14 +642,44 @@ Tables:
 - Short Goal (1:N) Tasks
 - Task (1:N) Time Logs
 - Habit (1:N) Habit Logs
+- Health Target (1:N) Health Logs
 - Financial Goal (1:N) Transactions
+
+## Health Log Schema
+```
+health_logs:
+  id INTEGER PRIMARY KEY
+  date DATE NOT NULL
+  weight REAL NULL
+  waist_cm REAL NULL
+  body_fat_pct REAL NULL
+  energy_level INTEGER NULL  -- 1-10
+  sleep_quality INTEGER NULL -- 1-10
+  notes TEXT NULL
+  created_at DATETIME
+  updated_at DATETIME
+```
+
+## Health Targets Schema
+```
+health_targets:
+  id INTEGER PRIMARY KEY
+  target_weight REAL NULL
+  target_waist_cm REAL NULL
+  target_body_fat_pct REAL NULL
+  target_date DATE NULL
+  created_at DATETIME
+  updated_at DATETIME
+```
 
 # 37. Business Rules
 
 - Deleting Goal does not delete Tasks
 - Deleting Habit does not delete History
+- Deleting Health Log is allowed (user owns data)
 - Timer Overlap Forbidden
 - Completed Tasks archived after 30 days
+- Health Targets: only one active target set at a time
 
 # 38. Notifications
 
@@ -591,6 +687,7 @@ Tables:
 - Habit Reminder Configurable
 - Overdue Tasks 19:00
 - Weekly Review Reminder Sunday Evening
+- Weekly Health Log Reminder Saturday Morning (Configurable)
 
 # 39. Backup Strategy
 
@@ -614,6 +711,7 @@ Tables:
 - Database Query < 100 ms
 - Task Creation < 5 sec
 - Expense Creation < 5 sec
+- Health Log Creation < 5 sec
 
 # 42. Success Definition
 
@@ -624,6 +722,7 @@ The application succeeds when the user can answer:
 - Where is my money going?
 - Which habits are helping or hurting me?
 - Which area of life is being neglected?
+- How is my body trending over time?
 
 # 43. Final Product Vision
 
@@ -632,6 +731,7 @@ Life Manager is not:
 - A habit tracker
 - A finance app
 - A timer
+- A health app
 
 Life Manager is a Personal Operating System that transforms:
 
@@ -651,6 +751,7 @@ Any feature, screen, workflow, architecture decision, AI capability, database mo
 
 If it fails any of these rules, it should not be built.
 
+---
 
 # Personal Roadmap (Wave System)
 
@@ -674,14 +775,17 @@ If it fails any of these rules, it should not be built.
 - Monthly Review
 - Goal Review
 
-## Wave 5 — Personal Intelligence
-- AI Coach
-- Forecasting
+## Wave 5 — Health Tracking
+- Health Log (Weekly)
+- Health Dashboard
+- Health Targets
+- Health Trends
 
 ## Wave 6 — Personal Operating System (Future, after 6 months real usage)
 - Knowledge System
 - Decision Journal
 - Personal CRM
+- AI Coach
 
 ---
 
@@ -691,21 +795,49 @@ If it fails any of these rules, it should not be built.
 2. قبل از هر تغییر، وضعیت فعلی رو بررسی کن
 3. بعد از هر تغییر، flutter analyze اجرا کن
 4. هیچ Wave جدیدی شروع نکن مگه اینکه صریحاً خواسته بشه
-5. همیشه طبق سند V7 پیش برو
+5. همیشه طبق سند V7.2 پیش برو
 6. برای تمام عملیات‌های زیر نیازی به تأیید نیست و مستقیم انجام بده:
    - خواندن و نوشتن فایل‌های پروژه
    - اجرای flutter pub get
    - اجرای dart run build_runner build
    - اجرای flutter analyze
    - اجرای git add و git commit
-# Life Manager — Final Master Reference V7.1
-## Claude Code Final Edition
 
-This file is based on the approved V7 reference and includes real-world usage amendments.
+---
 
-# New in V7.1
+# New in V7.2
 
-## Universal Edit Support
+## Changes from V7.1
+
+### Added
+- Health Module (Section 18) — full specification
+- health/ added to Project Structure
+- health_logs and health_targets tables added to Database Architecture
+- Health Log and Health Target schemas defined
+- Health Summary added to Weekly Review
+- Health Log Reminder added to Notifications
+- Health Log Creation added to Performance Targets
+- "How is my body trending over time?" added to Success Definition
+- Wave 5 redefined as Health Tracking
+- Health added to Global FAB actions
+- Health added to Information Architecture (MORE menu)
+- Health added to Dashboard sections
+
+### Removed
+- AI Coach Layer (Section 25) — moved to Future
+- Forecasting Engine (Section 26) — moved to Future
+- Phase 3 (AI Coach, Forecasting) removed from Build Order
+
+### Modified
+- AI Coach moved to Section 29 as Future item
+- Wave 5 previously undefined, now Health Tracking
+- Wave 6 now includes AI Coach
+- Section numbering updated accordingly
+
+---
+
+# Universal Edit Support (from V7.1)
+
 Every user-created entity must support:
 - Create
 - View
@@ -721,6 +853,8 @@ Applies to:
 - Debts
 - Financial Goals
 - KPIs
+- Health Logs
+- Health Targets
 
 ## Task Model
 - Title (Required)
@@ -767,18 +901,12 @@ Required:
 - Task Detail Screen
 - Goal Detail Screen
 - Transaction Detail Screen
+- Health Log Detail Screen
 
 ## Standard Metadata
 All primary entities include:
 - created_at
 - updated_at
-
-## Database Updates
-Add where applicable:
-- description TEXT NULL
-- notes TEXT NULL
-- due_date DATETIME NULL
-- updated_at DATETIME
 
 ## Extended Definition of Done
 A feature is complete only when:
@@ -789,10 +917,6 @@ A feature is complete only when:
 - Persists locally
 - Works offline
 - Tests pass
-
----
-
-The remainder of the approved V7 specification remains in force unchanged.
 
 ## Localization Rule
 All new UI text must be defined in a strings/constants file, not hardcoded inline.
