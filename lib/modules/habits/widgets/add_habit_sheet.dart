@@ -3,19 +3,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../../shared/constants/app_strings.dart';
 import '../../../shared/database/database.dart';
 import '../../../shared/database/database_provider.dart';
 import '../providers/habit_providers.dart';
 
-Future<void> showAddHabitSheet(BuildContext context) => showModalBottomSheet(
+Future<void> showAddHabitSheet(BuildContext context, {Habit? habit}) =>
+    showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       useSafeArea: true,
-      builder: (_) => const _AddHabitSheet(),
+      builder: (_) => _AddHabitSheet(habit: habit),
     );
 
 class _AddHabitSheet extends ConsumerStatefulWidget {
-  const _AddHabitSheet();
+  const _AddHabitSheet({this.habit});
+
+  final Habit? habit;
 
   @override
   ConsumerState<_AddHabitSheet> createState() => _AddHabitSheetState();
@@ -28,9 +32,24 @@ class _AddHabitSheetState extends ConsumerState<_AddHabitSheet> {
   ];
 
   final _titleCtrl = TextEditingController();
-  String _emoji = '✅';
-  HabitTimeOfDay _timeOfDay = HabitTimeOfDay.any;
+  late String _emoji;
+  late HabitTimeOfDay _timeOfDay;
   bool _saving = false;
+
+  bool get _isEdit => widget.habit != null;
+
+  @override
+  void initState() {
+    super.initState();
+    if (_isEdit) {
+      _titleCtrl.text = widget.habit!.title;
+      _emoji = widget.habit!.emoji;
+      _timeOfDay = HabitTimeOfDay.fromKey(widget.habit!.timeOfDay);
+    } else {
+      _emoji = '✅';
+      _timeOfDay = HabitTimeOfDay.any;
+    }
+  }
 
   @override
   void dispose() {
@@ -43,14 +62,23 @@ class _AddHabitSheetState extends ConsumerState<_AddHabitSheet> {
     setState(() => _saving = true);
     try {
       final db = ref.read(databaseProvider);
-      await db.into(db.habits).insert(
-            HabitsCompanion(
-              id: Value(const Uuid().v4()),
-              title: Value(_titleCtrl.text.trim()),
-              emoji: Value(_emoji),
-              timeOfDay: Value(_timeOfDay.key),
-            ),
-          );
+      if (_isEdit) {
+        await db.updateHabit(
+          widget.habit!.id,
+          title: _titleCtrl.text.trim(),
+          emoji: _emoji,
+          timeOfDay: _timeOfDay.key,
+        );
+      } else {
+        await db.into(db.habits).insert(
+              HabitsCompanion(
+                id: Value(const Uuid().v4()),
+                title: Value(_titleCtrl.text.trim()),
+                emoji: Value(_emoji),
+                timeOfDay: Value(_timeOfDay.key),
+              ),
+            );
+      }
       if (mounted) Navigator.pop(context);
     } catch (_) {
       if (mounted) setState(() => _saving = false);
@@ -79,16 +107,20 @@ class _AddHabitSheetState extends ConsumerState<_AddHabitSheet> {
             ),
           ),
           const SizedBox(height: 16),
-          Text('عادت جدید', style: Theme.of(context).textTheme.titleLarge),
+          Text(
+            _isEdit ? AppStrings.editHabit : AppStrings.newHabit,
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
           const SizedBox(height: 16),
           TextField(
             controller: _titleCtrl,
-            autofocus: true,
-            decoration: const InputDecoration(labelText: 'عنوان عادت'),
+            autofocus: !_isEdit,
+            decoration:
+                const InputDecoration(labelText: AppStrings.habitTitleHint),
           ),
           const SizedBox(height: 16),
           Text(
-            'آیکون',
+            AppStrings.habitIcon,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   color: colors.onSurfaceVariant,
                 ),
@@ -122,7 +154,7 @@ class _AddHabitSheetState extends ConsumerState<_AddHabitSheet> {
           ),
           const SizedBox(height: 16),
           Text(
-            'زمان انجام',
+            AppStrings.habitTimeOfDay,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   color: colors.onSurfaceVariant,
                 ),
@@ -145,7 +177,7 @@ class _AddHabitSheetState extends ConsumerState<_AddHabitSheet> {
                     height: 20,
                     child: CircularProgressIndicator(strokeWidth: 2),
                   )
-                : const Text('ذخیره'),
+                : const Text(AppStrings.save),
           ),
         ],
       ),

@@ -3,8 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../shared/constants/app_strings.dart';
 import '../../../shared/database/database.dart';
+import '../../../shared/database/database_provider.dart';
 import '../../../shared/theme/app_theme.dart';
 import '../../habits/providers/habit_providers.dart';
+import '../../habits/widgets/add_habit_sheet.dart';
 import '../../tasks/providers/task_providers.dart';
 import '../../tasks/widgets/edit_task_sheet.dart';
 import '../../tasks/widgets/quick_add_task_sheet.dart';
@@ -455,75 +457,80 @@ class _HabitCard extends ConsumerWidget {
       error: (_, __) => const HabitMetrics(),
     );
 
-    return Container(
-      margin: const EdgeInsets.only(bottom: 8),
-      decoration: BoxDecoration(
-        color: const Color(0xFF0C140C),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFF1E3A1E)),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-        child: Row(
-          children: [
-            // آیکون‌باکس (سمت راست در RTL)
-            Container(
-              width: 36,
-              height: 36,
-              decoration: BoxDecoration(
-                color: AppColors.success.withValues(alpha: 0.2),
-                borderRadius: BorderRadius.circular(8),
+    return GestureDetector(
+      onTap: () =>
+          ref.read(databaseProvider).toggleHabitLog(habit.id, DateTime.now()),
+      onLongPress: () => showAddHabitSheet(context, habit: habit),
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 8),
+        decoration: BoxDecoration(
+          color: const Color(0xFF0C140C),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: const Color(0xFF1E3A1E)),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+          child: Row(
+            children: [
+              // آیکون‌باکس (سمت راست در RTL)
+              Container(
+                width: 36,
+                height: 36,
+                decoration: BoxDecoration(
+                  color: AppColors.success.withValues(alpha: 0.2),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Center(
+                  child: Text(habit.emoji,
+                      style: const TextStyle(fontSize: 18)),
+                ),
               ),
-              child: Center(
-                child: Text(habit.emoji,
-                    style: const TextStyle(fontSize: 18)),
-              ),
-            ),
-            const SizedBox(width: 10),
-            // نام عادت + دایره‌های هفته (وسط)
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    habit.title,
-                    style: const TextStyle(
-                      color: AppColors.textPrimary,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
+              const SizedBox(width: 10),
+              // نام عادت + دایره‌های هفته (وسط)
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      habit.title,
+                      style: const TextStyle(
+                        color: AppColors.textPrimary,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      for (int i = 0; i < 7; i++) ...[
-                        if (i > 0) const SizedBox(width: 4),
-                        _DayDot(isDone: metrics.last7Days[i]),
+                    const SizedBox(height: 8),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        for (int i = 0; i < 7; i++) ...[
+                          if (i > 0) const SizedBox(width: 4),
+                          _DayDot(isDone: metrics.last7Days[i]),
+                        ],
                       ],
-                    ],
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 8),
+              // استریک (سمت چپ در RTL)
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text('🔥', style: TextStyle(fontSize: 20)),
+                  Text(
+                    '${metrics.currentStreak} ${AppStrings.streakDays}',
+                    style: const TextStyle(
+                      color: AppColors.successAccent,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ],
               ),
-            ),
-            const SizedBox(width: 8),
-            // استریک (سمت چپ در RTL)
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Text('🔥', style: TextStyle(fontSize: 20)),
-                Text(
-                  '${metrics.currentStreak} ${AppStrings.streakDays}',
-                  style: const TextStyle(
-                    color: AppColors.successAccent,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

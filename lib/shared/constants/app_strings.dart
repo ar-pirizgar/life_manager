@@ -151,6 +151,18 @@ class AppStrings {
   static const priorityLowLabel = 'کم';
   static const streakDays = 'روز';
 
+  // ── Habits ───────────────────────────────────────────────────
+  static const newHabit = 'عادت جدید';
+  static const editHabit = 'ویرایش عادت';
+  static const habitTitleHint = 'عنوان عادت';
+  static const habitIcon = 'آیکون';
+  static const habitTimeOfDay = 'زمان انجام';
+  static const archiveHabitTitle = 'بایگانی عادت';
+  static const archiveHabitBody = 'بایگانی شود؟\nتاریخچه حفظ می‌شود.';
+  static const todayHabits = 'عادت‌های امروز';
+  static const noHabitsToday = 'عادتی برای امروز تعریف نشده';
+  static const noHabitsHint = 'از بخش بیشتر > عادت‌ها اضافه کنید';
+
   // ── Common ────────────────────────────────────────────────────
   static const save = 'ذخیره';
   static const cancel = 'لغو';
