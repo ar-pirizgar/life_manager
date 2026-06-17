@@ -36,6 +36,9 @@ class AppColors {
   static const Color doneCardBackground = Color(0xFF1A1A1A);
   static const Color doneCardBorder = Color(0xFF2A2A2A);
 
+  // تسک‌های overdue
+  static const Color overdue = Color(0xFFC026D3);
+
   /// رنگ متناظر با مقدار اولویت تسک
   static Color priorityFor(String priority) => switch (priority) {
         'critical' => priorityCritical,

@@ -68,6 +68,20 @@ class TaskRepository {
         .watch();
   }
 
+  /// تسک‌های Home: امروز + overdue انجام‌نشده
+  Stream<List<Task>> watchHomeTasks(DateTime day) {
+    final todayStart = DateTime(day.year, day.month, day.day);
+    final todayEnd = todayStart.add(const Duration(days: 1));
+    return (_db.select(_db.tasks)
+          ..where((t) =>
+              (t.dueDate.isBiggerOrEqualValue(todayStart) &
+                  t.dueDate.isSmallerThanValue(todayEnd)) |
+              (t.dueDate.isSmallerThanValue(todayStart) &
+                  t.status.equals('done').not() &
+                  t.status.equals('cancelled').not())))
+        .watch();
+  }
+
   /// تسک‌های Inbox — تسک‌هایی که دسته‌بندی و هدف ندارند و هنوز انجام نشده‌اند
   Stream<List<Task>> watchInbox() {
     return (_db.select(_db.tasks)
@@ -111,6 +125,12 @@ final taskRepositoryProvider = Provider<TaskRepository>((ref) {
 final todayTasksProvider = StreamProvider<List<Task>>((ref) {
   final repo = ref.watch(taskRepositoryProvider);
   return repo.watchTasksForDay(DateTime.now());
+});
+
+/// تسک‌های Home: امروز + overdue انجام‌نشده
+final homeTasksProvider = StreamProvider<List<Task>>((ref) {
+  final repo = ref.watch(taskRepositoryProvider);
+  return repo.watchHomeTasks(DateTime.now());
 });
 
 /// تسک‌های یک روز انتخاب‌شده (با پارامتر)

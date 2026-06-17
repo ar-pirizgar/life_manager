@@ -96,14 +96,31 @@ int _priorityRank(String priority) => switch (priority) {
       _ => 4,
     };
 
+bool _isOverdue(Task task) {
+  if (task.status == 'done') return false;
+  final today = DateTime.now();
+  final todayStart = DateTime(today.year, today.month, today.day);
+  final dueStart =
+      DateTime(task.dueDate.year, task.dueDate.month, task.dueDate.day);
+  return dueStart.isBefore(todayStart);
+}
+
+int _sortGroup(Task task) {
+  if (task.status == 'done') return 5;
+  if (_isOverdue(task)) return 0;
+  return _priorityRank(task.priority) + 1;
+}
+
 List<Task> _sortTasksForHome(List<Task> tasks) {
   final sorted = [...tasks];
   sorted.sort((a, b) {
-    final aDone = a.status == 'done';
-    final bDone = b.status == 'done';
-    if (aDone != bDone) return aDone ? 1 : -1;
-    if (aDone && bDone) return 0;
-    return _priorityRank(a.priority).compareTo(_priorityRank(b.priority));
+    final aGroup = _sortGroup(a);
+    final bGroup = _sortGroup(b);
+    if (aGroup != bGroup) return aGroup.compareTo(bGroup);
+    if (aGroup == 0) {
+      return _priorityRank(a.priority).compareTo(_priorityRank(b.priority));
+    }
+    return 0;
   });
   return sorted;
 }
@@ -113,7 +130,7 @@ class _TasksTab extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final todayTasks = ref.watch(todayTasksProvider);
+    final todayTasks = ref.watch(homeTasksProvider);
     return Column(
       children: [
         Expanded(
@@ -162,33 +179,58 @@ class _TaskCard extends ConsumerWidget {
     return '${date.day}/${date.month}/${date.year}';
   }
 
+  String _overdueDaysText(DateTime dueDate) {
+    final today = DateTime.now();
+    final todayStart = DateTime(today.year, today.month, today.day);
+    final dueStart =
+        DateTime(dueDate.year, dueDate.month, dueDate.day);
+    final days = todayStart.difference(dueStart).inDays;
+    return '$days روز پیش';
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final priorityColor = AppColors.priorityFor(task.priority);
     final isDone = task.status == 'done';
+    final isOverdue = _isOverdue(task);
+
+    Color cardBg;
+    Color cardBorder;
+    Color haloColor;
+
+    if (isDone) {
+      cardBg = AppColors.doneCardBackground;
+      cardBorder = AppColors.doneCardBorder;
+      haloColor = Colors.transparent;
+    } else if (isOverdue) {
+      cardBg = AppColors.overdue.withValues(alpha: 0.08);
+      cardBorder = AppColors.overdue.withValues(alpha: 0.35);
+      haloColor = AppColors.overdue.withValues(alpha: 0.13);
+    } else {
+      cardBg = priorityColor.withValues(alpha: 0.06);
+      cardBorder = priorityColor.withValues(alpha: 0.22);
+      haloColor = priorityColor.withValues(alpha: 0.13);
+    }
+
     final secondaryColor =
         isDone ? AppColors.textMuted.withValues(alpha: 0.6) : AppColors.textSecondary;
+    final checkBorderColor = isOverdue
+        ? AppColors.overdue.withValues(alpha: 0.6)
+        : priorityColor.withValues(alpha: 0.6);
 
     return GestureDetector(
       onLongPress: () => showEditTaskSheet(context, task),
       child: Container(
         margin: const EdgeInsets.only(bottom: 8),
         decoration: BoxDecoration(
-          color: isDone
-              ? AppColors.doneCardBackground
-              : priorityColor.withValues(alpha: 0.06),
+          color: cardBg,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: isDone
-                ? AppColors.doneCardBorder
-                : priorityColor.withValues(alpha: 0.22),
-          ),
+          border: Border.all(color: cardBorder),
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(12),
           child: Stack(
             children: [
-              // هاله‌ی ملایم گوشه‌ی بالا-راست (= بالا-شروع در RTL)
               if (!isDone)
                 Positioned(
                   top: -28,
@@ -199,10 +241,7 @@ class _TaskCard extends ConsumerWidget {
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       gradient: RadialGradient(
-                        colors: [
-                          priorityColor.withValues(alpha: 0.13),
-                          Colors.transparent,
-                        ],
+                        colors: [haloColor, Colors.transparent],
                       ),
                     ),
                   ),
@@ -212,7 +251,6 @@ class _TaskCard extends ConsumerWidget {
                     const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                 child: Row(
                   children: [
-                    // دایره‌ی چک‌باکس (سمت راست در RTL)
                     GestureDetector(
                       onTap: () =>
                           ref.read(taskRepositoryProvider).toggleDone(task),
@@ -228,8 +266,7 @@ class _TaskCard extends ConsumerWidget {
                           border: isDone
                               ? null
                               : Border.all(
-                                  color: priorityColor.withValues(alpha: 0.6),
-                                  width: 1.5),
+                                  color: checkBorderColor, width: 1.5),
                         ),
                         child: isDone
                             ? const Icon(Icons.check,
@@ -238,7 +275,6 @@ class _TaskCard extends ConsumerWidget {
                       ),
                     ),
                     const SizedBox(width: 10),
-                    // عنوان + خط دوم
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -269,13 +305,24 @@ class _TaskCard extends ConsumerWidget {
                           const SizedBox(height: 3),
                           Row(
                             children: [
-                              Icon(Icons.access_time_outlined,
-                                  size: 11, color: secondaryColor),
+                              Icon(
+                                isOverdue
+                                    ? Icons.history_outlined
+                                    : Icons.access_time_outlined,
+                                size: 11,
+                                color: isOverdue
+                                    ? AppColors.overdue.withValues(alpha: 0.8)
+                                    : secondaryColor,
+                              ),
                               const SizedBox(width: 3),
                               Text(
-                                _formatDueDate(task.dueDate),
+                                isOverdue
+                                    ? _overdueDaysText(task.dueDate)
+                                    : _formatDueDate(task.dueDate),
                                 style: TextStyle(
-                                  color: secondaryColor,
+                                  color: isOverdue
+                                      ? AppColors.overdue.withValues(alpha: 0.9)
+                                      : secondaryColor,
                                   fontSize: 11,
                                 ),
                               ),
@@ -295,7 +342,6 @@ class _TaskCard extends ConsumerWidget {
                       ),
                     ),
                     const SizedBox(width: 8),
-                    // نشانگر اولویت (سمت چپ در RTL)
                     _PriorityBadge(priority: task.priority, isDone: isDone),
                   ],
                 ),
