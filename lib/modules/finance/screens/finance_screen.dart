@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/finance_providers.dart';
-import '../widgets/add_debt_sheet.dart';
+import '../providers/installment_providers.dart';
 import '../widgets/add_financial_goal_sheet.dart';
+import '../widgets/add_installment_loan_sheet.dart';
 import '../widgets/add_transaction_sheet.dart';
-import '../widgets/debt_tile.dart';
 import '../widgets/finance_summary_card.dart';
 import '../widgets/financial_goal_tile.dart';
+import '../widgets/installment_loan_tile.dart';
 import '../widgets/transaction_tile.dart';
 
 class FinanceScreen extends StatelessWidget {
@@ -23,7 +24,7 @@ class FinanceScreen extends StatelessWidget {
           bottom: const TabBar(
             tabs: [
               Tab(text: 'تراکنش‌ها'),
-              Tab(text: 'بدهی‌ها'),
+              Tab(text: 'اقساط'),
               Tab(text: 'اهداف'),
             ],
           ),
@@ -31,7 +32,7 @@ class FinanceScreen extends StatelessWidget {
         body: const TabBarView(
           children: [
             _TransactionsTab(),
-            _DebtsTab(),
+            _InstallmentsTab(),
             _GoalsTab(),
           ],
         ),
@@ -84,26 +85,82 @@ class _TransactionsTab extends ConsumerWidget {
   }
 }
 
-// ─── Debts Tab ────────────────────────────────────────────────
+// ─── Installments Tab ─────────────────────────────────────────
 
-class _DebtsTab extends ConsumerWidget {
-  const _DebtsTab();
+class _InstallmentsTab extends ConsumerStatefulWidget {
+  const _InstallmentsTab();
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final asyncDebts = ref.watch(activeDebtsProvider);
+  ConsumerState<_InstallmentsTab> createState() => _InstallmentsTabState();
+}
 
-    return asyncDebts.when(
-      data: (debts) {
+class _InstallmentsTabState extends ConsumerState<_InstallmentsTab> {
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(
+        () => ref.read(loanRepositoryProvider).syncInstallmentsState());
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final loansAsync = ref.watch(activeLoansProvider);
+    final pendingAsync = ref.watch(allPendingInstallmentsProvider);
+
+    return loansAsync.when(
+      data: (loans) {
+        final now = DateTime.now();
+        final loanIds = loans.map((l) => l.id).toSet();
+
+        double totalRemaining = loans.fold(0.0, (sum, l) {
+          return sum +
+              (l.totalInstallments - l.paidInstallments) *
+                  l.installmentAmount;
+        });
+
+        double thisMonth = 0;
+        pendingAsync.whenData((pending) {
+          thisMonth = pending
+              .where((i) =>
+                  loanIds.contains(i.loanId) &&
+                  i.month == now.month &&
+                  i.year == now.year)
+              .fold(0.0, (sum, i) => sum + i.amount);
+        });
+
         return Column(
           children: [
+            // ── Summary cards ─────────────────────────────────
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: _SummaryCard(
+                      label: 'کل بدهی فعال',
+                      amount: totalRemaining,
+                      color: const Color(0xFFEF4444),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: _SummaryCard(
+                      label: 'قسط این ماه',
+                      amount: thisMonth,
+                      color: const Color(0xFFF59E0B),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            // ── Header with add button ─────────────────────────
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
               child: Row(
                 children: [
                   Text(
-                    'بدهی‌های فعال',
+                    'وام‌ها و اقساط',
                     style: Theme.of(context)
                         .textTheme
                         .titleMedium
@@ -111,21 +168,27 @@ class _DebtsTab extends ConsumerWidget {
                   ),
                   const Spacer(),
                   TextButton.icon(
-                    onPressed: () => showAddDebtSheet(context),
+                    onPressed: () =>
+                        showAddInstallmentLoanSheet(context),
                     icon: const Icon(Icons.add, size: 18),
                     label: const Text('افزودن'),
                   ),
                 ],
               ),
             ),
-            if (debts.isEmpty)
+
+            // ── Loans list ────────────────────────────────────
+            if (loans.isEmpty)
               Expanded(
-                  child: _emptyState(context, 'هیچ بدهی فعالی وجود ندارد'))
+                child: _emptyState(
+                    context, 'هیچ وام یا قستی ثبت نشده'),
+              )
             else
               Expanded(
                 child: ListView.builder(
-                  itemCount: debts.length,
-                  itemBuilder: (_, i) => DebtTile(debt: debts[i]),
+                  itemCount: loans.length,
+                  itemBuilder: (_, i) =>
+                      InstallmentLoanTile(loan: loans[i]),
                 ),
               ),
           ],
@@ -187,6 +250,52 @@ class _GoalsTab extends ConsumerWidget {
       },
       loading: () => const SizedBox.shrink(),
       error: (_, __) => const SizedBox.shrink(),
+    );
+  }
+}
+
+// ─── Summary Card ─────────────────────────────────────────────
+
+class _SummaryCard extends StatelessWidget {
+  const _SummaryCard({
+    required this.label,
+    required this.amount,
+    required this.color,
+  });
+
+  final String label;
+  final double amount;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: color.withValues(alpha: 0.2)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: colors.onSurfaceVariant,
+                ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            fmtAmount(amount),
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: color,
+                ),
+          ),
+        ],
+      ),
     );
   }
 }

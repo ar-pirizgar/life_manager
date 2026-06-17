@@ -23,6 +23,7 @@ class TransactionTile extends ConsumerWidget {
     'salary': Icons.work_outlined,
     'freelance': Icons.laptop_outlined,
     'investment': Icons.trending_up_outlined,
+    'installment_payment': Icons.credit_score_outlined,
     'other': Icons.category_outlined,
   };
 

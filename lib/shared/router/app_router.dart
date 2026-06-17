@@ -5,6 +5,7 @@ import '../../modules/calendar/screens/calendar_screen.dart';
 import '../../modules/dashboard/screens/dashboard_screen.dart';
 import '../../modules/dashboard/screens/kpi_list_screen.dart';
 import '../../modules/finance/screens/finance_screen.dart';
+import '../../modules/finance/screens/installment_loan_detail_screen.dart';
 import '../../modules/goals/screens/goal_detail_screen.dart';
 import '../../modules/goals/screens/goals_screen.dart';
 import '../../modules/habits/screens/habits_screen.dart';
@@ -62,6 +63,14 @@ final appRouter = GoRouter(
             GoRoute(
               path: '/finance',
               builder: (_, __) => const FinanceScreen(),
+              routes: [
+                GoRoute(
+                  path: 'loan/:loanId',
+                  builder: (_, state) => InstallmentLoanDetailScreen(
+                    loanId: state.pathParameters['loanId']!,
+                  ),
+                ),
+              ],
             ),
           ],
         ),

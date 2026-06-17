@@ -29,6 +29,7 @@ enum TxCategory {
   salary('salary', 'حقوق', TxType.income),
   freelance('freelance', 'فریلنسر', TxType.income),
   investment('investment', 'سرمایه‌گذاری', TxType.income),
+  installmentPayment('installment_payment', 'پرداخت قسط', TxType.expense),
   other('other', 'متفرقه', null);
 
   const TxCategory(this.key, this.label, this.primaryType);

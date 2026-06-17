@@ -6552,6 +6552,1237 @@ class HealthTargetsCompanion extends UpdateCompanion<HealthTarget> {
   }
 }
 
+class $InstallmentLoansTable extends InstallmentLoans
+    with TableInfo<$InstallmentLoansTable, InstallmentLoan> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $InstallmentLoansTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+      'id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _titleMeta = const VerificationMeta('title');
+  @override
+  late final GeneratedColumn<String> title = GeneratedColumn<String>(
+      'title', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _typeMeta = const VerificationMeta('type');
+  @override
+  late final GeneratedColumn<String> type = GeneratedColumn<String>(
+      'type', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _totalAmountMeta =
+      const VerificationMeta('totalAmount');
+  @override
+  late final GeneratedColumn<double> totalAmount = GeneratedColumn<double>(
+      'total_amount', aliasedName, false,
+      type: DriftSqlType.double, requiredDuringInsert: true);
+  static const VerificationMeta _installmentAmountMeta =
+      const VerificationMeta('installmentAmount');
+  @override
+  late final GeneratedColumn<double> installmentAmount =
+      GeneratedColumn<double>('installment_amount', aliasedName, false,
+          type: DriftSqlType.double, requiredDuringInsert: true);
+  static const VerificationMeta _totalInstallmentsMeta =
+      const VerificationMeta('totalInstallments');
+  @override
+  late final GeneratedColumn<int> totalInstallments = GeneratedColumn<int>(
+      'total_installments', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _paidInstallmentsMeta =
+      const VerificationMeta('paidInstallments');
+  @override
+  late final GeneratedColumn<int> paidInstallments = GeneratedColumn<int>(
+      'paid_installments', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
+  static const VerificationMeta _dueDayOfMonthMeta =
+      const VerificationMeta('dueDayOfMonth');
+  @override
+  late final GeneratedColumn<int> dueDayOfMonth = GeneratedColumn<int>(
+      'due_day_of_month', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _reminderDayOfMonthMeta =
+      const VerificationMeta('reminderDayOfMonth');
+  @override
+  late final GeneratedColumn<int> reminderDayOfMonth = GeneratedColumn<int>(
+      'reminder_day_of_month', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _startDateMeta =
+      const VerificationMeta('startDate');
+  @override
+  late final GeneratedColumn<DateTime> startDate = GeneratedColumn<DateTime>(
+      'start_date', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _statusMeta = const VerificationMeta('status');
+  @override
+  late final GeneratedColumn<String> status = GeneratedColumn<String>(
+      'status', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultValue: const Constant('active'));
+  static const VerificationMeta _createdAtMeta =
+      const VerificationMeta('createdAt');
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+      'created_at', aliasedName, false,
+      type: DriftSqlType.dateTime,
+      requiredDuringInsert: false,
+      defaultValue: currentDateAndTime);
+  static const VerificationMeta _updatedAtMeta =
+      const VerificationMeta('updatedAt');
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+      'updated_at', aliasedName, false,
+      type: DriftSqlType.dateTime,
+      requiredDuringInsert: false,
+      defaultValue: currentDateAndTime);
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        title,
+        type,
+        totalAmount,
+        installmentAmount,
+        totalInstallments,
+        paidInstallments,
+        dueDayOfMonth,
+        reminderDayOfMonth,
+        startDate,
+        status,
+        createdAt,
+        updatedAt
+      ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'installment_loans';
+  @override
+  VerificationContext validateIntegrity(Insertable<InstallmentLoan> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('title')) {
+      context.handle(
+          _titleMeta, title.isAcceptableOrUnknown(data['title']!, _titleMeta));
+    } else if (isInserting) {
+      context.missing(_titleMeta);
+    }
+    if (data.containsKey('type')) {
+      context.handle(
+          _typeMeta, type.isAcceptableOrUnknown(data['type']!, _typeMeta));
+    } else if (isInserting) {
+      context.missing(_typeMeta);
+    }
+    if (data.containsKey('total_amount')) {
+      context.handle(
+          _totalAmountMeta,
+          totalAmount.isAcceptableOrUnknown(
+              data['total_amount']!, _totalAmountMeta));
+    } else if (isInserting) {
+      context.missing(_totalAmountMeta);
+    }
+    if (data.containsKey('installment_amount')) {
+      context.handle(
+          _installmentAmountMeta,
+          installmentAmount.isAcceptableOrUnknown(
+              data['installment_amount']!, _installmentAmountMeta));
+    } else if (isInserting) {
+      context.missing(_installmentAmountMeta);
+    }
+    if (data.containsKey('total_installments')) {
+      context.handle(
+          _totalInstallmentsMeta,
+          totalInstallments.isAcceptableOrUnknown(
+              data['total_installments']!, _totalInstallmentsMeta));
+    } else if (isInserting) {
+      context.missing(_totalInstallmentsMeta);
+    }
+    if (data.containsKey('paid_installments')) {
+      context.handle(
+          _paidInstallmentsMeta,
+          paidInstallments.isAcceptableOrUnknown(
+              data['paid_installments']!, _paidInstallmentsMeta));
+    }
+    if (data.containsKey('due_day_of_month')) {
+      context.handle(
+          _dueDayOfMonthMeta,
+          dueDayOfMonth.isAcceptableOrUnknown(
+              data['due_day_of_month']!, _dueDayOfMonthMeta));
+    } else if (isInserting) {
+      context.missing(_dueDayOfMonthMeta);
+    }
+    if (data.containsKey('reminder_day_of_month')) {
+      context.handle(
+          _reminderDayOfMonthMeta,
+          reminderDayOfMonth.isAcceptableOrUnknown(
+              data['reminder_day_of_month']!, _reminderDayOfMonthMeta));
+    } else if (isInserting) {
+      context.missing(_reminderDayOfMonthMeta);
+    }
+    if (data.containsKey('start_date')) {
+      context.handle(_startDateMeta,
+          startDate.isAcceptableOrUnknown(data['start_date']!, _startDateMeta));
+    } else if (isInserting) {
+      context.missing(_startDateMeta);
+    }
+    if (data.containsKey('status')) {
+      context.handle(_statusMeta,
+          status.isAcceptableOrUnknown(data['status']!, _statusMeta));
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(_updatedAtMeta,
+          updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  InstallmentLoan map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return InstallmentLoan(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
+      title: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}title'])!,
+      type: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}type'])!,
+      totalAmount: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}total_amount'])!,
+      installmentAmount: attachedDatabase.typeMapping.read(
+          DriftSqlType.double, data['${effectivePrefix}installment_amount'])!,
+      totalInstallments: attachedDatabase.typeMapping.read(
+          DriftSqlType.int, data['${effectivePrefix}total_installments'])!,
+      paidInstallments: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}paid_installments'])!,
+      dueDayOfMonth: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}due_day_of_month'])!,
+      reminderDayOfMonth: attachedDatabase.typeMapping.read(
+          DriftSqlType.int, data['${effectivePrefix}reminder_day_of_month'])!,
+      startDate: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}start_date'])!,
+      status: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}status'])!,
+      createdAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
+      updatedAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}updated_at'])!,
+    );
+  }
+
+  @override
+  $InstallmentLoansTable createAlias(String alias) {
+    return $InstallmentLoansTable(attachedDatabase, alias);
+  }
+}
+
+class InstallmentLoan extends DataClass implements Insertable<InstallmentLoan> {
+  final String id;
+  final String title;
+  final String type;
+  final double totalAmount;
+  final double installmentAmount;
+  final int totalInstallments;
+  final int paidInstallments;
+  final int dueDayOfMonth;
+  final int reminderDayOfMonth;
+  final DateTime startDate;
+  final String status;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  const InstallmentLoan(
+      {required this.id,
+      required this.title,
+      required this.type,
+      required this.totalAmount,
+      required this.installmentAmount,
+      required this.totalInstallments,
+      required this.paidInstallments,
+      required this.dueDayOfMonth,
+      required this.reminderDayOfMonth,
+      required this.startDate,
+      required this.status,
+      required this.createdAt,
+      required this.updatedAt});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['title'] = Variable<String>(title);
+    map['type'] = Variable<String>(type);
+    map['total_amount'] = Variable<double>(totalAmount);
+    map['installment_amount'] = Variable<double>(installmentAmount);
+    map['total_installments'] = Variable<int>(totalInstallments);
+    map['paid_installments'] = Variable<int>(paidInstallments);
+    map['due_day_of_month'] = Variable<int>(dueDayOfMonth);
+    map['reminder_day_of_month'] = Variable<int>(reminderDayOfMonth);
+    map['start_date'] = Variable<DateTime>(startDate);
+    map['status'] = Variable<String>(status);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    map['updated_at'] = Variable<DateTime>(updatedAt);
+    return map;
+  }
+
+  InstallmentLoansCompanion toCompanion(bool nullToAbsent) {
+    return InstallmentLoansCompanion(
+      id: Value(id),
+      title: Value(title),
+      type: Value(type),
+      totalAmount: Value(totalAmount),
+      installmentAmount: Value(installmentAmount),
+      totalInstallments: Value(totalInstallments),
+      paidInstallments: Value(paidInstallments),
+      dueDayOfMonth: Value(dueDayOfMonth),
+      reminderDayOfMonth: Value(reminderDayOfMonth),
+      startDate: Value(startDate),
+      status: Value(status),
+      createdAt: Value(createdAt),
+      updatedAt: Value(updatedAt),
+    );
+  }
+
+  factory InstallmentLoan.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return InstallmentLoan(
+      id: serializer.fromJson<String>(json['id']),
+      title: serializer.fromJson<String>(json['title']),
+      type: serializer.fromJson<String>(json['type']),
+      totalAmount: serializer.fromJson<double>(json['totalAmount']),
+      installmentAmount: serializer.fromJson<double>(json['installmentAmount']),
+      totalInstallments: serializer.fromJson<int>(json['totalInstallments']),
+      paidInstallments: serializer.fromJson<int>(json['paidInstallments']),
+      dueDayOfMonth: serializer.fromJson<int>(json['dueDayOfMonth']),
+      reminderDayOfMonth: serializer.fromJson<int>(json['reminderDayOfMonth']),
+      startDate: serializer.fromJson<DateTime>(json['startDate']),
+      status: serializer.fromJson<String>(json['status']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'title': serializer.toJson<String>(title),
+      'type': serializer.toJson<String>(type),
+      'totalAmount': serializer.toJson<double>(totalAmount),
+      'installmentAmount': serializer.toJson<double>(installmentAmount),
+      'totalInstallments': serializer.toJson<int>(totalInstallments),
+      'paidInstallments': serializer.toJson<int>(paidInstallments),
+      'dueDayOfMonth': serializer.toJson<int>(dueDayOfMonth),
+      'reminderDayOfMonth': serializer.toJson<int>(reminderDayOfMonth),
+      'startDate': serializer.toJson<DateTime>(startDate),
+      'status': serializer.toJson<String>(status),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+      'updatedAt': serializer.toJson<DateTime>(updatedAt),
+    };
+  }
+
+  InstallmentLoan copyWith(
+          {String? id,
+          String? title,
+          String? type,
+          double? totalAmount,
+          double? installmentAmount,
+          int? totalInstallments,
+          int? paidInstallments,
+          int? dueDayOfMonth,
+          int? reminderDayOfMonth,
+          DateTime? startDate,
+          String? status,
+          DateTime? createdAt,
+          DateTime? updatedAt}) =>
+      InstallmentLoan(
+        id: id ?? this.id,
+        title: title ?? this.title,
+        type: type ?? this.type,
+        totalAmount: totalAmount ?? this.totalAmount,
+        installmentAmount: installmentAmount ?? this.installmentAmount,
+        totalInstallments: totalInstallments ?? this.totalInstallments,
+        paidInstallments: paidInstallments ?? this.paidInstallments,
+        dueDayOfMonth: dueDayOfMonth ?? this.dueDayOfMonth,
+        reminderDayOfMonth: reminderDayOfMonth ?? this.reminderDayOfMonth,
+        startDate: startDate ?? this.startDate,
+        status: status ?? this.status,
+        createdAt: createdAt ?? this.createdAt,
+        updatedAt: updatedAt ?? this.updatedAt,
+      );
+  InstallmentLoan copyWithCompanion(InstallmentLoansCompanion data) {
+    return InstallmentLoan(
+      id: data.id.present ? data.id.value : this.id,
+      title: data.title.present ? data.title.value : this.title,
+      type: data.type.present ? data.type.value : this.type,
+      totalAmount:
+          data.totalAmount.present ? data.totalAmount.value : this.totalAmount,
+      installmentAmount: data.installmentAmount.present
+          ? data.installmentAmount.value
+          : this.installmentAmount,
+      totalInstallments: data.totalInstallments.present
+          ? data.totalInstallments.value
+          : this.totalInstallments,
+      paidInstallments: data.paidInstallments.present
+          ? data.paidInstallments.value
+          : this.paidInstallments,
+      dueDayOfMonth: data.dueDayOfMonth.present
+          ? data.dueDayOfMonth.value
+          : this.dueDayOfMonth,
+      reminderDayOfMonth: data.reminderDayOfMonth.present
+          ? data.reminderDayOfMonth.value
+          : this.reminderDayOfMonth,
+      startDate: data.startDate.present ? data.startDate.value : this.startDate,
+      status: data.status.present ? data.status.value : this.status,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('InstallmentLoan(')
+          ..write('id: $id, ')
+          ..write('title: $title, ')
+          ..write('type: $type, ')
+          ..write('totalAmount: $totalAmount, ')
+          ..write('installmentAmount: $installmentAmount, ')
+          ..write('totalInstallments: $totalInstallments, ')
+          ..write('paidInstallments: $paidInstallments, ')
+          ..write('dueDayOfMonth: $dueDayOfMonth, ')
+          ..write('reminderDayOfMonth: $reminderDayOfMonth, ')
+          ..write('startDate: $startDate, ')
+          ..write('status: $status, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      id,
+      title,
+      type,
+      totalAmount,
+      installmentAmount,
+      totalInstallments,
+      paidInstallments,
+      dueDayOfMonth,
+      reminderDayOfMonth,
+      startDate,
+      status,
+      createdAt,
+      updatedAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is InstallmentLoan &&
+          other.id == this.id &&
+          other.title == this.title &&
+          other.type == this.type &&
+          other.totalAmount == this.totalAmount &&
+          other.installmentAmount == this.installmentAmount &&
+          other.totalInstallments == this.totalInstallments &&
+          other.paidInstallments == this.paidInstallments &&
+          other.dueDayOfMonth == this.dueDayOfMonth &&
+          other.reminderDayOfMonth == this.reminderDayOfMonth &&
+          other.startDate == this.startDate &&
+          other.status == this.status &&
+          other.createdAt == this.createdAt &&
+          other.updatedAt == this.updatedAt);
+}
+
+class InstallmentLoansCompanion extends UpdateCompanion<InstallmentLoan> {
+  final Value<String> id;
+  final Value<String> title;
+  final Value<String> type;
+  final Value<double> totalAmount;
+  final Value<double> installmentAmount;
+  final Value<int> totalInstallments;
+  final Value<int> paidInstallments;
+  final Value<int> dueDayOfMonth;
+  final Value<int> reminderDayOfMonth;
+  final Value<DateTime> startDate;
+  final Value<String> status;
+  final Value<DateTime> createdAt;
+  final Value<DateTime> updatedAt;
+  final Value<int> rowid;
+  const InstallmentLoansCompanion({
+    this.id = const Value.absent(),
+    this.title = const Value.absent(),
+    this.type = const Value.absent(),
+    this.totalAmount = const Value.absent(),
+    this.installmentAmount = const Value.absent(),
+    this.totalInstallments = const Value.absent(),
+    this.paidInstallments = const Value.absent(),
+    this.dueDayOfMonth = const Value.absent(),
+    this.reminderDayOfMonth = const Value.absent(),
+    this.startDate = const Value.absent(),
+    this.status = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  InstallmentLoansCompanion.insert({
+    required String id,
+    required String title,
+    required String type,
+    required double totalAmount,
+    required double installmentAmount,
+    required int totalInstallments,
+    this.paidInstallments = const Value.absent(),
+    required int dueDayOfMonth,
+    required int reminderDayOfMonth,
+    required DateTime startDate,
+    this.status = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  })  : id = Value(id),
+        title = Value(title),
+        type = Value(type),
+        totalAmount = Value(totalAmount),
+        installmentAmount = Value(installmentAmount),
+        totalInstallments = Value(totalInstallments),
+        dueDayOfMonth = Value(dueDayOfMonth),
+        reminderDayOfMonth = Value(reminderDayOfMonth),
+        startDate = Value(startDate);
+  static Insertable<InstallmentLoan> custom({
+    Expression<String>? id,
+    Expression<String>? title,
+    Expression<String>? type,
+    Expression<double>? totalAmount,
+    Expression<double>? installmentAmount,
+    Expression<int>? totalInstallments,
+    Expression<int>? paidInstallments,
+    Expression<int>? dueDayOfMonth,
+    Expression<int>? reminderDayOfMonth,
+    Expression<DateTime>? startDate,
+    Expression<String>? status,
+    Expression<DateTime>? createdAt,
+    Expression<DateTime>? updatedAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (title != null) 'title': title,
+      if (type != null) 'type': type,
+      if (totalAmount != null) 'total_amount': totalAmount,
+      if (installmentAmount != null) 'installment_amount': installmentAmount,
+      if (totalInstallments != null) 'total_installments': totalInstallments,
+      if (paidInstallments != null) 'paid_installments': paidInstallments,
+      if (dueDayOfMonth != null) 'due_day_of_month': dueDayOfMonth,
+      if (reminderDayOfMonth != null)
+        'reminder_day_of_month': reminderDayOfMonth,
+      if (startDate != null) 'start_date': startDate,
+      if (status != null) 'status': status,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  InstallmentLoansCompanion copyWith(
+      {Value<String>? id,
+      Value<String>? title,
+      Value<String>? type,
+      Value<double>? totalAmount,
+      Value<double>? installmentAmount,
+      Value<int>? totalInstallments,
+      Value<int>? paidInstallments,
+      Value<int>? dueDayOfMonth,
+      Value<int>? reminderDayOfMonth,
+      Value<DateTime>? startDate,
+      Value<String>? status,
+      Value<DateTime>? createdAt,
+      Value<DateTime>? updatedAt,
+      Value<int>? rowid}) {
+    return InstallmentLoansCompanion(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      type: type ?? this.type,
+      totalAmount: totalAmount ?? this.totalAmount,
+      installmentAmount: installmentAmount ?? this.installmentAmount,
+      totalInstallments: totalInstallments ?? this.totalInstallments,
+      paidInstallments: paidInstallments ?? this.paidInstallments,
+      dueDayOfMonth: dueDayOfMonth ?? this.dueDayOfMonth,
+      reminderDayOfMonth: reminderDayOfMonth ?? this.reminderDayOfMonth,
+      startDate: startDate ?? this.startDate,
+      status: status ?? this.status,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (title.present) {
+      map['title'] = Variable<String>(title.value);
+    }
+    if (type.present) {
+      map['type'] = Variable<String>(type.value);
+    }
+    if (totalAmount.present) {
+      map['total_amount'] = Variable<double>(totalAmount.value);
+    }
+    if (installmentAmount.present) {
+      map['installment_amount'] = Variable<double>(installmentAmount.value);
+    }
+    if (totalInstallments.present) {
+      map['total_installments'] = Variable<int>(totalInstallments.value);
+    }
+    if (paidInstallments.present) {
+      map['paid_installments'] = Variable<int>(paidInstallments.value);
+    }
+    if (dueDayOfMonth.present) {
+      map['due_day_of_month'] = Variable<int>(dueDayOfMonth.value);
+    }
+    if (reminderDayOfMonth.present) {
+      map['reminder_day_of_month'] = Variable<int>(reminderDayOfMonth.value);
+    }
+    if (startDate.present) {
+      map['start_date'] = Variable<DateTime>(startDate.value);
+    }
+    if (status.present) {
+      map['status'] = Variable<String>(status.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('InstallmentLoansCompanion(')
+          ..write('id: $id, ')
+          ..write('title: $title, ')
+          ..write('type: $type, ')
+          ..write('totalAmount: $totalAmount, ')
+          ..write('installmentAmount: $installmentAmount, ')
+          ..write('totalInstallments: $totalInstallments, ')
+          ..write('paidInstallments: $paidInstallments, ')
+          ..write('dueDayOfMonth: $dueDayOfMonth, ')
+          ..write('reminderDayOfMonth: $reminderDayOfMonth, ')
+          ..write('startDate: $startDate, ')
+          ..write('status: $status, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $LoanInstallmentsTable extends LoanInstallments
+    with TableInfo<$LoanInstallmentsTable, LoanInstallment> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $LoanInstallmentsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+      'id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _loanIdMeta = const VerificationMeta('loanId');
+  @override
+  late final GeneratedColumn<String> loanId = GeneratedColumn<String>(
+      'loan_id', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'REFERENCES installment_loans (id)'));
+  static const VerificationMeta _installmentNumberMeta =
+      const VerificationMeta('installmentNumber');
+  @override
+  late final GeneratedColumn<int> installmentNumber = GeneratedColumn<int>(
+      'installment_number', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _monthMeta = const VerificationMeta('month');
+  @override
+  late final GeneratedColumn<int> month = GeneratedColumn<int>(
+      'month', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _yearMeta = const VerificationMeta('year');
+  @override
+  late final GeneratedColumn<int> year = GeneratedColumn<int>(
+      'year', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _amountMeta = const VerificationMeta('amount');
+  @override
+  late final GeneratedColumn<double> amount = GeneratedColumn<double>(
+      'amount', aliasedName, false,
+      type: DriftSqlType.double, requiredDuringInsert: true);
+  static const VerificationMeta _dueDateMeta =
+      const VerificationMeta('dueDate');
+  @override
+  late final GeneratedColumn<DateTime> dueDate = GeneratedColumn<DateTime>(
+      'due_date', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _reminderDateMeta =
+      const VerificationMeta('reminderDate');
+  @override
+  late final GeneratedColumn<DateTime> reminderDate = GeneratedColumn<DateTime>(
+      'reminder_date', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _statusMeta = const VerificationMeta('status');
+  @override
+  late final GeneratedColumn<String> status = GeneratedColumn<String>(
+      'status', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultValue: const Constant('pending'));
+  static const VerificationMeta _paidAtMeta = const VerificationMeta('paidAt');
+  @override
+  late final GeneratedColumn<DateTime> paidAt = GeneratedColumn<DateTime>(
+      'paid_at', aliasedName, true,
+      type: DriftSqlType.dateTime, requiredDuringInsert: false);
+  static const VerificationMeta _taskIdMeta = const VerificationMeta('taskId');
+  @override
+  late final GeneratedColumn<String> taskId = GeneratedColumn<String>(
+      'task_id', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _createdAtMeta =
+      const VerificationMeta('createdAt');
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+      'created_at', aliasedName, false,
+      type: DriftSqlType.dateTime,
+      requiredDuringInsert: false,
+      defaultValue: currentDateAndTime);
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        loanId,
+        installmentNumber,
+        month,
+        year,
+        amount,
+        dueDate,
+        reminderDate,
+        status,
+        paidAt,
+        taskId,
+        createdAt
+      ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'loan_installments';
+  @override
+  VerificationContext validateIntegrity(Insertable<LoanInstallment> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('loan_id')) {
+      context.handle(_loanIdMeta,
+          loanId.isAcceptableOrUnknown(data['loan_id']!, _loanIdMeta));
+    } else if (isInserting) {
+      context.missing(_loanIdMeta);
+    }
+    if (data.containsKey('installment_number')) {
+      context.handle(
+          _installmentNumberMeta,
+          installmentNumber.isAcceptableOrUnknown(
+              data['installment_number']!, _installmentNumberMeta));
+    } else if (isInserting) {
+      context.missing(_installmentNumberMeta);
+    }
+    if (data.containsKey('month')) {
+      context.handle(
+          _monthMeta, month.isAcceptableOrUnknown(data['month']!, _monthMeta));
+    } else if (isInserting) {
+      context.missing(_monthMeta);
+    }
+    if (data.containsKey('year')) {
+      context.handle(
+          _yearMeta, year.isAcceptableOrUnknown(data['year']!, _yearMeta));
+    } else if (isInserting) {
+      context.missing(_yearMeta);
+    }
+    if (data.containsKey('amount')) {
+      context.handle(_amountMeta,
+          amount.isAcceptableOrUnknown(data['amount']!, _amountMeta));
+    } else if (isInserting) {
+      context.missing(_amountMeta);
+    }
+    if (data.containsKey('due_date')) {
+      context.handle(_dueDateMeta,
+          dueDate.isAcceptableOrUnknown(data['due_date']!, _dueDateMeta));
+    } else if (isInserting) {
+      context.missing(_dueDateMeta);
+    }
+    if (data.containsKey('reminder_date')) {
+      context.handle(
+          _reminderDateMeta,
+          reminderDate.isAcceptableOrUnknown(
+              data['reminder_date']!, _reminderDateMeta));
+    } else if (isInserting) {
+      context.missing(_reminderDateMeta);
+    }
+    if (data.containsKey('status')) {
+      context.handle(_statusMeta,
+          status.isAcceptableOrUnknown(data['status']!, _statusMeta));
+    }
+    if (data.containsKey('paid_at')) {
+      context.handle(_paidAtMeta,
+          paidAt.isAcceptableOrUnknown(data['paid_at']!, _paidAtMeta));
+    }
+    if (data.containsKey('task_id')) {
+      context.handle(_taskIdMeta,
+          taskId.isAcceptableOrUnknown(data['task_id']!, _taskIdMeta));
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  LoanInstallment map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return LoanInstallment(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
+      loanId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}loan_id'])!,
+      installmentNumber: attachedDatabase.typeMapping.read(
+          DriftSqlType.int, data['${effectivePrefix}installment_number'])!,
+      month: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}month'])!,
+      year: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}year'])!,
+      amount: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}amount'])!,
+      dueDate: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}due_date'])!,
+      reminderDate: attachedDatabase.typeMapping.read(
+          DriftSqlType.dateTime, data['${effectivePrefix}reminder_date'])!,
+      status: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}status'])!,
+      paidAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}paid_at']),
+      taskId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}task_id']),
+      createdAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
+    );
+  }
+
+  @override
+  $LoanInstallmentsTable createAlias(String alias) {
+    return $LoanInstallmentsTable(attachedDatabase, alias);
+  }
+}
+
+class LoanInstallment extends DataClass implements Insertable<LoanInstallment> {
+  final String id;
+  final String loanId;
+  final int installmentNumber;
+  final int month;
+  final int year;
+  final double amount;
+  final DateTime dueDate;
+  final DateTime reminderDate;
+  final String status;
+  final DateTime? paidAt;
+  final String? taskId;
+  final DateTime createdAt;
+  const LoanInstallment(
+      {required this.id,
+      required this.loanId,
+      required this.installmentNumber,
+      required this.month,
+      required this.year,
+      required this.amount,
+      required this.dueDate,
+      required this.reminderDate,
+      required this.status,
+      this.paidAt,
+      this.taskId,
+      required this.createdAt});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['loan_id'] = Variable<String>(loanId);
+    map['installment_number'] = Variable<int>(installmentNumber);
+    map['month'] = Variable<int>(month);
+    map['year'] = Variable<int>(year);
+    map['amount'] = Variable<double>(amount);
+    map['due_date'] = Variable<DateTime>(dueDate);
+    map['reminder_date'] = Variable<DateTime>(reminderDate);
+    map['status'] = Variable<String>(status);
+    if (!nullToAbsent || paidAt != null) {
+      map['paid_at'] = Variable<DateTime>(paidAt);
+    }
+    if (!nullToAbsent || taskId != null) {
+      map['task_id'] = Variable<String>(taskId);
+    }
+    map['created_at'] = Variable<DateTime>(createdAt);
+    return map;
+  }
+
+  LoanInstallmentsCompanion toCompanion(bool nullToAbsent) {
+    return LoanInstallmentsCompanion(
+      id: Value(id),
+      loanId: Value(loanId),
+      installmentNumber: Value(installmentNumber),
+      month: Value(month),
+      year: Value(year),
+      amount: Value(amount),
+      dueDate: Value(dueDate),
+      reminderDate: Value(reminderDate),
+      status: Value(status),
+      paidAt:
+          paidAt == null && nullToAbsent ? const Value.absent() : Value(paidAt),
+      taskId:
+          taskId == null && nullToAbsent ? const Value.absent() : Value(taskId),
+      createdAt: Value(createdAt),
+    );
+  }
+
+  factory LoanInstallment.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return LoanInstallment(
+      id: serializer.fromJson<String>(json['id']),
+      loanId: serializer.fromJson<String>(json['loanId']),
+      installmentNumber: serializer.fromJson<int>(json['installmentNumber']),
+      month: serializer.fromJson<int>(json['month']),
+      year: serializer.fromJson<int>(json['year']),
+      amount: serializer.fromJson<double>(json['amount']),
+      dueDate: serializer.fromJson<DateTime>(json['dueDate']),
+      reminderDate: serializer.fromJson<DateTime>(json['reminderDate']),
+      status: serializer.fromJson<String>(json['status']),
+      paidAt: serializer.fromJson<DateTime?>(json['paidAt']),
+      taskId: serializer.fromJson<String?>(json['taskId']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'loanId': serializer.toJson<String>(loanId),
+      'installmentNumber': serializer.toJson<int>(installmentNumber),
+      'month': serializer.toJson<int>(month),
+      'year': serializer.toJson<int>(year),
+      'amount': serializer.toJson<double>(amount),
+      'dueDate': serializer.toJson<DateTime>(dueDate),
+      'reminderDate': serializer.toJson<DateTime>(reminderDate),
+      'status': serializer.toJson<String>(status),
+      'paidAt': serializer.toJson<DateTime?>(paidAt),
+      'taskId': serializer.toJson<String?>(taskId),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+    };
+  }
+
+  LoanInstallment copyWith(
+          {String? id,
+          String? loanId,
+          int? installmentNumber,
+          int? month,
+          int? year,
+          double? amount,
+          DateTime? dueDate,
+          DateTime? reminderDate,
+          String? status,
+          Value<DateTime?> paidAt = const Value.absent(),
+          Value<String?> taskId = const Value.absent(),
+          DateTime? createdAt}) =>
+      LoanInstallment(
+        id: id ?? this.id,
+        loanId: loanId ?? this.loanId,
+        installmentNumber: installmentNumber ?? this.installmentNumber,
+        month: month ?? this.month,
+        year: year ?? this.year,
+        amount: amount ?? this.amount,
+        dueDate: dueDate ?? this.dueDate,
+        reminderDate: reminderDate ?? this.reminderDate,
+        status: status ?? this.status,
+        paidAt: paidAt.present ? paidAt.value : this.paidAt,
+        taskId: taskId.present ? taskId.value : this.taskId,
+        createdAt: createdAt ?? this.createdAt,
+      );
+  LoanInstallment copyWithCompanion(LoanInstallmentsCompanion data) {
+    return LoanInstallment(
+      id: data.id.present ? data.id.value : this.id,
+      loanId: data.loanId.present ? data.loanId.value : this.loanId,
+      installmentNumber: data.installmentNumber.present
+          ? data.installmentNumber.value
+          : this.installmentNumber,
+      month: data.month.present ? data.month.value : this.month,
+      year: data.year.present ? data.year.value : this.year,
+      amount: data.amount.present ? data.amount.value : this.amount,
+      dueDate: data.dueDate.present ? data.dueDate.value : this.dueDate,
+      reminderDate: data.reminderDate.present
+          ? data.reminderDate.value
+          : this.reminderDate,
+      status: data.status.present ? data.status.value : this.status,
+      paidAt: data.paidAt.present ? data.paidAt.value : this.paidAt,
+      taskId: data.taskId.present ? data.taskId.value : this.taskId,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('LoanInstallment(')
+          ..write('id: $id, ')
+          ..write('loanId: $loanId, ')
+          ..write('installmentNumber: $installmentNumber, ')
+          ..write('month: $month, ')
+          ..write('year: $year, ')
+          ..write('amount: $amount, ')
+          ..write('dueDate: $dueDate, ')
+          ..write('reminderDate: $reminderDate, ')
+          ..write('status: $status, ')
+          ..write('paidAt: $paidAt, ')
+          ..write('taskId: $taskId, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, loanId, installmentNumber, month, year,
+      amount, dueDate, reminderDate, status, paidAt, taskId, createdAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is LoanInstallment &&
+          other.id == this.id &&
+          other.loanId == this.loanId &&
+          other.installmentNumber == this.installmentNumber &&
+          other.month == this.month &&
+          other.year == this.year &&
+          other.amount == this.amount &&
+          other.dueDate == this.dueDate &&
+          other.reminderDate == this.reminderDate &&
+          other.status == this.status &&
+          other.paidAt == this.paidAt &&
+          other.taskId == this.taskId &&
+          other.createdAt == this.createdAt);
+}
+
+class LoanInstallmentsCompanion extends UpdateCompanion<LoanInstallment> {
+  final Value<String> id;
+  final Value<String> loanId;
+  final Value<int> installmentNumber;
+  final Value<int> month;
+  final Value<int> year;
+  final Value<double> amount;
+  final Value<DateTime> dueDate;
+  final Value<DateTime> reminderDate;
+  final Value<String> status;
+  final Value<DateTime?> paidAt;
+  final Value<String?> taskId;
+  final Value<DateTime> createdAt;
+  final Value<int> rowid;
+  const LoanInstallmentsCompanion({
+    this.id = const Value.absent(),
+    this.loanId = const Value.absent(),
+    this.installmentNumber = const Value.absent(),
+    this.month = const Value.absent(),
+    this.year = const Value.absent(),
+    this.amount = const Value.absent(),
+    this.dueDate = const Value.absent(),
+    this.reminderDate = const Value.absent(),
+    this.status = const Value.absent(),
+    this.paidAt = const Value.absent(),
+    this.taskId = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  LoanInstallmentsCompanion.insert({
+    required String id,
+    required String loanId,
+    required int installmentNumber,
+    required int month,
+    required int year,
+    required double amount,
+    required DateTime dueDate,
+    required DateTime reminderDate,
+    this.status = const Value.absent(),
+    this.paidAt = const Value.absent(),
+    this.taskId = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  })  : id = Value(id),
+        loanId = Value(loanId),
+        installmentNumber = Value(installmentNumber),
+        month = Value(month),
+        year = Value(year),
+        amount = Value(amount),
+        dueDate = Value(dueDate),
+        reminderDate = Value(reminderDate);
+  static Insertable<LoanInstallment> custom({
+    Expression<String>? id,
+    Expression<String>? loanId,
+    Expression<int>? installmentNumber,
+    Expression<int>? month,
+    Expression<int>? year,
+    Expression<double>? amount,
+    Expression<DateTime>? dueDate,
+    Expression<DateTime>? reminderDate,
+    Expression<String>? status,
+    Expression<DateTime>? paidAt,
+    Expression<String>? taskId,
+    Expression<DateTime>? createdAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (loanId != null) 'loan_id': loanId,
+      if (installmentNumber != null) 'installment_number': installmentNumber,
+      if (month != null) 'month': month,
+      if (year != null) 'year': year,
+      if (amount != null) 'amount': amount,
+      if (dueDate != null) 'due_date': dueDate,
+      if (reminderDate != null) 'reminder_date': reminderDate,
+      if (status != null) 'status': status,
+      if (paidAt != null) 'paid_at': paidAt,
+      if (taskId != null) 'task_id': taskId,
+      if (createdAt != null) 'created_at': createdAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  LoanInstallmentsCompanion copyWith(
+      {Value<String>? id,
+      Value<String>? loanId,
+      Value<int>? installmentNumber,
+      Value<int>? month,
+      Value<int>? year,
+      Value<double>? amount,
+      Value<DateTime>? dueDate,
+      Value<DateTime>? reminderDate,
+      Value<String>? status,
+      Value<DateTime?>? paidAt,
+      Value<String?>? taskId,
+      Value<DateTime>? createdAt,
+      Value<int>? rowid}) {
+    return LoanInstallmentsCompanion(
+      id: id ?? this.id,
+      loanId: loanId ?? this.loanId,
+      installmentNumber: installmentNumber ?? this.installmentNumber,
+      month: month ?? this.month,
+      year: year ?? this.year,
+      amount: amount ?? this.amount,
+      dueDate: dueDate ?? this.dueDate,
+      reminderDate: reminderDate ?? this.reminderDate,
+      status: status ?? this.status,
+      paidAt: paidAt ?? this.paidAt,
+      taskId: taskId ?? this.taskId,
+      createdAt: createdAt ?? this.createdAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (loanId.present) {
+      map['loan_id'] = Variable<String>(loanId.value);
+    }
+    if (installmentNumber.present) {
+      map['installment_number'] = Variable<int>(installmentNumber.value);
+    }
+    if (month.present) {
+      map['month'] = Variable<int>(month.value);
+    }
+    if (year.present) {
+      map['year'] = Variable<int>(year.value);
+    }
+    if (amount.present) {
+      map['amount'] = Variable<double>(amount.value);
+    }
+    if (dueDate.present) {
+      map['due_date'] = Variable<DateTime>(dueDate.value);
+    }
+    if (reminderDate.present) {
+      map['reminder_date'] = Variable<DateTime>(reminderDate.value);
+    }
+    if (status.present) {
+      map['status'] = Variable<String>(status.value);
+    }
+    if (paidAt.present) {
+      map['paid_at'] = Variable<DateTime>(paidAt.value);
+    }
+    if (taskId.present) {
+      map['task_id'] = Variable<String>(taskId.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('LoanInstallmentsCompanion(')
+          ..write('id: $id, ')
+          ..write('loanId: $loanId, ')
+          ..write('installmentNumber: $installmentNumber, ')
+          ..write('month: $month, ')
+          ..write('year: $year, ')
+          ..write('amount: $amount, ')
+          ..write('dueDate: $dueDate, ')
+          ..write('reminderDate: $reminderDate, ')
+          ..write('status: $status, ')
+          ..write('paidAt: $paidAt, ')
+          ..write('taskId: $taskId, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -6571,6 +7802,10 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       $MonthlyReflectionsTable(this);
   late final $HealthLogsTable healthLogs = $HealthLogsTable(this);
   late final $HealthTargetsTable healthTargets = $HealthTargetsTable(this);
+  late final $InstallmentLoansTable installmentLoans =
+      $InstallmentLoansTable(this);
+  late final $LoanInstallmentsTable loanInstallments =
+      $LoanInstallmentsTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -6590,7 +7825,9 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         weeklyReviews,
         monthlyReflections,
         healthLogs,
-        healthTargets
+        healthTargets,
+        installmentLoans,
+        loanInstallments
       ];
 }
 
@@ -10595,6 +11832,782 @@ typedef $$HealthTargetsTableProcessedTableManager = ProcessedTableManager<
     ),
     HealthTarget,
     PrefetchHooks Function()>;
+typedef $$InstallmentLoansTableCreateCompanionBuilder
+    = InstallmentLoansCompanion Function({
+  required String id,
+  required String title,
+  required String type,
+  required double totalAmount,
+  required double installmentAmount,
+  required int totalInstallments,
+  Value<int> paidInstallments,
+  required int dueDayOfMonth,
+  required int reminderDayOfMonth,
+  required DateTime startDate,
+  Value<String> status,
+  Value<DateTime> createdAt,
+  Value<DateTime> updatedAt,
+  Value<int> rowid,
+});
+typedef $$InstallmentLoansTableUpdateCompanionBuilder
+    = InstallmentLoansCompanion Function({
+  Value<String> id,
+  Value<String> title,
+  Value<String> type,
+  Value<double> totalAmount,
+  Value<double> installmentAmount,
+  Value<int> totalInstallments,
+  Value<int> paidInstallments,
+  Value<int> dueDayOfMonth,
+  Value<int> reminderDayOfMonth,
+  Value<DateTime> startDate,
+  Value<String> status,
+  Value<DateTime> createdAt,
+  Value<DateTime> updatedAt,
+  Value<int> rowid,
+});
+
+final class $$InstallmentLoansTableReferences extends BaseReferences<
+    _$AppDatabase, $InstallmentLoansTable, InstallmentLoan> {
+  $$InstallmentLoansTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
+
+  static MultiTypedResultKey<$LoanInstallmentsTable, List<LoanInstallment>>
+      _loanInstallmentsRefsTable(_$AppDatabase db) =>
+          MultiTypedResultKey.fromTable(db.loanInstallments,
+              aliasName: $_aliasNameGenerator(
+                  db.installmentLoans.id, db.loanInstallments.loanId));
+
+  $$LoanInstallmentsTableProcessedTableManager get loanInstallmentsRefs {
+    final manager =
+        $$LoanInstallmentsTableTableManager($_db, $_db.loanInstallments)
+            .filter((f) => f.loanId.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache =
+        $_typedResult.readTableOrNull(_loanInstallmentsRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+}
+
+class $$InstallmentLoansTableFilterComposer
+    extends Composer<_$AppDatabase, $InstallmentLoansTable> {
+  $$InstallmentLoansTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get title => $composableBuilder(
+      column: $table.title, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get type => $composableBuilder(
+      column: $table.type, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<double> get totalAmount => $composableBuilder(
+      column: $table.totalAmount, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<double> get installmentAmount => $composableBuilder(
+      column: $table.installmentAmount,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get totalInstallments => $composableBuilder(
+      column: $table.totalInstallments,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get paidInstallments => $composableBuilder(
+      column: $table.paidInstallments,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get dueDayOfMonth => $composableBuilder(
+      column: $table.dueDayOfMonth, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get reminderDayOfMonth => $composableBuilder(
+      column: $table.reminderDayOfMonth,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get startDate => $composableBuilder(
+      column: $table.startDate, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get status => $composableBuilder(
+      column: $table.status, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+      column: $table.updatedAt, builder: (column) => ColumnFilters(column));
+
+  Expression<bool> loanInstallmentsRefs(
+      Expression<bool> Function($$LoanInstallmentsTableFilterComposer f) f) {
+    final $$LoanInstallmentsTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.loanInstallments,
+        getReferencedColumn: (t) => t.loanId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$LoanInstallmentsTableFilterComposer(
+              $db: $db,
+              $table: $db.loanInstallments,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+}
+
+class $$InstallmentLoansTableOrderingComposer
+    extends Composer<_$AppDatabase, $InstallmentLoansTable> {
+  $$InstallmentLoansTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get title => $composableBuilder(
+      column: $table.title, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get type => $composableBuilder(
+      column: $table.type, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<double> get totalAmount => $composableBuilder(
+      column: $table.totalAmount, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<double> get installmentAmount => $composableBuilder(
+      column: $table.installmentAmount,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get totalInstallments => $composableBuilder(
+      column: $table.totalInstallments,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get paidInstallments => $composableBuilder(
+      column: $table.paidInstallments,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get dueDayOfMonth => $composableBuilder(
+      column: $table.dueDayOfMonth,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get reminderDayOfMonth => $composableBuilder(
+      column: $table.reminderDayOfMonth,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get startDate => $composableBuilder(
+      column: $table.startDate, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get status => $composableBuilder(
+      column: $table.status, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+      column: $table.updatedAt, builder: (column) => ColumnOrderings(column));
+}
+
+class $$InstallmentLoansTableAnnotationComposer
+    extends Composer<_$AppDatabase, $InstallmentLoansTable> {
+  $$InstallmentLoansTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get title =>
+      $composableBuilder(column: $table.title, builder: (column) => column);
+
+  GeneratedColumn<String> get type =>
+      $composableBuilder(column: $table.type, builder: (column) => column);
+
+  GeneratedColumn<double> get totalAmount => $composableBuilder(
+      column: $table.totalAmount, builder: (column) => column);
+
+  GeneratedColumn<double> get installmentAmount => $composableBuilder(
+      column: $table.installmentAmount, builder: (column) => column);
+
+  GeneratedColumn<int> get totalInstallments => $composableBuilder(
+      column: $table.totalInstallments, builder: (column) => column);
+
+  GeneratedColumn<int> get paidInstallments => $composableBuilder(
+      column: $table.paidInstallments, builder: (column) => column);
+
+  GeneratedColumn<int> get dueDayOfMonth => $composableBuilder(
+      column: $table.dueDayOfMonth, builder: (column) => column);
+
+  GeneratedColumn<int> get reminderDayOfMonth => $composableBuilder(
+      column: $table.reminderDayOfMonth, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get startDate =>
+      $composableBuilder(column: $table.startDate, builder: (column) => column);
+
+  GeneratedColumn<String> get status =>
+      $composableBuilder(column: $table.status, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  Expression<T> loanInstallmentsRefs<T extends Object>(
+      Expression<T> Function($$LoanInstallmentsTableAnnotationComposer a) f) {
+    final $$LoanInstallmentsTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.loanInstallments,
+        getReferencedColumn: (t) => t.loanId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$LoanInstallmentsTableAnnotationComposer(
+              $db: $db,
+              $table: $db.loanInstallments,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+}
+
+class $$InstallmentLoansTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $InstallmentLoansTable,
+    InstallmentLoan,
+    $$InstallmentLoansTableFilterComposer,
+    $$InstallmentLoansTableOrderingComposer,
+    $$InstallmentLoansTableAnnotationComposer,
+    $$InstallmentLoansTableCreateCompanionBuilder,
+    $$InstallmentLoansTableUpdateCompanionBuilder,
+    (InstallmentLoan, $$InstallmentLoansTableReferences),
+    InstallmentLoan,
+    PrefetchHooks Function({bool loanInstallmentsRefs})> {
+  $$InstallmentLoansTableTableManager(
+      _$AppDatabase db, $InstallmentLoansTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$InstallmentLoansTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$InstallmentLoansTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$InstallmentLoansTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<String> id = const Value.absent(),
+            Value<String> title = const Value.absent(),
+            Value<String> type = const Value.absent(),
+            Value<double> totalAmount = const Value.absent(),
+            Value<double> installmentAmount = const Value.absent(),
+            Value<int> totalInstallments = const Value.absent(),
+            Value<int> paidInstallments = const Value.absent(),
+            Value<int> dueDayOfMonth = const Value.absent(),
+            Value<int> reminderDayOfMonth = const Value.absent(),
+            Value<DateTime> startDate = const Value.absent(),
+            Value<String> status = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
+            Value<DateTime> updatedAt = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              InstallmentLoansCompanion(
+            id: id,
+            title: title,
+            type: type,
+            totalAmount: totalAmount,
+            installmentAmount: installmentAmount,
+            totalInstallments: totalInstallments,
+            paidInstallments: paidInstallments,
+            dueDayOfMonth: dueDayOfMonth,
+            reminderDayOfMonth: reminderDayOfMonth,
+            startDate: startDate,
+            status: status,
+            createdAt: createdAt,
+            updatedAt: updatedAt,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required String id,
+            required String title,
+            required String type,
+            required double totalAmount,
+            required double installmentAmount,
+            required int totalInstallments,
+            Value<int> paidInstallments = const Value.absent(),
+            required int dueDayOfMonth,
+            required int reminderDayOfMonth,
+            required DateTime startDate,
+            Value<String> status = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
+            Value<DateTime> updatedAt = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              InstallmentLoansCompanion.insert(
+            id: id,
+            title: title,
+            type: type,
+            totalAmount: totalAmount,
+            installmentAmount: installmentAmount,
+            totalInstallments: totalInstallments,
+            paidInstallments: paidInstallments,
+            dueDayOfMonth: dueDayOfMonth,
+            reminderDayOfMonth: reminderDayOfMonth,
+            startDate: startDate,
+            status: status,
+            createdAt: createdAt,
+            updatedAt: updatedAt,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$InstallmentLoansTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: ({loanInstallmentsRefs = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [
+                if (loanInstallmentsRefs) db.loanInstallments
+              ],
+              addJoins: null,
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (loanInstallmentsRefs)
+                    await $_getPrefetchedData<InstallmentLoan,
+                            $InstallmentLoansTable, LoanInstallment>(
+                        currentTable: table,
+                        referencedTable: $$InstallmentLoansTableReferences
+                            ._loanInstallmentsRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$InstallmentLoansTableReferences(db, table, p0)
+                                .loanInstallmentsRefs,
+                        referencedItemsForCurrentItem: (item,
+                                referencedItems) =>
+                            referencedItems.where((e) => e.loanId == item.id),
+                        typedResults: items)
+                ];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$InstallmentLoansTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $InstallmentLoansTable,
+    InstallmentLoan,
+    $$InstallmentLoansTableFilterComposer,
+    $$InstallmentLoansTableOrderingComposer,
+    $$InstallmentLoansTableAnnotationComposer,
+    $$InstallmentLoansTableCreateCompanionBuilder,
+    $$InstallmentLoansTableUpdateCompanionBuilder,
+    (InstallmentLoan, $$InstallmentLoansTableReferences),
+    InstallmentLoan,
+    PrefetchHooks Function({bool loanInstallmentsRefs})>;
+typedef $$LoanInstallmentsTableCreateCompanionBuilder
+    = LoanInstallmentsCompanion Function({
+  required String id,
+  required String loanId,
+  required int installmentNumber,
+  required int month,
+  required int year,
+  required double amount,
+  required DateTime dueDate,
+  required DateTime reminderDate,
+  Value<String> status,
+  Value<DateTime?> paidAt,
+  Value<String?> taskId,
+  Value<DateTime> createdAt,
+  Value<int> rowid,
+});
+typedef $$LoanInstallmentsTableUpdateCompanionBuilder
+    = LoanInstallmentsCompanion Function({
+  Value<String> id,
+  Value<String> loanId,
+  Value<int> installmentNumber,
+  Value<int> month,
+  Value<int> year,
+  Value<double> amount,
+  Value<DateTime> dueDate,
+  Value<DateTime> reminderDate,
+  Value<String> status,
+  Value<DateTime?> paidAt,
+  Value<String?> taskId,
+  Value<DateTime> createdAt,
+  Value<int> rowid,
+});
+
+final class $$LoanInstallmentsTableReferences extends BaseReferences<
+    _$AppDatabase, $LoanInstallmentsTable, LoanInstallment> {
+  $$LoanInstallmentsTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
+
+  static $InstallmentLoansTable _loanIdTable(_$AppDatabase db) =>
+      db.installmentLoans.createAlias($_aliasNameGenerator(
+          db.loanInstallments.loanId, db.installmentLoans.id));
+
+  $$InstallmentLoansTableProcessedTableManager get loanId {
+    final $_column = $_itemColumn<String>('loan_id')!;
+
+    final manager =
+        $$InstallmentLoansTableTableManager($_db, $_db.installmentLoans)
+            .filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_loanIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+}
+
+class $$LoanInstallmentsTableFilterComposer
+    extends Composer<_$AppDatabase, $LoanInstallmentsTable> {
+  $$LoanInstallmentsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get installmentNumber => $composableBuilder(
+      column: $table.installmentNumber,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get month => $composableBuilder(
+      column: $table.month, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get year => $composableBuilder(
+      column: $table.year, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<double> get amount => $composableBuilder(
+      column: $table.amount, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get dueDate => $composableBuilder(
+      column: $table.dueDate, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get reminderDate => $composableBuilder(
+      column: $table.reminderDate, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get status => $composableBuilder(
+      column: $table.status, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get paidAt => $composableBuilder(
+      column: $table.paidAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get taskId => $composableBuilder(
+      column: $table.taskId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+
+  $$InstallmentLoansTableFilterComposer get loanId {
+    final $$InstallmentLoansTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.loanId,
+        referencedTable: $db.installmentLoans,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$InstallmentLoansTableFilterComposer(
+              $db: $db,
+              $table: $db.installmentLoans,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$LoanInstallmentsTableOrderingComposer
+    extends Composer<_$AppDatabase, $LoanInstallmentsTable> {
+  $$LoanInstallmentsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get installmentNumber => $composableBuilder(
+      column: $table.installmentNumber,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get month => $composableBuilder(
+      column: $table.month, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get year => $composableBuilder(
+      column: $table.year, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<double> get amount => $composableBuilder(
+      column: $table.amount, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get dueDate => $composableBuilder(
+      column: $table.dueDate, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get reminderDate => $composableBuilder(
+      column: $table.reminderDate,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get status => $composableBuilder(
+      column: $table.status, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get paidAt => $composableBuilder(
+      column: $table.paidAt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get taskId => $composableBuilder(
+      column: $table.taskId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+
+  $$InstallmentLoansTableOrderingComposer get loanId {
+    final $$InstallmentLoansTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.loanId,
+        referencedTable: $db.installmentLoans,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$InstallmentLoansTableOrderingComposer(
+              $db: $db,
+              $table: $db.installmentLoans,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$LoanInstallmentsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $LoanInstallmentsTable> {
+  $$LoanInstallmentsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<int> get installmentNumber => $composableBuilder(
+      column: $table.installmentNumber, builder: (column) => column);
+
+  GeneratedColumn<int> get month =>
+      $composableBuilder(column: $table.month, builder: (column) => column);
+
+  GeneratedColumn<int> get year =>
+      $composableBuilder(column: $table.year, builder: (column) => column);
+
+  GeneratedColumn<double> get amount =>
+      $composableBuilder(column: $table.amount, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get dueDate =>
+      $composableBuilder(column: $table.dueDate, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get reminderDate => $composableBuilder(
+      column: $table.reminderDate, builder: (column) => column);
+
+  GeneratedColumn<String> get status =>
+      $composableBuilder(column: $table.status, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get paidAt =>
+      $composableBuilder(column: $table.paidAt, builder: (column) => column);
+
+  GeneratedColumn<String> get taskId =>
+      $composableBuilder(column: $table.taskId, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  $$InstallmentLoansTableAnnotationComposer get loanId {
+    final $$InstallmentLoansTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.loanId,
+        referencedTable: $db.installmentLoans,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$InstallmentLoansTableAnnotationComposer(
+              $db: $db,
+              $table: $db.installmentLoans,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$LoanInstallmentsTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $LoanInstallmentsTable,
+    LoanInstallment,
+    $$LoanInstallmentsTableFilterComposer,
+    $$LoanInstallmentsTableOrderingComposer,
+    $$LoanInstallmentsTableAnnotationComposer,
+    $$LoanInstallmentsTableCreateCompanionBuilder,
+    $$LoanInstallmentsTableUpdateCompanionBuilder,
+    (LoanInstallment, $$LoanInstallmentsTableReferences),
+    LoanInstallment,
+    PrefetchHooks Function({bool loanId})> {
+  $$LoanInstallmentsTableTableManager(
+      _$AppDatabase db, $LoanInstallmentsTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$LoanInstallmentsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$LoanInstallmentsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$LoanInstallmentsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<String> id = const Value.absent(),
+            Value<String> loanId = const Value.absent(),
+            Value<int> installmentNumber = const Value.absent(),
+            Value<int> month = const Value.absent(),
+            Value<int> year = const Value.absent(),
+            Value<double> amount = const Value.absent(),
+            Value<DateTime> dueDate = const Value.absent(),
+            Value<DateTime> reminderDate = const Value.absent(),
+            Value<String> status = const Value.absent(),
+            Value<DateTime?> paidAt = const Value.absent(),
+            Value<String?> taskId = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              LoanInstallmentsCompanion(
+            id: id,
+            loanId: loanId,
+            installmentNumber: installmentNumber,
+            month: month,
+            year: year,
+            amount: amount,
+            dueDate: dueDate,
+            reminderDate: reminderDate,
+            status: status,
+            paidAt: paidAt,
+            taskId: taskId,
+            createdAt: createdAt,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required String id,
+            required String loanId,
+            required int installmentNumber,
+            required int month,
+            required int year,
+            required double amount,
+            required DateTime dueDate,
+            required DateTime reminderDate,
+            Value<String> status = const Value.absent(),
+            Value<DateTime?> paidAt = const Value.absent(),
+            Value<String?> taskId = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              LoanInstallmentsCompanion.insert(
+            id: id,
+            loanId: loanId,
+            installmentNumber: installmentNumber,
+            month: month,
+            year: year,
+            amount: amount,
+            dueDate: dueDate,
+            reminderDate: reminderDate,
+            status: status,
+            paidAt: paidAt,
+            taskId: taskId,
+            createdAt: createdAt,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$LoanInstallmentsTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: ({loanId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (loanId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.loanId,
+                    referencedTable:
+                        $$LoanInstallmentsTableReferences._loanIdTable(db),
+                    referencedColumn:
+                        $$LoanInstallmentsTableReferences._loanIdTable(db).id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$LoanInstallmentsTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $LoanInstallmentsTable,
+    LoanInstallment,
+    $$LoanInstallmentsTableFilterComposer,
+    $$LoanInstallmentsTableOrderingComposer,
+    $$LoanInstallmentsTableAnnotationComposer,
+    $$LoanInstallmentsTableCreateCompanionBuilder,
+    $$LoanInstallmentsTableUpdateCompanionBuilder,
+    (LoanInstallment, $$LoanInstallmentsTableReferences),
+    LoanInstallment,
+    PrefetchHooks Function({bool loanId})>;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -10628,4 +12641,8 @@ class $AppDatabaseManager {
       $$HealthLogsTableTableManager(_db, _db.healthLogs);
   $$HealthTargetsTableTableManager get healthTargets =>
       $$HealthTargetsTableTableManager(_db, _db.healthTargets);
+  $$InstallmentLoansTableTableManager get installmentLoans =>
+      $$InstallmentLoansTableTableManager(_db, _db.installmentLoans);
+  $$LoanInstallmentsTableTableManager get loanInstallments =>
+      $$LoanInstallmentsTableTableManager(_db, _db.loanInstallments);
 }

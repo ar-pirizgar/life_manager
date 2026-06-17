@@ -268,6 +268,48 @@ class TimeLogs extends Table {
   Set<Column> get primaryKey => {id};
 }
 
+// --- ماژول اقساط ---
+
+class InstallmentLoans extends Table {
+  TextColumn get id => text()();
+  TextColumn get title => text()();
+  // bank_loan | installment_purchase | credit_card | personal_debt | other
+  TextColumn get type => text()();
+  RealColumn get totalAmount => real()();
+  RealColumn get installmentAmount => real()();
+  IntColumn get totalInstallments => integer()();
+  IntColumn get paidInstallments => integer().withDefault(const Constant(0))();
+  IntColumn get dueDayOfMonth => integer()();
+  IntColumn get reminderDayOfMonth => integer()();
+  DateTimeColumn get startDate => dateTime()();
+  // active | completed | cancelled
+  TextColumn get status => text().withDefault(const Constant('active'))();
+  DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
+  DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
+class LoanInstallments extends Table {
+  TextColumn get id => text()();
+  TextColumn get loanId => text().references(InstallmentLoans, #id)();
+  IntColumn get installmentNumber => integer()();
+  IntColumn get month => integer()();
+  IntColumn get year => integer()();
+  RealColumn get amount => real()();
+  DateTimeColumn get dueDate => dateTime()();
+  DateTimeColumn get reminderDate => dateTime()();
+  // pending | paid | overdue
+  TextColumn get status => text().withDefault(const Constant('pending'))();
+  DateTimeColumn get paidAt => dateTime().nullable()();
+  TextColumn get taskId => text().nullable()();
+  DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
 // ============================================================
 // تعریف دیتابیس
 // ============================================================
@@ -280,12 +322,13 @@ class TimeLogs extends Table {
   Kpis, KpiLogs,
   WeeklyReviews, MonthlyReflections,
   HealthLogs, HealthTargets,
+  InstallmentLoans, LoanInstallments,
 ])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 9;
+  int get schemaVersion => 10;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -322,6 +365,10 @@ class AppDatabase extends _$AppDatabase {
           if (from < 9) {
             await m.createTable(healthLogs);
             await m.createTable(healthTargets);
+          }
+          if (from < 10) {
+            await m.createTable(installmentLoans);
+            await m.createTable(loanInstallments);
           }
         },
       );
@@ -618,6 +665,45 @@ class AppDatabase extends _$AppDatabase {
             ..where((g) => g.status.equals('active'))
             ..orderBy([(g) => OrderingTerm.desc(g.createdAt)]))
           .watch();
+
+  // ── Installment Loans ─────────────────────────────────────────
+
+  Stream<List<InstallmentLoan>> watchActiveLoans() =>
+      (select(installmentLoans)
+            ..where((l) => l.status.equals('active'))
+            ..orderBy([(l) => OrderingTerm.desc(l.createdAt)]))
+          .watch();
+
+  Stream<InstallmentLoan?> watchLoanById(String id) =>
+      (select(installmentLoans)..where((l) => l.id.equals(id)))
+          .watchSingleOrNull();
+
+  Future<InstallmentLoan?> getLoanById(String id) =>
+      (select(installmentLoans)..where((l) => l.id.equals(id)))
+          .getSingleOrNull();
+
+  Stream<List<LoanInstallment>> watchLoanInstallments(String loanId) =>
+      (select(loanInstallments)
+            ..where((i) => i.loanId.equals(loanId))
+            ..orderBy([(i) => OrderingTerm.desc(i.installmentNumber)]))
+          .watch();
+
+  Future<List<LoanInstallment>> getLoanInstallments(String loanId) =>
+      (select(loanInstallments)
+            ..where((i) => i.loanId.equals(loanId))
+            ..orderBy([(i) => OrderingTerm.asc(i.installmentNumber)]))
+          .get();
+
+  Stream<List<LoanInstallment>> watchAllPendingInstallments() =>
+      (select(loanInstallments)
+            ..where((i) =>
+                i.status.equals('pending') | i.status.equals('overdue')))
+          .watch();
+
+  Future<List<LoanInstallment>> getPendingInstallments() =>
+      (select(loanInstallments)
+            ..where((i) => i.status.equals('pending')))
+          .get();
 }
 
 LazyDatabase _openConnection() {
