@@ -97,10 +97,15 @@ DateTime _day(DateTime dt) => DateTime(dt.year, dt.month, dt.day);
 // ─── Providers ────────────────────────────────────────────────
 
 final activeHabitsProvider = StreamProvider<List<Habit>>((ref) {
+  // keepAlive prevents disposal when no widget is watching (e.g. between
+  // navigations), eliminating the loading flash and any transient error state
+  // on re-entry to the Habits screen.
+  ref.keepAlive();
   return ref.watch(databaseProvider).watchActiveHabits();
 });
 
 final todayHabitLogsProvider = StreamProvider<List<HabitLog>>((ref) {
+  ref.keepAlive();
   return ref.watch(databaseProvider).watchTodayHabitLogs();
 });
 

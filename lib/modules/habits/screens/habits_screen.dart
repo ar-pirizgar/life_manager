@@ -12,27 +12,38 @@ class HabitsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final habitsAsync = ref.watch(activeHabitsProvider);
-    final (done, total) = ref.watch(todayProgressProvider);
 
     return Scaffold(
       appBar: AppBar(title: const Text('عادت‌ها')),
       body: habitsAsync.when(
-        data: (habits) => Column(
-          children: [
-            _TodayHeader(done: done, total: total),
-            Expanded(
-              child: habits.isEmpty
-                  ? _emptyState(context)
-                  : ListView.builder(
-                      padding: const EdgeInsets.only(bottom: 80),
-                      itemCount: habits.length,
-                      itemBuilder: (_, i) => HabitCard(habit: habits[i]),
-                    ),
-            ),
-          ],
+        data: (habits) {
+          // Read progress inside data callback so it's only computed after
+          // activeHabitsProvider has data, avoiding a synchronous provider
+          // fan-out error on the very first frame.
+          final (done, total) = ref.watch(todayProgressProvider);
+          return Column(
+            children: [
+              _TodayHeader(done: done, total: total),
+              Expanded(
+                child: habits.isEmpty
+                    ? _emptyState(context)
+                    : ListView.builder(
+                        padding: const EdgeInsets.only(bottom: 80),
+                        itemCount: habits.length,
+                        itemBuilder: (_, i) => HabitCard(habit: habits[i]),
+                      ),
+              ),
+            ],
+          );
+        },
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (e, _) => Center(
+          child: Text(
+            'خطا: $e',
+            style: TextStyle(
+                color: Theme.of(context).colorScheme.error),
+          ),
         ),
-        loading: () => const SizedBox.shrink(),
-        error: (_, __) => const SizedBox.shrink(),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => showAddHabitSheet(context),
