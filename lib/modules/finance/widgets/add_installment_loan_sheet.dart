@@ -1,19 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../shared/database/database.dart';
 import '../../../shared/utils/jalali_helper.dart';
 import '../providers/installment_providers.dart';
 
-Future<void> showAddInstallmentLoanSheet(BuildContext context) =>
+Future<void> showAddInstallmentLoanSheet(
+  BuildContext context, {
+  InstallmentLoan? loan,
+}) =>
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       useSafeArea: true,
-      builder: (_) => const _AddInstallmentLoanSheet(),
+      builder: (ctx) => DraggableScrollableSheet(
+        expand: false,
+        initialChildSize: 0.88,
+        minChildSize: 0.1,
+        maxChildSize: 0.95,
+        builder: (_, scrollController) =>
+            _AddInstallmentLoanSheet(loan: loan, scrollController: scrollController),
+      ),
     );
 
 class _AddInstallmentLoanSheet extends ConsumerStatefulWidget {
-  const _AddInstallmentLoanSheet();
+  const _AddInstallmentLoanSheet({this.loan, required this.scrollController});
+
+  final InstallmentLoan? loan;
+  final ScrollController scrollController;
 
   @override
   ConsumerState<_AddInstallmentLoanSheet> createState() =>
@@ -35,6 +49,25 @@ class _AddInstallmentLoanSheetState
   DateTime _startDate = DateTime.now();
   bool _saving = false;
 
+  bool get _isEditing => widget.loan != null;
+
+  @override
+  void initState() {
+    super.initState();
+    final loan = widget.loan;
+    if (loan != null) {
+      _titleCtrl.text = loan.title;
+      _totalAmountCtrl.text = loan.totalAmount.toInt().toString();
+      _installmentAmountCtrl.text = loan.installmentAmount.toInt().toString();
+      _totalInstallmentsCtrl.text = loan.totalInstallments.toString();
+      _paidInstallmentsCtrl.text = loan.paidInstallments.toString();
+      _type = LoanType.fromKey(loan.type);
+      _dueDayOfMonth = loan.dueDayOfMonth;
+      _reminderDayOfMonth = loan.reminderDayOfMonth;
+      _startDate = loan.startDate;
+    }
+  }
+
   @override
   void dispose() {
     _titleCtrl.dispose();
@@ -46,11 +79,11 @@ class _AddInstallmentLoanSheetState
   }
 
   Future<void> _pickStartDate() async {
-    final picked = await showDatePicker(
-      context: context,
+    final picked = await JalaliHelper.pickDate(
+      context,
       initialDate: _startDate,
       firstDate: DateTime(2000),
-      lastDate: DateTime.now().add(const Duration(days: 365)),
+      lastDate: DateTime.now().add(const Duration(days: 365 * 10)),
     );
     if (picked != null) setState(() => _startDate = picked);
   }
@@ -59,21 +92,40 @@ class _AddInstallmentLoanSheetState
     if (!_formKey.currentState!.validate()) return;
     setState(() => _saving = true);
     try {
-      await ref.read(loanRepositoryProvider).createLoan(
-            title: _titleCtrl.text.trim(),
-            type: _type,
-            totalAmount: double.parse(
-                _totalAmountCtrl.text.replaceAll(',', '').trim()),
-            installmentAmount: double.parse(
-                _installmentAmountCtrl.text.replaceAll(',', '').trim()),
-            totalInstallments:
-                int.parse(_totalInstallmentsCtrl.text.trim()),
-            paidInstallments:
-                int.tryParse(_paidInstallmentsCtrl.text.trim()) ?? 0,
-            dueDayOfMonth: _dueDayOfMonth,
-            reminderDayOfMonth: _reminderDayOfMonth,
-            startDate: _startDate,
-          );
+      final repo = ref.read(loanRepositoryProvider);
+      final title = _titleCtrl.text.trim();
+      final totalAmount =
+          double.parse(_totalAmountCtrl.text.replaceAll(',', '').trim());
+      final installmentAmount = double.parse(
+          _installmentAmountCtrl.text.replaceAll(',', '').trim());
+      final totalInstallments = int.parse(_totalInstallmentsCtrl.text.trim());
+
+      if (_isEditing) {
+        await repo.updateLoan(
+          loanId: widget.loan!.id,
+          title: title,
+          type: _type,
+          totalAmount: totalAmount,
+          installmentAmount: installmentAmount,
+          totalInstallments: totalInstallments,
+          dueDayOfMonth: _dueDayOfMonth,
+          reminderDayOfMonth: _reminderDayOfMonth,
+          startDate: _startDate,
+        );
+      } else {
+        await repo.createLoan(
+          title: title,
+          type: _type,
+          totalAmount: totalAmount,
+          installmentAmount: installmentAmount,
+          totalInstallments: totalInstallments,
+          paidInstallments:
+              int.tryParse(_paidInstallmentsCtrl.text.trim()) ?? 0,
+          dueDayOfMonth: _dueDayOfMonth,
+          reminderDayOfMonth: _reminderDayOfMonth,
+          startDate: _startDate,
+        );
+      }
       if (mounted) Navigator.pop(context);
     } catch (_) {
       if (mounted) setState(() => _saving = false);
@@ -86,6 +138,7 @@ class _AddInstallmentLoanSheetState
     final insets = MediaQuery.viewInsetsOf(context).bottom;
 
     return SingleChildScrollView(
+      controller: widget.scrollController,
       padding: EdgeInsets.fromLTRB(16, 12, 16, insets + 16),
       child: Form(
         key: _formKey,
@@ -104,8 +157,10 @@ class _AddInstallmentLoanSheetState
               ),
             ),
             const SizedBox(height: 16),
-            Text('افزودن وام / قسط',
-                style: Theme.of(context).textTheme.titleLarge),
+            Text(
+              _isEditing ? 'ویرایش وام / قسط' : 'افزودن وام / قسط',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
             const SizedBox(height: 16),
 
             // نوع وام
@@ -177,30 +232,34 @@ class _AddInstallmentLoanSheetState
                     decoration:
                         const InputDecoration(labelText: 'تعداد کل اقساط'),
                     validator: (v) {
-                      if (v == null || v.trim().isEmpty) {
-                        return 'الزامی است';
-                      }
+                      if (v == null || v.trim().isEmpty) return 'الزامی است';
                       final n = int.tryParse(v.trim());
                       if (n == null || n < 1) return 'عدد معتبر';
+                      if (_isEditing) {
+                        final paid = widget.loan!.paidInstallments;
+                        if (n < paid) return 'کمتر از $paid نمی‌شود';
+                      }
                       return null;
                     },
                   ),
                 ),
-                const SizedBox(width: 12),
-                // اقساط پرداخت شده
-                Expanded(
-                  child: TextFormField(
-                    controller: _paidInstallmentsCtrl,
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(
-                        labelText: 'اقساط پرداخت شده'),
-                    validator: (v) {
-                      final n = int.tryParse(v?.trim() ?? '');
-                      if (n == null || n < 0) return 'عدد معتبر';
-                      return null;
-                    },
+                if (!_isEditing) ...[
+                  const SizedBox(width: 12),
+                  // اقساط پرداخت شده — فقط در حالت ایجاد
+                  Expanded(
+                    child: TextFormField(
+                      controller: _paidInstallmentsCtrl,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                          labelText: 'اقساط پرداخت شده'),
+                      validator: (v) {
+                        final n = int.tryParse(v?.trim() ?? '');
+                        if (n == null || n < 0) return 'عدد معتبر';
+                        return null;
+                      },
+                    ),
                   ),
-                ),
+                ],
               ],
             ),
             const SizedBox(height: 16),
@@ -252,6 +311,17 @@ class _AddInstallmentLoanSheetState
                 child: const Text('تغییر'),
               ),
             ),
+
+            if (_isEditing) ...[
+              const SizedBox(height: 4),
+              Text(
+                'اقساط پرداخت‌شده حفظ می‌شوند. فقط اقساط آینده بازتولید می‌شوند.',
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: colors.onSurfaceVariant,
+                    ),
+              ),
+            ],
+
             const SizedBox(height: 16),
 
             FilledButton(
@@ -262,7 +332,7 @@ class _AddInstallmentLoanSheetState
                       height: 20,
                       child: CircularProgressIndicator(strokeWidth: 2),
                     )
-                  : const Text('ذخیره'),
+                  : Text(_isEditing ? 'ذخیره تغییرات' : 'ذخیره'),
             ),
           ],
         ),

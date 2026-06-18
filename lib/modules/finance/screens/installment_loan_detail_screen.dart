@@ -5,6 +5,7 @@ import '../../../shared/database/database.dart';
 import '../../../shared/utils/jalali_helper.dart';
 import '../providers/finance_providers.dart';
 import '../providers/installment_providers.dart';
+import '../widgets/add_installment_loan_sheet.dart';
 
 class InstallmentLoanDetailScreen extends ConsumerWidget {
   const InstallmentLoanDetailScreen({super.key, required this.loanId});
@@ -26,9 +27,23 @@ class InstallmentLoanDetailScreen extends ConsumerWidget {
         actions: [
           loanAsync.when(
             data: (loan) => loan != null && loan.status == 'active'
-                ? IconButton(
-                    icon: const Icon(Icons.delete_outline),
-                    onPressed: () => _deleteLoan(context, ref, loan),
+                ? Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.edit_outlined),
+                        tooltip: 'ویرایش',
+                        onPressed: () => showAddInstallmentLoanSheet(
+                          context,
+                          loan: loan,
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.delete_outline),
+                        tooltip: 'حذف',
+                        onPressed: () => _deleteLoan(context, ref, loan),
+                      ),
+                    ],
                   )
                 : const SizedBox.shrink(),
             loading: () => const SizedBox.shrink(),

@@ -205,11 +205,11 @@ class _TaskCard extends ConsumerWidget {
     } else if (isOverdue) {
       cardBg = AppColors.overdue.withValues(alpha: 0.08);
       cardBorder = AppColors.overdue.withValues(alpha: 0.35);
-      haloColor = AppColors.overdue.withValues(alpha: 0.13);
+      haloColor = AppColors.overdue.withValues(alpha: 0.25);
     } else {
       cardBg = priorityColor.withValues(alpha: 0.06);
       cardBorder = priorityColor.withValues(alpha: 0.22);
-      haloColor = priorityColor.withValues(alpha: 0.13);
+      haloColor = priorityColor.withValues(alpha: 0.25);
     }
 
     final secondaryColor =
