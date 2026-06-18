@@ -12,30 +12,28 @@ class HabitsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final habitsAsync = ref.watch(activeHabitsProvider);
+    // Watch done count unconditionally — same pattern as _HabitsTab in home
+    // screen. Avoids a diamond dependency where todayProgressProvider would
+    // subscribe to activeHabitsProvider mid-build, triggering a fan-out error.
+    final done = ref.watch(todayDoneSetProvider).length;
 
     return Scaffold(
       appBar: AppBar(title: const Text('عادت‌ها')),
       body: habitsAsync.when(
-        data: (habits) {
-          // Read progress inside data callback so it's only computed after
-          // activeHabitsProvider has data, avoiding a synchronous provider
-          // fan-out error on the very first frame.
-          final (done, total) = ref.watch(todayProgressProvider);
-          return Column(
-            children: [
-              _TodayHeader(done: done, total: total),
-              Expanded(
-                child: habits.isEmpty
-                    ? _emptyState(context)
-                    : ListView.builder(
-                        padding: const EdgeInsets.only(bottom: 80),
-                        itemCount: habits.length,
-                        itemBuilder: (_, i) => HabitCard(habit: habits[i]),
-                      ),
-              ),
-            ],
-          );
-        },
+        data: (habits) => Column(
+          children: [
+            _TodayHeader(done: done, total: habits.length),
+            Expanded(
+              child: habits.isEmpty
+                  ? _emptyState(context)
+                  : ListView.builder(
+                      padding: const EdgeInsets.only(bottom: 80),
+                      itemCount: habits.length,
+                      itemBuilder: (_, i) => HabitCard(habit: habits[i]),
+                    ),
+            ),
+          ],
+        ),
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => Center(
           child: Text(
