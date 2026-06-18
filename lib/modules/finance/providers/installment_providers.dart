@@ -92,29 +92,9 @@ class LoanRepository {
       final dueDay = dueDayOfMonth.clamp(1, monthLength);
       final dueDate = Jalali(jYear, jMonth, dueDay).toDateTime();
 
-      final DateTime reminderDate;
-      if (reminderDayOfMonth <= dueDayOfMonth) {
-        final remDay = reminderDayOfMonth.clamp(1, monthLength);
-        reminderDate = Jalali(jYear, jMonth, remDay).toDateTime();
-      } else {
-        // Reminder falls in the previous Shamsi month (advance notice for next
-        // month's installment). Guard: never produce a date before jStart —
-        // e.g. installment 0 with reminderDay=29, dueDay=28, startDay=28
-        // would otherwise land in Ordibehesht when the loan starts in Khordad.
-        final prevJMonth = jMonth == 1 ? 12 : jMonth - 1;
-        final prevJYear = jMonth == 1 ? jYear - 1 : jYear;
-        final prevMonthLength = Jalali(prevJYear, prevJMonth, 1).monthLength;
-        final remDay = reminderDayOfMonth.clamp(1, prevMonthLength);
-        final prevMonthReminder = Jalali(prevJYear, prevJMonth, remDay).toDateTime();
-        final loanStartDate = jStart.toDateTime();
-        if (prevMonthReminder.isBefore(loanStartDate)) {
-          // Fall back to the same month as the due date so the reminder stays
-          // within the loan's lifetime.
-          reminderDate = Jalali(jYear, jMonth, reminderDayOfMonth.clamp(1, monthLength)).toDateTime();
-        } else {
-          reminderDate = prevMonthReminder;
-        }
-      }
+      // Reminder is always in the same month as the due date.
+      final remDay = reminderDayOfMonth.clamp(1, monthLength);
+      final reminderDate = Jalali(jYear, jMonth, remDay).toDateTime();
 
       await _db.into(_db.loanInstallments).insert(LoanInstallmentsCompanion(
             id: Value(_uuid.v4()),
@@ -171,16 +151,11 @@ class LoanRepository {
       );
 
       // Future unpaid installments.
-      // Advance the start month by one when the first installment's reminder
-      // would predate the loan start:
-      //   • reminderDay > dueDay  → reminder is in the month BEFORE jStart.month
-      //                             (always before loan start for i=0)
-      //   • reminderDay < jStart.day → same-month reminder precedes the start day
-      // In both cases the first due date shifts to jStart.month+1 and the first
-      // reminder lands in jStart.month, giving users advance notice.
-      final bool firstReminderPredatesLoan = paidInstallments == 0 &&
-          (reminderDayOfMonth > dueDayOfMonth ||
-           reminderDayOfMonth < jStart.day);
+      // Shift start month forward only when the same-month reminder would fall
+      // before the loan's start day (e.g. loan starts on 28th, reminder is 5th
+      // → shift so reminder 5 Tir aligns with due 28 Tir, not 5 Khordad).
+      final bool firstReminderPredatesLoan =
+          paidInstallments == 0 && reminderDayOfMonth < jStart.day;
       final unpaidJStart = firstReminderPredatesLoan
           ? _nextJalaliMonth(jStart)
           : jStart;
@@ -255,9 +230,8 @@ class LoanRepository {
           ));
 
       // Regenerate future installments (same advance logic as createLoan).
-      final bool updateFirstReminderPredatesLoan = paidCount == 0 &&
-          (reminderDayOfMonth > dueDayOfMonth ||
-           reminderDayOfMonth < jStart.day);
+      final bool updateFirstReminderPredatesLoan =
+          paidCount == 0 && reminderDayOfMonth < jStart.day;
       final updateUnpaidJStart = updateFirstReminderPredatesLoan
           ? _nextJalaliMonth(jStart)
           : jStart;
