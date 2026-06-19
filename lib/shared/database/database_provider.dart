@@ -3,8 +3,7 @@ import 'database.dart';
 
 /// Provider سراسری دیتابیس.
 /// همه ماژول‌ها از طریق این provider به دیتابیس دسترسی دارند.
+// Always overridden in main() with a pre-constructed AppDatabase(dbPath).
 final databaseProvider = Provider<AppDatabase>((ref) {
-  final db = AppDatabase();
-  ref.onDispose(db.close);
-  return db;
+  throw StateError('databaseProvider must be overridden in main()');
 });

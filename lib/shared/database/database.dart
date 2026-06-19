@@ -1,8 +1,6 @@
 import 'dart:io';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart' as p;
 import 'package:uuid/uuid.dart';
 
 part 'database.g.dart';
@@ -325,7 +323,7 @@ class LoanInstallments extends Table {
   InstallmentLoans, LoanInstallments,
 ])
 class AppDatabase extends _$AppDatabase {
-  AppDatabase() : super(_openConnection());
+  AppDatabase(String dbPath) : super(_openConnection(dbPath));
 
   @override
   int get schemaVersion => 10;
@@ -706,10 +704,9 @@ class AppDatabase extends _$AppDatabase {
           .get();
 }
 
-LazyDatabase _openConnection() {
+LazyDatabase _openConnection(String dbPath) {
   return LazyDatabase(() async {
-    final dbFolder = await getApplicationDocumentsDirectory();
-    final file = File(p.join(dbFolder.path, 'life_manager.sqlite'));
-    return NativeDatabase(file);
+    final file = File(dbPath);
+    return NativeDatabase.createInBackground(file);
   });
 }

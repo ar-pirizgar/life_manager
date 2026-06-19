@@ -4,6 +4,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as p;
 import 'shared/database/database.dart';
 import 'shared/database/database_provider.dart';
 import 'shared/router/app_router.dart';
@@ -45,9 +47,11 @@ void main() async {
     );
   };
 
-  // Pre-create the database so the LazyDatabase starts its async path-lookup
-  // concurrently with the first frame render, rather than blocking it.
-  final db = AppDatabase();
+  // Resolve the DB path before runApp so the LazyDatabase callback is instant.
+  final dbFolder = await getApplicationDocumentsDirectory();
+  final dbPath = p.join(dbFolder.path, 'life_manager.sqlite');
+
+  final db = AppDatabase(dbPath);
 
   runApp(
     ProviderScope(
