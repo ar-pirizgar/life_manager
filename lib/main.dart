@@ -79,7 +79,6 @@ class LifeManagerApp extends StatelessWidget {
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
       ],
       builder: (context, child) {
         // اطمینان از راست‌به‌چپ بودن کل اپ
