@@ -28,7 +28,7 @@ class HabitMetrics {
     this.currentStreak = 0,
     this.bestStreak = 0,
     this.successRate = 0.0,
-    this.last7Days = const [],
+    this.last7Days = const [false, false, false, false, false, false, false],
   });
 
   final int currentStreak;
